@@ -1,0 +1,121 @@
+$button_sizes: (
+  "lg": 14px 18px,
+  "lg--squared": 14px 14px,
+  "md": 12px 16px,
+  "md--squared": 12px 12px,
+  "sm": 8px 12px,
+  "sm--squared": 8px 8px,
+);
+
+$button_variants: (
+  "primary": "primary",
+  "secondary": "secondary",
+  "neutral": "default",
+);
+
+@mixin button_size {
+  @each $variant, $sizes in $button_sizes {
+    &--#{$variant} {
+      padding: $sizes;
+    }
+  }
+}
+
+@mixin defaults {
+  border: 0;
+  display: inline-block;
+  transition: box-shadow 0.2s;
+  display: flex;
+  align-items: center;
+  height: max-content;
+
+  &:focus {
+    outline: 0;
+    box-shadow: var(--elevation__tight_1);
+  }
+}
+
+.button {
+  @include defaults;
+  @include button_size;
+
+  &--filled {
+    @mixin button--filled($color, $cursor) {
+      cursor: $cursor;
+      background-color: $color;
+      border-radius: var(--border__rounded_md);
+    }
+
+    @each $variant_name, $variant in $button_variants {
+      &--#{$variant_name} {
+        @include button--filled(var(--color__action_#{$variant}), auto);
+
+        &:hover {
+          @include button--filled(var(--color__action_#{$variant}--hover), pointer)
+        }
+
+        &:active {
+          @include button--filled(var(--color__action_#{$variant}--active), pointer)
+        }
+
+        &:disabled {
+          @include button--filled(var(--color__action_#{$variant}--disabled), not-allowed)
+        }
+      }
+    }
+  }
+
+  &--ghost {
+    @mixin button--ghost($color, $cursor) {
+      cursor: $cursor;
+      background-color: var(--color__inverted);
+      border-radius: var(--border__rounded_md);
+      border: 2px solid $color;
+    }
+
+    @each $variant_name, $variant in $button_variants {
+      &--#{$variant_name} {
+        @include button--ghost(var(--color__action_#{$variant}), auto);
+
+        &:hover {
+          @include button--ghost(var(--color__action_#{$variant}--hover), pointer)
+        }
+
+        &:active {
+          @include button--ghost(var(--color__action_#{$variant}--active), pointer)
+        }
+
+        &:disabled {
+          @include button--ghost(var(--color__action_#{$variant}--disabled), not-allowed)
+        }
+      }
+    }
+  }
+
+  &--borderless {
+    @mixin button--borderless($color, $cursor) {
+      cursor: $cursor;
+      background-color: var(--color__inverted);
+      border-radius: var(--border__rounded_md);
+      border: 1px solid $color;
+    }
+
+    @each $variant_name, $variant in $button_variants {
+      &--#{$variant_name} {
+        @include button--borderless(var(--color__inverted), auto);
+
+        &:hover {
+          @include button--borderless(var(--color__action_#{$variant}--hover), pointer)
+        }
+
+        &:active {
+          @include button--borderless(var(--color__action_#{$variant}--active), pointer)
+        }
+
+        &:disabled {
+          @include button--borderless(var(--color__action_#{$variant}--disabled), not-allowed)
+        }
+      }
+    }
+  }
+}

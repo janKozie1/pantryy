@@ -1,0 +1,7 @@
+@use '../variables/colors' as colors;
+
+@each $name, $value in colors.$colors {
+  .-color--#{$name} { color: $value; }
+  .-bg--#{$name} { background-color: $value; }
+  .-fill--#{$name} { rect { fill: $value; } };
+}

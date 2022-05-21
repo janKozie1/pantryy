@@ -1,0 +1,50 @@
+$colors: (
+  "primary": #E86C00,
+  "secondary": #FDCC4A,
+  "inverted": #FFFFFF,
+
+  "neutral_black": #09101D,
+  "neutral_white": #FFFFFF,
+  "neutral_1": #2C3A4B,
+  "neutral_2": #394452,
+  "neutral_3": #545D69,
+  "neutral_4": #6D7580,
+  "neutral_5": #858C94,
+  "neutral_6": #A5ABB3,
+  "neutral_7": #DADEE3,
+  "neutral_8": #EBEEF2,
+  "neutral_9": #F4F6F9,
+
+  "accent_1": #ECB2F2,
+  "accent_2": #2D6A6A,
+  "accent_3": #E9AD8C,
+  "accent_4": #221874,
+  "accent_5": #7CC6D6,
+  "accent_6": #E1604D,
+
+  "action_primary": #E86C00,
+  "action_primary--hover": #CC5F00,
+  "action_primary--active": #B35300,
+  "action_primary--disabled": rgba(232, 108, 0, 0.5),
+
+  "action_secondary": #19AB4F,
+  "action_secondary--hover": #0C9E42,
+  "action_secondary--active": #009236,
+  "action_secondary--disabled": rgba(25, 171, 79, 0.5),
+
+  "action_default": #9098A1,
+  "action_default--hover": #858C94,
+  "action_default--active": #798087,
+  "action_default--disabled": rgba(144, 152, 161, 0.7),
+
+  "state_success": #287D3C,
+  "state_warning": #B95000,
+  "state_error": #DA1414,
+  "state_info": #2E5AAC,
+);
+
+@mixin css_colors {
+  @each $name, $value in $colors {
+    --color__#{$name}: #{$value};
+  }
+}

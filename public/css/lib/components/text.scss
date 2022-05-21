@@ -1,0 +1,177 @@
+@use "sass:list";
+
+@mixin generate_text_variant_for_weights($weights) {
+  $weight_variants: heavy, regular, light;
+  @for $index from 1 through list.length($weight_variants) {
+    &--#{list.nth($weight_variants, $index)} {
+      font-weight: #{list.nth($weights, $index)};
+      @content;
+    }
+  }
+}
+
+@mixin generate_text_variant_for_sizes($sizes) {
+  $size_variants: large, medium, small;
+  @for $index from 1 through list.length($size_variants) {
+    &--#{list.nth($size_variants, $index)} {
+      font-size: #{list.nth(list.nth($sizes, $index), 1)};
+      line-height: #{list.nth(list.nth($sizes, $index), 2)};
+      @content;
+    }
+  }
+}
+
+.text {
+  &__display {
+    &--large {
+      @include generate_text_variant_for_weights(700 400 300) {
+        color: var(--color__neutral_black);
+
+        font-size: 6.9rem;
+        line-height: 7.6rem;
+      }
+    }
+
+    &--small {
+      @include generate_text_variant_for_weights(600 400 300) {
+        color: var(--color__neutral_black);
+
+        font-size: 5.7rem;
+        line-height: 6.4rem;
+      }
+    }
+  }
+
+  &__heading {
+    &--1 {
+      @include generate_text_variant_for_weights(600 400 300) {
+        color: var(--color__neutral_black);
+
+        font-size: 4.8rem;
+        line-height: 5.2rem;
+      }
+    }
+
+    &--2 {
+      @include generate_text_variant_for_weights(600 400 300) {
+        color: var(--color__neutral_black);
+
+        font-size: 4.0rem;
+        line-height: 4.4rem;
+      }
+    }
+
+    &--3 {
+      @include generate_text_variant_for_weights(600 400 300) {
+        color: var(--color__neutral_black);
+
+        font-size: 3.3rem;
+        line-height: 3.6rem;
+      }
+    }
+
+    &--4 {
+      @include generate_text_variant_for_weights(600 400 300) {
+        color: var(--color__neutral_black);
+
+        font-size: 2.8rem;
+        line-height: 3.2rem;
+      }
+    }
+
+    &--5 {
+      @include generate_text_variant_for_weights(600 400 300) {
+        color: var(--color__neutral_black);
+
+        font-size: 2.3rem;
+        line-height: 2.4rem;
+      }
+    }
+
+    &--6 {
+      @include generate_text_variant_for_weights(600 400 300) {
+        color: var(--color__neutral_black);
+
+        font-size: 1.9rem;
+        line-height: 2rem;
+      }
+    }
+  }
+
+  &__paragraph {
+    &--large {
+      @include generate_text_variant_for_weights(600 400 300) {
+        color: var(--color__neutral_black);
+
+        font-size: 2.3rem;
+        line-height: 3.6rem;
+      }
+    }
+
+    &--base {
+      @include generate_text_variant_for_weights(600 400 300) {
+        color: var(--color__neutral_black);
+
+        font-size: 1.6rem;
+        line-height: 2.4rem;
+      }
+    }
+
+    &--small {
+      @include generate_text_variant_for_weights(600 400 300) {
+        color: var(--color__neutral_black);
+
+        font-size: 1.3rem;
+        line-height: 2rem;
+      }
+    }
+
+    &--xsmall {
+      @include generate_text_variant_for_weights(600 400 300) {
+        color: var(--color__neutral_black);
+
+        font-size: 1.1rem;
+        line-height: 1.6rem;
+      }
+    }
+
+    &--tiny {
+      @include generate_text_variant_for_weights(600 400 300) {
+        color: var(--color__neutral_black);
+
+        font-size: 0.9rem;
+        line-height: 1.2rem;
+      }
+    }
+  }
+
+  &__small_caps {
+    @include generate_text_variant_for_weights(600 400 300) {
+      color: var(--color__neutral_black);
+
+      font-size: 1.4rem;
+      line-height: 2rem;
+
+      text-transform: uppercase;
+      font-variant: small-caps;
+    }
+  }
+
+  &__action {
+    &--button {
+      @include generate_text_variant_for_sizes(((1.8rem, 2.8rem), (1.6rem, 2.4rem), (1.4rem, 2rem))) {
+          color: var(--color__neutral_black);
+
+          font-weight: 600;
+      }
+    }
+
+    &--link {
+      @include generate_text_variant_for_sizes(((2rem, 2.8rem), (1.6rem, 2.4rem), (1.4rem, 2rem))) {
+        color: var(--color__neutral_black);
+
+        font-weight: 600;
+      }
+    }
+  }
+}

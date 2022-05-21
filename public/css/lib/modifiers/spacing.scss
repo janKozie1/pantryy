@@ -1,0 +1,26 @@
+@use '../variables/spacings' as spacings;
+
+.-mt--auto { margin-top: auto ;}
+.-mr--auto { margin-right: auto ;}
+.-mb--auto { margin-bottom: auto ;}
+.-ml--auto { margin-left: auto ;}
+
+@each $name, $value in spacings.$spacing {
+  .-p--#{$name} { padding: $value; }
+  .-pt--#{$name} { padding-top: $value; }
+  .-pr--#{$name} { padding-right: $value; }
+  .-pb--#{$name} { padding-bottom: $value; }
+  .-pl--#{$name} { padding-left: $value; }
+
+  .-px--#{$name} { padding-left: $value; padding-right: $value; }
+  .-py--#{$name} { padding-top: $value; padding-bottom: $value; }
+
+  .-m--#{$name} { margin: $value; }
+  .-mt--#{$name} { margin-top: $value; }
+  .-mr--#{$name} { margin-right: $value; }
+  .-mb--#{$name} { margin-bottom: $value; }
+  .-ml--#{$name} { margin-left: $value; }
+
+  .-mx--#{$name} { margin-left: $value; margin-right: $value; }
+  .-my--#{$name} { margin-top: $value; margin-bottom: $value; }
+}

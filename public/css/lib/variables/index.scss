@@ -1,0 +1,11 @@
+@use 'colors';
+@use 'elevations';
+@use 'spacings';
+@use 'borders';
+
+@mixin variables {
+  @include colors.css_colors;
+  @include elevations.css_elevations;
+  @include spacings.css_spacings;
+  @include borders.css_borders;
+}

@@ -1,0 +1,10 @@
+.divider--vertical {
+  width: 1px;
+  background-color: var(--color__neutral_7);
+}
+.divider--horizontal {
+  height: 1px;
+  background-color: var(--color__neutral_7);
+}
+
+/*# sourceMappingURL=divider.css.map */

@@ -1,0 +1,18 @@
+$spacing: (
+  "100": 1px,
+  "200": 2px,
+  "300": 4px,
+  "400": 6px,
+  "500": 8px,
+  "600": 12px,
+  "700": 16px,
+  "800": 24px,
+  "900": 32px,
+  "1000": 40px,
+);
+
+@mixin css_spacings {
+  @each $name, $value in $spacing {
+    --spacing__#{$name}: #{$value};
+  }
+}

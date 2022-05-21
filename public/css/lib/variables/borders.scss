@@ -1,0 +1,11 @@
+$borders: (
+  "rounded_sm": 4px,
+  "rounded_md": 8px,
+  "rounded_lg": 16px,
+);
+
+@mixin css_borders {
+  @each $name, $value in $borders {
+    --border__#{$name}: #{$value};
+  }
+}

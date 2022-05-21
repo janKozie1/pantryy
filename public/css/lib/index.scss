@@ -1,0 +1,28 @@
+@use 'variables';
+
+@use 'defaults';
+
+@use 'modifiers';
+@use 'components';
+
+:root {
+  @include variables.variables;
+}
+
+html {
+  font-size: defaults.$root_font_size;
+}
+
+html, body {
+  height: 100vh;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+
+  text-transform: none;
+  text-decoration: none;
+  font-family: defaults.$font_family;
+}
