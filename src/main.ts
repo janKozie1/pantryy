@@ -1,8 +1,12 @@
 import App from './App.svelte';
 
-const app = new App({
+const config = {
 	target: document.body,
-	hydrate: true,
-});
+	compilerOptions: {
+		hydratable: true,
+	},
+};
+
+const app = new App(config);
 
 export default app;

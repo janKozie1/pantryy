@@ -3,16 +3,17 @@
 
   import Image from "../components/atoms/Image.svelte";
   import Stylesheet from "../components/atoms/Stylesheet.svelte";
+  import Logo from "../components/molecules/Logo.svelte";
 </script>
 
 <Stylesheet src="pages/home.css" />
 
 <div class="page">
   <header class="header">
-    <Image src="shared/logo_full.png" alt="logo" cls="logo--big" />
+    <Logo variant="big" />
     <div class="-mr--900 -align-center">
       <Link
-        href="/register"
+        to="/register"
         class="button button--lg button--filled--primary -mx--900"
       >
         <span class="text__action--button--large">
@@ -20,7 +21,7 @@
         </span>
       </Link>
       <Link
-        href="/login"
+        to="/login"
         class="button button--lg button--borderless--neutral -mx--900"
       >
         <span class="text__action--button--large">
