@@ -1,30 +1,36 @@
 <script>
-  let pageName = "Home Page";
+  import { Link } from "svelte-routing";
+
+  import Image from "../components/atoms/Image.svelte";
+  import Stylesheet from "../components/atoms/Stylesheet.svelte";
 </script>
 
-<main>
-  <h1>{pageName}!</h1>
-  <p>Welcome this is my <b>{pageName}</b></p>
-</main>
+<Stylesheet src="pages/home.css" />
 
-<style>
-  main {
-    text-align: center;
-    padding: 1em;
-    max-width: 240px;
-    margin: 0 auto;
-  }
-
-  h1 {
-    color: #ff3e00;
-    text-transform: uppercase;
-    font-size: 4em;
-    font-weight: 100;
-  }
-
-  @media (min-width: 640px) {
-    main {
-      max-width: none;
-    }
-  }
-</style>
+<div class="page">
+  <header class="header">
+    <Image src="shared/logo_full.png" alt="logo" cls="logo--big" />
+    <div class="-mr--900 -align-center">
+      <Link
+        href="/register"
+        class="button button--lg button--filled--primary -mx--900"
+      >
+        <span class="text__action--button--large">
+          <span class="-color--inverted"> Create an account </span>
+        </span>
+      </Link>
+      <Link
+        href="/login"
+        class="button button--lg button--borderless--neutral -mx--900"
+      >
+        <span class="text__action--button--large">
+          <span class="-color--neutral-3"> Log in </span>
+        </span>
+      </Link>
+    </div>
+  </header>
+  <main class="hero_container">
+    <h1 class="text__heading--1--light">Manage your pantry with ease</h1>
+    <Image src="home/tomato.jpg" lat="tomato" cls="hero_image" />
+  </main>
+</div>
