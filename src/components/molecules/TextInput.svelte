@@ -3,6 +3,7 @@
 
   export let label: string;
   export let name: string;
+  export let type: string;
 
   export let placeholder: Nullable<string>;
 </script>
@@ -14,6 +15,7 @@
     </div>
     <input
       {name}
+      {type}
       class="input__input -full-width"
       placeholder={`${placeholder ?? label}...`}
     />

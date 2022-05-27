@@ -1,11 +1,21 @@
 <script>
   import { Link } from "svelte-routing";
+  import Icon from "../components/atoms/Icon.svelte";
 
   import Image from "../components/atoms/Image.svelte";
   import Stylesheet from "../components/atoms/Stylesheet.svelte";
+  import Button from "../components/molecules/Button.svelte";
   import Logo from "../components/molecules/Logo.svelte";
   import Tab from "../components/molecules/Tab.svelte";
   import TextInput from "../components/molecules/TextInput.svelte";
+  import { Routes } from "../config";
+
+  const forms = {
+    login: Routes.login,
+    register: Routes.register,
+  };
+
+  let pathname = window.location.pathname;
 </script>
 
 <Stylesheet src="pages/auth.css" />
@@ -17,59 +27,54 @@
       <Tab to="/login">Log in</Tab>
       <Tab to="/register">Register</Tab>
     </div>
-    <form class="form -full-width -mt--1000" action="/login" method="POST">
-      <div class="form__inputs_container">
-        <TextInput name="email" label="Email" />
-        <TextInput name="password" label="Password" type="password" />
-      </div>
-      <a href="#" class="text__action--link--small -mt--600 -ml--auto">
-        <span class="-color--action_default"> Forgot password? </span>
-      </a>
-      <button
-        type="submit"
-        class="button button--md button--filled--primary -mt--1000 -full-width -justify-center"
-      >
-        <span class="text__action--button--large">
-          <span class="-color--inverted" href="#"> Log in </span>
-        </span>
-        <div class="-inline-flex -pl--500 -mt--200">
-          <svg
-            class="-fill--inverted"
-            width="24"
-            height="25"
-            viewBox="0 0 24 25"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-            ><g id="Navigation / arrow forward"
-              ><mask
-                id="mask0_70_10339"
-                style="mask-type:alpha"
-                maskUnits="userSpaceOnUse"
-                x="4"
-                y="4"
-                width="16"
-                height="16"
-                ><g id="Icon Mask"
-                  ><path
-                    id="Round"
-                    d="M5.20874 13.2644H16.3787L11.4987 18.1444C11.1087 18.5344 11.1087 19.1744 11.4987 19.5644C11.8887 19.9544 12.5187 19.9544 12.9087 19.5644L19.4987 12.9744C19.8887 12.5844 19.8887 11.9544 19.4987 11.5644L12.9187 4.96436C12.7319 4.77711 12.4783 4.67188 12.2137 4.67188C11.9492 4.67188 11.6956 4.77711 11.5087 4.96436C11.1187 5.35436 11.1187 5.98436 11.5087 6.37436L16.3787 11.2644H5.20874C4.65874 11.2644 4.20874 11.7144 4.20874 12.2644C4.20874 12.8144 4.65874 13.2644 5.20874 13.2644Z"
-                    fill="black"
-                  /></g
-                ></mask
-              ><g mask="url(#mask0_70_10339)"
-                ><rect
-                  id="Color Fill"
-                  y="0.264648"
-                  width="24"
-                  height="24"
-                  fill="#858C94"
-                /></g
-              ></g
-            ></svg
-          >
+    {#if pathname.includes(forms.login)}
+      <form class="form -full-width -mt--1000" action="/login" method="POST">
+        <div class="form__inputs_container">
+          <TextInput name="email" label="Email" />
+          <TextInput name="password" label="Password" type="password" />
         </div>
-      </button>
-    </form>
+        <Link to="#" class="text__action--link--small -mt--600 -ml--auto">
+          <span class="-color--action_default">Forgot password?</span>
+        </Link>
+        <Button
+          type="submit"
+          cls="-mt--1000 -full-width -justify-center"
+          size="lg"
+          color="primary"
+          fill="filled"
+        >
+          <span slot="content" class="-color--inverted">Log in</span>
+          <div slot="icon" class="-inline-flex -pl--500 -mt--200">
+            <Icon cls="-fill--inverted" icon="arrow_forward" />
+          </div>
+        </Button>
+      </form>
+    {:else if pathname.includes(forms.register)}
+      <form class="form -full-width -mt--1000">
+        <div class="form__inputs_container">
+          <TextInput name="email" label="Email" />
+          <TextInput name="password" label="Password" type="password" />
+          <TextInput
+            name="repeated_password"
+            label="Repeat password"
+            placeholder="Password"
+            type="password"
+          />
+        </div>
+        <Button
+          type="submit"
+          cls="-mt--1000 -full-width -justify-center"
+          size="lg"
+          color="primary"
+          fill="filled"
+        >
+          <span slot="content" class="-color--inverted">Sign up</span>
+          <div slot="icon" class="-inline-flex -pl--500 -mt--200">
+            <Icon cls="-fill--inverted" icon="arrow_forward" />
+          </div>
+        </Button>
+      </form>
+    {/if}
   </div>
 </main>
 <div class="bg_photos_container">
