@@ -4,6 +4,10 @@
 	import Home from "./pages/Home.svelte";
 	import Auth from "./pages/Auth.svelte";
 	import { Routes } from "./config";
+
+	fetch("/api", { method: "GET" })
+		.then((e) => e.text())
+		.then((e) => console.log(e));
 </script>
 
 <Router url={""}>
