@@ -1,7 +1,7 @@
-<script>
+<script lang="ts">
   import { Link } from "svelte-routing";
-  import Icon from "../components/atoms/Icon.svelte";
 
+  import Icon from "../components/atoms/Icon.svelte";
   import Image from "../components/atoms/Image.svelte";
   import Stylesheet from "../components/atoms/Stylesheet.svelte";
   import Button from "../components/molecules/Button.svelte";
@@ -10,9 +10,43 @@
   import TextInput from "../components/molecules/TextInput.svelte";
   import { Routes } from "../config";
 
+  import { getServices } from "../services";
+  import { errorMessages, withFormData } from "../utils/form";
+  import { isNil } from "../utils/guards";
+
+  const services = getServices();
+
   const forms = {
     login: Routes.login,
     register: Routes.register,
+  };
+
+  let fieldErrors = {
+    email: null,
+    password: null,
+    repeatedPassword: null,
+  };
+
+  let onLoginSubmit = (data: FormData) => {
+    const email = data.get("email");
+    const password = data.get("password");
+
+    const validationResult = services.validation.validateLoginFields({
+      email,
+      password,
+    });
+
+    if (!validationResult.isValid) {
+      return (fieldErrors = {
+        ...fieldErrors,
+        email: validationResult.errors.email ?? null,
+        password: validationResult.errors.password ?? null,
+      });
+    }
+
+    if (!isNil(validationResult.validFields)) {
+      services.auth.login(validationResult.validFields);
+    }
   };
 
   let pathname = window.location.pathname;
@@ -28,10 +62,17 @@
       <Tab to="/register">Register</Tab>
     </div>
     {#if pathname.includes(forms.login)}
-      <form class="form -full-width -mt--1000" action="/login" method="POST">
+      <form
+        on:submit|preventDefault={withFormData(onLoginSubmit)}
+        class="form -full-width -mt--1000"
+      >
         <div class="form__inputs_container">
-          <TextInput name="email" label="Email" />
-          <TextInput name="password" label="Password" type="password" />
+          <TextInput name="email" label="Email" error={fieldErrors.email} />
+          <TextInput
+            name="password"
+            label="Password"
+            error={fieldErrors.password}
+          />
         </div>
         <Link to="#" class="text__action--link--small -mt--600 -ml--auto">
           <span class="-color--action_default">Forgot password?</span>
@@ -52,13 +93,18 @@
     {:else if pathname.includes(forms.register)}
       <form class="form -full-width -mt--1000">
         <div class="form__inputs_container">
-          <TextInput name="email" label="Email" />
-          <TextInput name="password" label="Password" type="password" />
+          <TextInput name="email" label="Email" error={fieldErrors.email} />
+          <TextInput
+            name="password"
+            label="Password"
+            error={fieldErrors.password}
+          />
           <TextInput
             name="repeated_password"
             label="Repeat password"
             placeholder="Password"
             type="password"
+            error={fieldErrors.repeatedPassword}
           />
         </div>
         <Button

@@ -3,11 +3,14 @@ import dotenv from 'dotenv';
 
 import { Pool  } from 'pg';
 
+const pool = new Pool();
+
 dotenv.config();
 const app: Express = express();
 
 app.get('/api', (req: Request, res: Response) => {
-  const pool = new Pool();
+
+
   pool.query('SELECT NOW()', (err, res) => {
     console.log(err, res)
     pool.end()

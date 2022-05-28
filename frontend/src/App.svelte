@@ -1,13 +1,14 @@
 <script lang="ts">
 	import { Router, Route } from "svelte-routing";
+	import { setContext } from "svelte";
+
+	import services, { SERVICES_KEY } from "./services";
 
 	import Home from "./pages/Home.svelte";
 	import Auth from "./pages/Auth.svelte";
 	import { Routes } from "./config";
 
-	fetch("/api", { method: "GET" })
-		.then((e) => e.text())
-		.then((e) => console.log(e));
+	setContext(SERVICES_KEY, services);
 </script>
 
 <Router url={""}>

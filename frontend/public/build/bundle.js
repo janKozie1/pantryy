@@ -152,6 +152,13 @@ var app = (function () {
         node.addEventListener(event, handler, options);
         return () => node.removeEventListener(event, handler, options);
     }
+    function prevent_default(fn) {
+        return function (event) {
+            event.preventDefault();
+            // @ts-ignore
+            return fn.call(this, event);
+        };
+    }
     function attr(node, attribute, value) {
         if (value == null)
             node.removeAttribute(attribute);
@@ -1477,7 +1484,7 @@ var app = (function () {
     });
 
     // (40:0) {#if $activeRoute !== null && $activeRoute.route === route}
-    function create_if_block$2(ctx) {
+    function create_if_block$3(ctx) {
     	let current_block_type_index;
     	let if_block;
     	let if_block_anchor;
@@ -1547,7 +1554,7 @@ var app = (function () {
 
     	dispatch_dev("SvelteRegisterBlock", {
     		block,
-    		id: create_if_block$2.name,
+    		id: create_if_block$3.name,
     		type: "if",
     		source: "(40:0) {#if $activeRoute !== null && $activeRoute.route === route}",
     		ctx
@@ -1720,7 +1727,7 @@ var app = (function () {
     function create_fragment$b(ctx) {
     	let if_block_anchor;
     	let current;
-    	let if_block = /*$activeRoute*/ ctx[1] !== null && /*$activeRoute*/ ctx[1].route === /*route*/ ctx[7] && create_if_block$2(ctx);
+    	let if_block = /*$activeRoute*/ ctx[1] !== null && /*$activeRoute*/ ctx[1].route === /*route*/ ctx[7] && create_if_block$3(ctx);
 
     	const block = {
     		c: function create() {
@@ -1744,7 +1751,7 @@ var app = (function () {
     						transition_in(if_block, 1);
     					}
     				} else {
-    					if_block = create_if_block$2(ctx);
+    					if_block = create_if_block$3(ctx);
     					if_block.c();
     					transition_in(if_block, 1);
     					if_block.m(if_block_anchor.parentNode, if_block_anchor);
@@ -2201,6 +2208,119 @@ var app = (function () {
     	}
     }
 
+    const Routes = {
+        login: '/login',
+        register: '/register',
+        home: '/'
+    };
+    const ApiPrefix = '/api';
+    const ApiEndpoints = {
+        login: '/login',
+        register: 'register',
+    };
+
+    const makeScopedFetch = (apiPrefix) => (...args) => {
+        const [requestURI, ...other] = args;
+        return fetch(`${apiPrefix}${requestURI}`, ...other);
+    };
+
+    const makeLogin = ({ fetch }, { requestEndpoints }) => async (data) => {
+        try {
+            const response = await fetch(requestEndpoints.login, {
+                method: 'POST',
+                body: JSON.stringify({
+                    email: data.email,
+                    password: data.password,
+                })
+            });
+            const body = await response.json();
+            console.log(body);
+        }
+        catch (_a) {
+            return null;
+        }
+    };
+    const makeAuthService = (config, serviceConfig) => ({
+        login: makeLogin(config, serviceConfig),
+    });
+
+    const withFormData = (fn) => (e) => {
+        const target = e.target;
+        if (target instanceof HTMLFormElement) {
+            fn(new FormData(target));
+        }
+    };
+    const errorMessages = {
+        NOT_EMPTY: 'Must not be empty',
+        VALID_EMAIL: 'Must be a valid email',
+    };
+
+    const isString = (arg) => typeof arg === 'string';
+    const isNil = (arg) => arg === null || arg === undefined;
+    const isNotNil = (arg) => !isNil(arg);
+    const isLiteral = (arg) => typeof arg === 'object' && (Object.getPrototypeOf(Object.getPrototypeOf(arg))) === null;
+    function isEmpty(arg) {
+        if (arg === null || arg === undefined) {
+            return true;
+        }
+        if (isString(arg) && arg.trim() === '') {
+            return true;
+        }
+        if (isLiteral(arg) && Object.keys(arg).length === 0) {
+            return true;
+        }
+        if (Array.isArray(arg) && arg.length === 0) {
+            return true;
+        }
+        return false;
+    }
+
+    const isEmail = (arg) => isString(arg) && /^[\w\d]+@[\w\d]+\.[\w\d]+/.test(arg);
+
+    const hasErrors = (obj) => Object.values(obj).some(isNotNil);
+    const makeValidateLoginFields = () => ({ email, password }) => {
+        const errors = {
+            email: isEmpty(email)
+                ? errorMessages.NOT_EMPTY
+                : !isEmail(email)
+                    ? errorMessages.VALID_EMAIL
+                    : null,
+            password: isEmpty(password)
+                ? errorMessages.NOT_EMPTY
+                : null,
+        };
+        const isValid = !hasErrors(errors);
+        return {
+            isValid,
+            errors,
+            validFields: isValid ? {
+                email,
+                password
+            } : null,
+        };
+    };
+    const makeValidationService = (config, serviceConfig) => ({
+        validateLoginFields: makeValidateLoginFields(),
+    });
+
+    const makeServices = (sharedConfig, specificConfigs) => ({
+        auth: makeAuthService(sharedConfig, specificConfigs.auth),
+        validation: makeValidationService(sharedConfig, specificConfigs.validation),
+    });
+    const SERVICES_KEY = Symbol();
+    const getServices = () => getContext(SERVICES_KEY);
+    var services = makeServices({
+        fetch: makeScopedFetch(ApiPrefix),
+    }, {
+        auth: {
+            requestEndpoints: {
+                login: ApiEndpoints.login,
+                register: ApiEndpoints.register,
+            }
+        },
+        validation: null,
+    });
+
     /* src\components\atoms\Image.svelte generated by Svelte v3.48.0 */
 
     const file$6 = "src\\components\\atoms\\Image.svelte";
@@ -2561,7 +2681,7 @@ var app = (function () {
     /* src\pages\Home.svelte generated by Svelte v3.48.0 */
     const file$4 = "src\\pages\\Home.svelte";
 
-    // (15:6) <Link         to="/register"         class="button button--lg button--filled--primary -mx--900"       >
+    // (13:6) <Link         to="/register"         class="button button--lg button--filled--primary -mx--900"       >
     function create_default_slot_1$2(ctx) {
     	let span1;
     	let span0;
@@ -2572,9 +2692,9 @@ var app = (function () {
     			span0 = element("span");
     			span0.textContent = "Create an account";
     			attr_dev(span0, "class", "-color--inverted");
-    			add_location(span0, file$4, 19, 10, 563);
+    			add_location(span0, file$4, 17, 10, 567);
     			attr_dev(span1, "class", "text__action--button--large");
-    			add_location(span1, file$4, 18, 8, 510);
+    			add_location(span1, file$4, 16, 8, 514);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, span1, anchor);
@@ -2590,14 +2710,14 @@ var app = (function () {
     		block,
     		id: create_default_slot_1$2.name,
     		type: "slot",
-    		source: "(15:6) <Link         to=\\\"/register\\\"         class=\\\"button button--lg button--filled--primary -mx--900\\\"       >",
+    		source: "(13:6) <Link         to=\\\"/register\\\"         class=\\\"button button--lg button--filled--primary -mx--900\\\"       >",
     		ctx
     	});
 
     	return block;
     }
 
-    // (23:6) <Link         to="/login"         class="button button--lg button--borderless--neutral -mx--900"       >
+    // (21:6) <Link         to="/login"         class="button button--lg button--borderless--neutral -mx--900"       >
     function create_default_slot$2(ctx) {
     	let span1;
     	let span0;
@@ -2608,9 +2728,9 @@ var app = (function () {
     			span0 = element("span");
     			span0.textContent = "Log in";
     			attr_dev(span0, "class", "-color--neutral-3");
-    			add_location(span0, file$4, 27, 10, 823);
+    			add_location(span0, file$4, 25, 10, 827);
     			attr_dev(span1, "class", "text__action--button--large");
-    			add_location(span1, file$4, 26, 8, 770);
+    			add_location(span1, file$4, 24, 8, 774);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, span1, anchor);
@@ -2626,7 +2746,7 @@ var app = (function () {
     		block,
     		id: create_default_slot$2.name,
     		type: "slot",
-    		source: "(23:6) <Link         to=\\\"/login\\\"         class=\\\"button button--lg button--borderless--neutral -mx--900\\\"       >",
+    		source: "(21:6) <Link         to=\\\"/login\\\"         class=\\\"button button--lg button--borderless--neutral -mx--900\\\"       >",
     		ctx
     	});
 
@@ -2684,7 +2804,7 @@ var app = (function () {
     	image = new Image({
     			props: {
     				src: "home/tomato.jpg",
-    				lat: "tomato",
+    				alt: "tomato",
     				cls: "hero_image"
     			},
     			$$inline: true
@@ -2709,15 +2829,15 @@ var app = (function () {
     			t5 = space();
     			create_component(image.$$.fragment);
     			attr_dev(div0, "class", "-mr--900 -align-center");
-    			add_location(div0, file$4, 13, 4, 355);
+    			add_location(div0, file$4, 11, 4, 359);
     			attr_dev(header, "class", "header");
-    			add_location(header, file$4, 11, 2, 300);
+    			add_location(header, file$4, 9, 2, 304);
     			attr_dev(h1, "class", "text__heading--1--light");
-    			add_location(h1, file$4, 33, 4, 960);
+    			add_location(h1, file$4, 31, 4, 964);
     			attr_dev(main, "class", "hero_container");
-    			add_location(main, file$4, 32, 2, 926);
+    			add_location(main, file$4, 30, 2, 930);
     			attr_dev(div1, "class", "page");
-    			add_location(div1, file$4, 10, 0, 279);
+    			add_location(div1, file$4, 8, 0, 283);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -2955,7 +3075,7 @@ var app = (function () {
     const get_content_slot_context = ctx => ({});
 
     // (15:2) {#if $$slots.icon}
-    function create_if_block$1(ctx) {
+    function create_if_block$2(ctx) {
     	let div;
     	let current;
     	const icon_slot_template = /*#slots*/ ctx[7].icon;
@@ -3010,7 +3130,7 @@ var app = (function () {
 
     	dispatch_dev("SvelteRegisterBlock", {
     		block,
-    		id: create_if_block$1.name,
+    		id: create_if_block$2.name,
     		type: "if",
     		source: "(15:2) {#if $$slots.icon}",
     		ctx
@@ -3027,7 +3147,7 @@ var app = (function () {
     	let current;
     	const content_slot_template = /*#slots*/ ctx[7].content;
     	const content_slot = create_slot(content_slot_template, ctx, /*$$scope*/ ctx[6], get_content_slot_context);
-    	let if_block = /*$$slots*/ ctx[5].icon && create_if_block$1(ctx);
+    	let if_block = /*$$slots*/ ctx[5].icon && create_if_block$2(ctx);
 
     	const block = {
     		c: function create() {
@@ -3081,7 +3201,7 @@ var app = (function () {
     						transition_in(if_block, 1);
     					}
     				} else {
-    					if_block = create_if_block$1(ctx);
+    					if_block = create_if_block$2(ctx);
     					if_block.c();
     					transition_in(if_block, 1);
     					if_block.m(button, null);
@@ -3407,8 +3527,52 @@ var app = (function () {
     }
 
     /* src\components\molecules\TextInput.svelte generated by Svelte v3.48.0 */
-
     const file$1 = "src\\components\\molecules\\TextInput.svelte";
+
+    // (20:4) {#if isString(error)}
+    function create_if_block$1(ctx) {
+    	let div;
+    	let span1;
+    	let span0;
+    	let t;
+
+    	const block = {
+    		c: function create() {
+    			div = element("div");
+    			span1 = element("span");
+    			span0 = element("span");
+    			t = text(/*error*/ ctx[3]);
+    			attr_dev(span0, "class", "-color--state_error");
+    			add_location(span0, file$1, 22, 10, 647);
+    			attr_dev(span1, "class", "text__paragraph--small--regular");
+    			add_location(span1, file$1, 21, 8, 590);
+    			attr_dev(div, "class", "-pl--700 -mt--400 ");
+    			add_location(div, file$1, 20, 6, 549);
+    		},
+    		m: function mount(target, anchor) {
+    			insert_dev(target, div, anchor);
+    			append_dev(div, span1);
+    			append_dev(span1, span0);
+    			append_dev(span0, t);
+    		},
+    		p: function update(ctx, dirty) {
+    			if (dirty & /*error*/ 8) set_data_dev(t, /*error*/ ctx[3]);
+    		},
+    		d: function destroy(detaching) {
+    			if (detaching) detach_dev(div);
+    		}
+    	};
+
+    	dispatch_dev("SvelteRegisterBlock", {
+    		block,
+    		id: create_if_block$1.name,
+    		type: "if",
+    		source: "(20:4) {#if isString(error)}",
+    		ctx
+    	});
+
+    	return block;
+    }
 
     function create_fragment$2(ctx) {
     	let div1;
@@ -3419,6 +3583,9 @@ var app = (function () {
     	let t1;
     	let input;
     	let input_placeholder_value;
+    	let t2;
+    	let show_if = isString(/*error*/ ctx[3]);
+    	let if_block = show_if && create_if_block$1(ctx);
 
     	const block = {
     		c: function create() {
@@ -3429,19 +3596,21 @@ var app = (function () {
     			t0 = text(/*label*/ ctx[0]);
     			t1 = space();
     			input = element("input");
+    			t2 = space();
+    			if (if_block) if_block.c();
     			attr_dev(span, "class", "text__paragraph--base--heavy");
-    			add_location(span, file$1, 9, 6, 226);
+    			add_location(span, file$1, 11, 6, 316);
     			attr_dev(div0, "class", "-pl--700 -pb--500");
-    			add_location(div0, file$1, 8, 4, 188);
+    			add_location(div0, file$1, 10, 4, 278);
     			attr_dev(input, "name", /*name*/ ctx[1]);
     			attr_dev(input, "type", /*type*/ ctx[2]);
     			attr_dev(input, "class", "input__input -full-width");
-    			attr_dev(input, "placeholder", input_placeholder_value = `${/*placeholder*/ ctx[3] ?? /*label*/ ctx[0]}...`);
-    			add_location(input, file$1, 11, 4, 299);
+    			attr_dev(input, "placeholder", input_placeholder_value = `${/*placeholder*/ ctx[4] ?? /*label*/ ctx[0]}...`);
+    			add_location(input, file$1, 13, 4, 389);
     			attr_dev(label_1, "class", "input__label -full-width");
-    			add_location(label_1, file$1, 7, 2, 143);
+    			add_location(label_1, file$1, 9, 2, 233);
     			attr_dev(div1, "class", "input -full-width");
-    			add_location(div1, file$1, 6, 0, 109);
+    			add_location(div1, file$1, 8, 0, 199);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -3454,6 +3623,8 @@ var app = (function () {
     			append_dev(span, t0);
     			append_dev(label_1, t1);
     			append_dev(label_1, input);
+    			append_dev(label_1, t2);
+    			if (if_block) if_block.m(label_1, null);
     		},
     		p: function update(ctx, [dirty]) {
     			if (dirty & /*label*/ 1) set_data_dev(t0, /*label*/ ctx[0]);
@@ -3466,14 +3637,30 @@ var app = (function () {
     				attr_dev(input, "type", /*type*/ ctx[2]);
     			}
 
-    			if (dirty & /*placeholder, label*/ 9 && input_placeholder_value !== (input_placeholder_value = `${/*placeholder*/ ctx[3] ?? /*label*/ ctx[0]}...`)) {
+    			if (dirty & /*placeholder, label*/ 17 && input_placeholder_value !== (input_placeholder_value = `${/*placeholder*/ ctx[4] ?? /*label*/ ctx[0]}...`)) {
     				attr_dev(input, "placeholder", input_placeholder_value);
+    			}
+
+    			if (dirty & /*error*/ 8) show_if = isString(/*error*/ ctx[3]);
+
+    			if (show_if) {
+    				if (if_block) {
+    					if_block.p(ctx, dirty);
+    				} else {
+    					if_block = create_if_block$1(ctx);
+    					if_block.c();
+    					if_block.m(label_1, null);
+    				}
+    			} else if (if_block) {
+    				if_block.d(1);
+    				if_block = null;
     			}
     		},
     		i: noop,
     		o: noop,
     		d: function destroy(detaching) {
     			if (detaching) detach_dev(div1);
+    			if (if_block) if_block.d();
     		}
     	};
 
@@ -3493,9 +3680,10 @@ var app = (function () {
     	validate_slots('TextInput', slots, []);
     	let { label } = $$props;
     	let { name } = $$props;
-    	let { type } = $$props;
-    	let { placeholder } = $$props;
-    	const writable_props = ['label', 'name', 'type', 'placeholder'];
+    	let { type = "text" } = $$props;
+    	let { error = null } = $$props;
+    	let { placeholder = null } = $$props;
+    	const writable_props = ['label', 'name', 'type', 'error', 'placeholder'];
 
     	Object.keys($$props).forEach(key => {
     		if (!~writable_props.indexOf(key) && key.slice(0, 2) !== '$$' && key !== 'slot') console.warn(`<TextInput> was created with unknown prop '${key}'`);
@@ -3505,23 +3693,32 @@ var app = (function () {
     		if ('label' in $$props) $$invalidate(0, label = $$props.label);
     		if ('name' in $$props) $$invalidate(1, name = $$props.name);
     		if ('type' in $$props) $$invalidate(2, type = $$props.type);
-    		if ('placeholder' in $$props) $$invalidate(3, placeholder = $$props.placeholder);
+    		if ('error' in $$props) $$invalidate(3, error = $$props.error);
+    		if ('placeholder' in $$props) $$invalidate(4, placeholder = $$props.placeholder);
     	};
 
-    	$$self.$capture_state = () => ({ label, name, type, placeholder });
+    	$$self.$capture_state = () => ({
+    		isString,
+    		label,
+    		name,
+    		type,
+    		error,
+    		placeholder
+    	});
 
     	$$self.$inject_state = $$props => {
     		if ('label' in $$props) $$invalidate(0, label = $$props.label);
     		if ('name' in $$props) $$invalidate(1, name = $$props.name);
     		if ('type' in $$props) $$invalidate(2, type = $$props.type);
-    		if ('placeholder' in $$props) $$invalidate(3, placeholder = $$props.placeholder);
+    		if ('error' in $$props) $$invalidate(3, error = $$props.error);
+    		if ('placeholder' in $$props) $$invalidate(4, placeholder = $$props.placeholder);
     	};
 
     	if ($$props && "$$inject" in $$props) {
     		$$self.$inject_state($$props.$$inject);
     	}
 
-    	return [label, name, type, placeholder];
+    	return [label, name, type, error, placeholder];
     }
 
     class TextInput extends SvelteComponentDev {
@@ -3532,7 +3729,8 @@ var app = (function () {
     			label: 0,
     			name: 1,
     			type: 2,
-    			placeholder: 3
+    			error: 3,
+    			placeholder: 4
     		});
 
     		dispatch_dev("SvelteRegisterComponent", {
@@ -3551,14 +3749,6 @@ var app = (function () {
 
     		if (/*name*/ ctx[1] === undefined && !('name' in props)) {
     			console.warn("<TextInput> was created without expected prop 'name'");
-    		}
-
-    		if (/*type*/ ctx[2] === undefined && !('type' in props)) {
-    			console.warn("<TextInput> was created without expected prop 'type'");
-    		}
-
-    		if (/*placeholder*/ ctx[3] === undefined && !('placeholder' in props)) {
-    			console.warn("<TextInput> was created without expected prop 'placeholder'");
     		}
     	}
 
@@ -3586,6 +3776,14 @@ var app = (function () {
     		throw new Error("<TextInput>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
     	}
 
+    	get error() {
+    		throw new Error("<TextInput>: Props cannot be read directly from the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
+    	}
+
+    	set error(value) {
+    		throw new Error("<TextInput>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
+    	}
+
     	get placeholder() {
     		throw new Error("<TextInput>: Props cannot be read directly from the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
     	}
@@ -3595,16 +3793,12 @@ var app = (function () {
     	}
     }
 
-    const Routes = {
-        login: '/login',
-        register: '/register',
-        home: '/'
-    };
-
     /* src\pages\Auth.svelte generated by Svelte v3.48.0 */
+
+    const { Object: Object_1 } = globals;
     const file = "src\\pages\\Auth.svelte";
 
-    // (27:6) <Tab to="/login">
+    // (47:6) <Tab to="/login">
     function create_default_slot_2(ctx) {
     	let t;
 
@@ -3624,14 +3818,14 @@ var app = (function () {
     		block,
     		id: create_default_slot_2.name,
     		type: "slot",
-    		source: "(27:6) <Tab to=\\\"/login\\\">",
+    		source: "(47:6) <Tab to=\\\"/login\\\">",
     		ctx
     	});
 
     	return block;
     }
 
-    // (28:6) <Tab to="/register">
+    // (48:6) <Tab to="/register">
     function create_default_slot_1$1(ctx) {
     	let t;
 
@@ -3651,14 +3845,14 @@ var app = (function () {
     		block,
     		id: create_default_slot_1$1.name,
     		type: "slot",
-    		source: "(28:6) <Tab to=\\\"/register\\\">",
+    		source: "(48:6) <Tab to=\\\"/register\\\">",
     		ctx
     	});
 
     	return block;
     }
 
-    // (52:48) 
+    // (79:48) 
     function create_if_block_1(ctx) {
     	let form;
     	let div;
@@ -3672,7 +3866,11 @@ var app = (function () {
     	let current;
 
     	textinput0 = new TextInput({
-    			props: { name: "email", label: "Email" },
+    			props: {
+    				name: "email",
+    				label: "Email",
+    				error: /*fieldErrors*/ ctx[0].email
+    			},
     			$$inline: true
     		});
 
@@ -3680,7 +3878,7 @@ var app = (function () {
     			props: {
     				name: "password",
     				label: "Password",
-    				type: "password"
+    				error: /*fieldErrors*/ ctx[0].password
     			},
     			$$inline: true
     		});
@@ -3690,7 +3888,8 @@ var app = (function () {
     				name: "repeated_password",
     				label: "Repeat password",
     				placeholder: "Password",
-    				type: "password"
+    				type: "password",
+    				error: /*fieldErrors*/ ctx[0].repeatedPassword
     			},
     			$$inline: true
     		});
@@ -3723,9 +3922,9 @@ var app = (function () {
     			t2 = space();
     			create_component(button.$$.fragment);
     			attr_dev(div, "class", "form__inputs_container");
-    			add_location(div, file, 53, 8, 1870);
+    			add_location(div, file, 80, 8, 2926);
     			attr_dev(form, "class", "form -full-width -mt--1000");
-    			add_location(form, file, 52, 6, 1820);
+    			add_location(form, file, 79, 6, 2876);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, form, anchor);
@@ -3738,6 +3937,24 @@ var app = (function () {
     			append_dev(form, t2);
     			mount_component(button, form, null);
     			current = true;
+    		},
+    		p: function update(ctx, dirty) {
+    			const textinput0_changes = {};
+    			if (dirty & /*fieldErrors*/ 1) textinput0_changes.error = /*fieldErrors*/ ctx[0].email;
+    			textinput0.$set(textinput0_changes);
+    			const textinput1_changes = {};
+    			if (dirty & /*fieldErrors*/ 1) textinput1_changes.error = /*fieldErrors*/ ctx[0].password;
+    			textinput1.$set(textinput1_changes);
+    			const textinput2_changes = {};
+    			if (dirty & /*fieldErrors*/ 1) textinput2_changes.error = /*fieldErrors*/ ctx[0].repeatedPassword;
+    			textinput2.$set(textinput2_changes);
+    			const button_changes = {};
+
+    			if (dirty & /*$$scope*/ 32) {
+    				button_changes.$$scope = { dirty, ctx };
+    			}
+
+    			button.$set(button_changes);
     		},
     		i: function intro(local) {
     			if (current) return;
@@ -3767,14 +3984,14 @@ var app = (function () {
     		block,
     		id: create_if_block_1.name,
     		type: "if",
-    		source: "(52:48) ",
+    		source: "(79:48) ",
     		ctx
     	});
 
     	return block;
     }
 
-    // (30:4) {#if pathname.includes(forms.login)}
+    // (50:4) {#if pathname.includes(forms.login)}
     function create_if_block(ctx) {
     	let form;
     	let div;
@@ -3786,9 +4003,15 @@ var app = (function () {
     	let t2;
     	let button;
     	let current;
+    	let mounted;
+    	let dispose;
 
     	textinput0 = new TextInput({
-    			props: { name: "email", label: "Email" },
+    			props: {
+    				name: "email",
+    				label: "Email",
+    				error: /*fieldErrors*/ ctx[0].email
+    			},
     			$$inline: true
     		});
 
@@ -3796,7 +4019,7 @@ var app = (function () {
     			props: {
     				name: "password",
     				label: "Password",
-    				type: "password"
+    				error: /*fieldErrors*/ ctx[0].password
     			},
     			$$inline: true
     		});
@@ -3839,11 +4062,9 @@ var app = (function () {
     			t2 = space();
     			create_component(button.$$.fragment);
     			attr_dev(div, "class", "form__inputs_container");
-    			add_location(div, file, 31, 8, 1003);
+    			add_location(div, file, 54, 8, 1974);
     			attr_dev(form, "class", "form -full-width -mt--1000");
-    			attr_dev(form, "action", "/login");
-    			attr_dev(form, "method", "POST");
-    			add_location(form, file, 30, 6, 923);
+    			add_location(form, file, 50, 6, 1846);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, form, anchor);
@@ -3856,6 +4077,33 @@ var app = (function () {
     			append_dev(form, t2);
     			mount_component(button, form, null);
     			current = true;
+
+    			if (!mounted) {
+    				dispose = listen_dev(form, "submit", prevent_default(withFormData(/*onLoginSubmit*/ ctx[2])), false, true, false);
+    				mounted = true;
+    			}
+    		},
+    		p: function update(ctx, dirty) {
+    			const textinput0_changes = {};
+    			if (dirty & /*fieldErrors*/ 1) textinput0_changes.error = /*fieldErrors*/ ctx[0].email;
+    			textinput0.$set(textinput0_changes);
+    			const textinput1_changes = {};
+    			if (dirty & /*fieldErrors*/ 1) textinput1_changes.error = /*fieldErrors*/ ctx[0].password;
+    			textinput1.$set(textinput1_changes);
+    			const link_changes = {};
+
+    			if (dirty & /*$$scope*/ 32) {
+    				link_changes.$$scope = { dirty, ctx };
+    			}
+
+    			link.$set(link_changes);
+    			const button_changes = {};
+
+    			if (dirty & /*$$scope*/ 32) {
+    				button_changes.$$scope = { dirty, ctx };
+    			}
+
+    			button.$set(button_changes);
     		},
     		i: function intro(local) {
     			if (current) return;
@@ -3878,6 +4126,8 @@ var app = (function () {
     			destroy_component(textinput1);
     			destroy_component(link);
     			destroy_component(button);
+    			mounted = false;
+    			dispose();
     		}
     	};
 
@@ -3885,14 +4135,14 @@ var app = (function () {
     		block,
     		id: create_if_block.name,
     		type: "if",
-    		source: "(30:4) {#if pathname.includes(forms.login)}",
+    		source: "(50:4) {#if pathname.includes(forms.login)}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (71:10) 
+    // (103:10) 
     function create_content_slot_1(ctx) {
     	let span;
 
@@ -3902,7 +4152,7 @@ var app = (function () {
     			span.textContent = "Sign up";
     			attr_dev(span, "slot", "content");
     			attr_dev(span, "class", "-color--inverted");
-    			add_location(span, file, 70, 10, 2400);
+    			add_location(span, file, 102, 10, 3590);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, span, anchor);
@@ -3917,14 +4167,14 @@ var app = (function () {
     		block,
     		id: create_content_slot_1.name,
     		type: "slot",
-    		source: "(71:10) ",
+    		source: "(103:10) ",
     		ctx
     	});
 
     	return block;
     }
 
-    // (72:10) 
+    // (104:10) 
     function create_icon_slot_1(ctx) {
     	let div;
     	let icon;
@@ -3944,7 +4194,7 @@ var app = (function () {
     			create_component(icon.$$.fragment);
     			attr_dev(div, "slot", "icon");
     			attr_dev(div, "class", "-inline-flex -pl--500 -mt--200");
-    			add_location(div, file, 71, 10, 2471);
+    			add_location(div, file, 103, 10, 3661);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, div, anchor);
@@ -3971,14 +4221,14 @@ var app = (function () {
     		block,
     		id: create_icon_slot_1.name,
     		type: "slot",
-    		source: "(72:10) ",
+    		source: "(104:10) ",
     		ctx
     	});
 
     	return block;
     }
 
-    // (36:8) <Link to="#" class="text__action--link--small -mt--600 -ml--auto">
+    // (63:8) <Link to="#" class="text__action--link--small -mt--600 -ml--auto">
     function create_default_slot$1(ctx) {
     	let span;
 
@@ -3987,7 +4237,7 @@ var app = (function () {
     			span = element("span");
     			span.textContent = "Forgot password?";
     			attr_dev(span, "class", "-color--action_default");
-    			add_location(span, file, 36, 10, 1264);
+    			add_location(span, file, 63, 10, 2320);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, span, anchor);
@@ -4002,14 +4252,14 @@ var app = (function () {
     		block,
     		id: create_default_slot$1.name,
     		type: "slot",
-    		source: "(36:8) <Link to=\\\"#\\\" class=\\\"text__action--link--small -mt--600 -ml--auto\\\">",
+    		source: "(63:8) <Link to=\\\"#\\\" class=\\\"text__action--link--small -mt--600 -ml--auto\\\">",
     		ctx
     	});
 
     	return block;
     }
 
-    // (46:10) 
+    // (73:10) 
     function create_content_slot(ctx) {
     	let span;
 
@@ -4019,7 +4269,7 @@ var app = (function () {
     			span.textContent = "Log in";
     			attr_dev(span, "slot", "content");
     			attr_dev(span, "class", "-color--inverted");
-    			add_location(span, file, 45, 10, 1525);
+    			add_location(span, file, 72, 10, 2581);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, span, anchor);
@@ -4034,14 +4284,14 @@ var app = (function () {
     		block,
     		id: create_content_slot.name,
     		type: "slot",
-    		source: "(46:10) ",
+    		source: "(73:10) ",
     		ctx
     	});
 
     	return block;
     }
 
-    // (47:10) 
+    // (74:10) 
     function create_icon_slot(ctx) {
     	let div;
     	let icon;
@@ -4061,7 +4311,7 @@ var app = (function () {
     			create_component(icon.$$.fragment);
     			attr_dev(div, "slot", "icon");
     			attr_dev(div, "class", "-inline-flex -pl--500 -mt--200");
-    			add_location(div, file, 46, 10, 1595);
+    			add_location(div, file, 73, 10, 2651);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, div, anchor);
@@ -4088,7 +4338,7 @@ var app = (function () {
     		block,
     		id: create_icon_slot.name,
     		type: "slot",
-    		source: "(47:10) ",
+    		source: "(74:10) ",
     		ctx
     	});
 
@@ -4150,8 +4400,8 @@ var app = (function () {
     	const if_blocks = [];
 
     	function select_block_type(ctx, dirty) {
-    		if (/*pathname*/ ctx[1].includes(/*forms*/ ctx[0].login)) return 0;
-    		if (/*pathname*/ ctx[1].includes(/*forms*/ ctx[0].register)) return 1;
+    		if (/*pathname*/ ctx[3].includes(/*forms*/ ctx[1].login)) return 0;
+    		if (/*pathname*/ ctx[3].includes(/*forms*/ ctx[1].register)) return 1;
     		return -1;
     	}
 
@@ -4208,13 +4458,13 @@ var app = (function () {
     			t6 = space();
     			create_component(image2.$$.fragment);
     			attr_dev(div0, "class", "tabs_container");
-    			add_location(div0, file, 25, 4, 759);
+    			add_location(div0, file, 45, 4, 1682);
     			attr_dev(div1, "class", "page_content");
-    			add_location(div1, file, 24, 2, 728);
+    			add_location(div1, file, 44, 2, 1651);
     			attr_dev(main, "class", "page");
-    			add_location(main, file, 22, 0, 681);
+    			add_location(main, file, 42, 0, 1604);
     			attr_dev(div2, "class", "bg_photos_container");
-    			add_location(div2, file, 79, 0, 2668);
+    			add_location(div2, file, 111, 0, 3858);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -4248,18 +4498,19 @@ var app = (function () {
     		p: function update(ctx, [dirty]) {
     			const tab0_changes = {};
 
-    			if (dirty & /*$$scope*/ 4) {
+    			if (dirty & /*$$scope*/ 32) {
     				tab0_changes.$$scope = { dirty, ctx };
     			}
 
     			tab0.$set(tab0_changes);
     			const tab1_changes = {};
 
-    			if (dirty & /*$$scope*/ 4) {
+    			if (dirty & /*$$scope*/ 32) {
     				tab1_changes.$$scope = { dirty, ctx };
     			}
 
     			tab1.$set(tab1_changes);
+    			if (if_block) if_block.p(ctx, dirty);
     		},
     		i: function intro(local) {
     			if (current) return;
@@ -4318,16 +4569,45 @@ var app = (function () {
     function instance$1($$self, $$props, $$invalidate) {
     	let { $$slots: slots = {}, $$scope } = $$props;
     	validate_slots('Auth', slots, []);
+    	const services = getServices();
 
     	const forms = {
     		login: Routes.login,
     		register: Routes.register
     	};
 
+    	let fieldErrors = {
+    		email: null,
+    		password: null,
+    		repeatedPassword: null
+    	};
+
+    	let onLoginSubmit = data => {
+    		var _a, _b;
+    		const email = data.get("email");
+    		const password = data.get("password");
+    		const validationResult = services.validation.validateLoginFields({ email, password });
+
+    		if (!validationResult.isValid) {
+    			return $$invalidate(0, fieldErrors = Object.assign(Object.assign({}, fieldErrors), {
+    				email: (_a = validationResult.errors.email) !== null && _a !== void 0
+    				? _a
+    				: null,
+    				password: (_b = validationResult.errors.password) !== null && _b !== void 0
+    				? _b
+    				: null
+    			}));
+    		}
+
+    		if (!isNil(validationResult.validFields)) {
+    			services.auth.login(validationResult.validFields);
+    		}
+    	};
+
     	let pathname = window.location.pathname;
     	const writable_props = [];
 
-    	Object.keys($$props).forEach(key => {
+    	Object_1.keys($$props).forEach(key => {
     		if (!~writable_props.indexOf(key) && key.slice(0, 2) !== '$$' && key !== 'slot') console.warn(`<Auth> was created with unknown prop '${key}'`);
     	});
 
@@ -4341,19 +4621,27 @@ var app = (function () {
     		Tab,
     		TextInput,
     		Routes,
+    		getServices,
+    		withFormData,
+    		isNil,
+    		services,
     		forms,
+    		fieldErrors,
+    		onLoginSubmit,
     		pathname
     	});
 
     	$$self.$inject_state = $$props => {
-    		if ('pathname' in $$props) $$invalidate(1, pathname = $$props.pathname);
+    		if ('fieldErrors' in $$props) $$invalidate(0, fieldErrors = $$props.fieldErrors);
+    		if ('onLoginSubmit' in $$props) $$invalidate(2, onLoginSubmit = $$props.onLoginSubmit);
+    		if ('pathname' in $$props) $$invalidate(3, pathname = $$props.pathname);
     	};
 
     	if ($$props && "$$inject" in $$props) {
     		$$self.$inject_state($$props.$$inject);
     	}
 
-    	return [forms, pathname];
+    	return [fieldErrors, forms, onLoginSubmit, pathname];
     }
 
     class Auth extends SvelteComponentDev {
@@ -4371,8 +4659,6 @@ var app = (function () {
     }
 
     /* src\App.svelte generated by Svelte v3.48.0 */
-
-    const { console: console_1 } = globals;
 
     // (13:1) <Route path={Routes.home}>
     function create_default_slot_1(ctx) {
@@ -4560,14 +4846,24 @@ var app = (function () {
     function instance($$self, $$props, $$invalidate) {
     	let { $$slots: slots = {}, $$scope } = $$props;
     	validate_slots('App', slots, []);
-    	fetch("/api", { method: "GET" }).then(e => e.text()).then(e => console.log(e));
+    	setContext(SERVICES_KEY, services);
     	const writable_props = [];
 
     	Object.keys($$props).forEach(key => {
-    		if (!~writable_props.indexOf(key) && key.slice(0, 2) !== '$$' && key !== 'slot') console_1.warn(`<App> was created with unknown prop '${key}'`);
+    		if (!~writable_props.indexOf(key) && key.slice(0, 2) !== '$$' && key !== 'slot') console.warn(`<App> was created with unknown prop '${key}'`);
     	});
 
-    	$$self.$capture_state = () => ({ Router, Route, Home, Auth, Routes });
+    	$$self.$capture_state = () => ({
+    		Router,
+    		Route,
+    		setContext,
+    		services,
+    		SERVICES_KEY,
+    		Home,
+    		Auth,
+    		Routes
+    	});
+
     	return [];
     }
 

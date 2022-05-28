@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import { Link } from "svelte-routing";
 
   import Image from "../components/atoms/Image.svelte";
@@ -32,6 +32,6 @@
   </header>
   <main class="hero_container">
     <h1 class="text__heading--1--light">Manage your pantry with ease</h1>
-    <Image src="home/tomato.jpg" lat="tomato" cls="hero_image" />
+    <Image src="home/tomato.jpg" alt="tomato" cls="hero_image" />
   </main>
 </div>
