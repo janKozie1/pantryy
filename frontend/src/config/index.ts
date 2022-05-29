@@ -8,6 +8,6 @@ export const Routes = {
 
 export const ApiPrefix = '/api';
 export const ApiEndpoints = {
-  login: '/login',
-  register: 'register',
+  login: '/auth/login',
+  register: '/auth/register',
 }

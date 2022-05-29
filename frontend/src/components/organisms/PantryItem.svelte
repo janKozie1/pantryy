@@ -3,7 +3,7 @@
 </script>
 
 <li class="pantry_list__item">
-  <Image src="/user_content/beetroot.jpg" class="-full-width" />
+  <Image src="user_content/beetroot.jpg" class="-full-width" />
   <div class="item_description -pt--300">
     <div>
       <h3 class="text__small_caps--regular">beetroot</h3>

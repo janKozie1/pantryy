@@ -1,10 +1,13 @@
 import type { ServiceCreator, MakeServiceFN, SharedServicesConfig } from "."
-import { getCookie } from "../utils/cookies";
+import { getCookie, removeCookie } from "../utils/cookies";
 import { isEmpty } from "../utils/guards";
 import type { Nullable } from "../utils/types";
 
 type AuthServiceConfig = Readonly<{
   authCookieName: string;
+  redirect: Readonly<{
+    toLogin: () => void;
+  }>
   requestEndpoints: Readonly<{
     login: string;
     register: string;
@@ -63,6 +66,11 @@ const makeLogin: MakeServiceFN<LoginRequest, Promise<Nullable<LoginResponse>>, A
 
 const makeIsLoggedIn: MakeServiceFN<unknown, Boolean, AuthServiceConfig> = (_, {authCookieName}) => () => !isEmpty(getCookie(authCookieName));
 
+const makeLogout: MakeServiceFN<unknown, void, AuthServiceConfig> = (_, {authCookieName, redirect}) => () => {
+  removeCookie(authCookieName);
+  redirect.toLogin();
+};
+
 type SignupRequest = Readonly<{
   email: string;
   password: string;
@@ -72,11 +80,13 @@ type SignupRequest = Readonly<{
 export type AuthService = Readonly<{
   login: ReturnType<typeof makeLogin>;
   isLoggedIn: ReturnType<typeof makeIsLoggedIn>;
+  logout: ReturnType<typeof makeLogout>;
 }>
 
 const makeAuthService: ServiceCreator<AuthService, AuthServiceConfig> = (config, serviceConfig) => ({
   login: makeLogin(config, serviceConfig),
   isLoggedIn: makeIsLoggedIn(config, serviceConfig),
+  logout: makeLogout(config, serviceConfig),
 })
 
 export default makeAuthService;

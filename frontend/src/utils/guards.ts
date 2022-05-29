@@ -2,7 +2,6 @@ import type { Literal } from "./types";
 
 export const isString = (arg: unknown): arg is string => typeof arg === 'string';
 
-
 export const isNil = (arg: unknown): arg is null | undefined => arg === null || arg === undefined;
 export const isNotNil = <T>(arg: T | null | undefined): arg is T => !isNil(arg);
 

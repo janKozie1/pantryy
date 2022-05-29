@@ -1,8 +1,12 @@
 <script lang="ts">
   import { Routes } from "../../config";
+  import { getServices } from "../../services";
+  import Icon from "../atoms/Icon.svelte";
 
   import Logo from "../molecules/Logo.svelte";
   import NavLink from "../molecules/NavLink.svelte";
+
+  const services = getServices();
 </script>
 
 <nav class="nav">
@@ -15,7 +19,15 @@
     </ul>
     <ul class="nav__items -mt--auto -mb--900">
       <NavLink to="#" icon="settings">Settings</NavLink>
-      <NavLink to="#" icon="arrow_back">Log out</NavLink>
+      <li class="nav__item">
+        <button
+          on:click={services.auth.logout}
+          class="nav__link text__action--button--medium -full-width"
+        >
+          <Icon icon="arrow_back" cls="-fill--neutral_6" />
+          <span class="-color--neutral_5"> Log out </span>
+        </button>
+      </li>
     </ul>
   </div>
   <div class="divider--vertical -full-height -ml--auto" />

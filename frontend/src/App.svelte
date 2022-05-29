@@ -1,8 +1,6 @@
 <script lang="ts">
 	import { Router, Route } from "svelte-navigator";
-	import { setContext } from "svelte";
 
-	import services, { SERVICES_KEY } from "./services";
 	import { Routes } from "./config";
 
 	import AuthRoute from "./components/organisms/AuthRoute.svelte";
@@ -10,25 +8,26 @@
 	import Home from "./pages/Home.svelte";
 	import Auth from "./pages/Auth.svelte";
 	import Pantry from "./pages/Pantry.svelte";
-
-	setContext(SERVICES_KEY, services);
+	import ServicesProvider from "./components/organisms/ServicesProvider.svelte";
 </script>
 
 <Router>
-	<Route path={Routes.register}>
-		<AuthRoute isProtected={false} redirectTo={Routes.pantry}>
-			<Auth />
-		</AuthRoute>
-	</Route>
-	<Route path={Routes.login}>
-		<AuthRoute isProtected={false} redirectTo={Routes.pantry}>
-			<Auth />
-		</AuthRoute>
-	</Route>
-	<Route path={Routes.pantry}>
-		<AuthRoute isProtected redirectTo={Routes.login}>
-			<Pantry />
-		</AuthRoute>
-	</Route>
-	<Route path={Routes.home}><Home /></Route>
+	<ServicesProvider>
+		<Route path={Routes.register}>
+			<AuthRoute isProtected={false} redirectTo={Routes.pantry}>
+				<Auth />
+			</AuthRoute>
+		</Route>
+		<Route path={Routes.login}>
+			<AuthRoute isProtected={false} redirectTo={Routes.pantry}>
+				<Auth />
+			</AuthRoute>
+		</Route>
+		<Route path={Routes.pantry}>
+			<AuthRoute isProtected redirectTo={Routes.login}>
+				<Pantry />
+			</AuthRoute>
+		</Route>
+		<Route path={Routes.home}><Home /></Route>
+	</ServicesProvider>
 </Router>

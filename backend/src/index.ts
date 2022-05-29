@@ -1,37 +1,31 @@
-import express, { Express, Request, Response } from 'express';
 import { Pool  } from 'pg';
-import bodyParser from 'body-parser';
 
 import dotenv from 'dotenv';
 
+import routes from './routes';
+import App from './app';
+
 dotenv.config();
 
-const pool = new Pool();
-const app = express();
+type AppConfig = Readonly<{
+  prefix: string;
+  port: string;
+}>
 
-app.use(bodyParser.urlencoded({extended: false}));
-app.use(bodyParser.json());
+const init = (config: AppConfig) => {
+  const pool = new Pool();
+  const app = App();
 
-app.get('/api', (req: Request, res: Response) => {
-  pool.query('SELECT NOW()', (err, res) => {
-    console.log(err, res)
-    pool.end()
-  })
-  res.send('Express + TypeScript Server');
-});
+  routes(config.prefix, { app, pool });
 
-app.post('/api/login', (req, res) => {
-  if (req.body.password === 'asdf') {
-    res.cookie("auth", "asdf")
-    return res.json({ok: true})
-  }
+  app.listen(config.port, () => {
+    console.log(`⚡️[server]: Server is running`);
+  });
 
-  return res.json({ ok: false, errors: {
-    email: "User doesnt exist",
-    password: "Invalid password"
-  }})
-})
+  return app;
+}
 
-app.listen(process.env.PORT, () => {
-  console.log(`⚡️[server]: Server is running`);
+init({
+  port: process.env.PORT ?? '8080',
+  prefix: '/api'
 });

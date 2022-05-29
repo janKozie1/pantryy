@@ -1,4 +1,4 @@
-import { isEmpty, isNotNil } from "./guards";
+import { isEmpty, isNil, isNotNil } from "./guards";
 import type { Nullable } from "./types";
 
 const getUnparsedCookies = (): string[] => document.cookie.split(';');
@@ -16,5 +16,20 @@ export const getCookies = (): Record<string, string> => getUnparsedCookies().map
   [name]: value
 }), {})
 
+export const setCookies = (cookies: Record<string, Nullable<string>>) => {
+  const preparedCookies = Object.entries(cookies).map(([cookieName, cookieValue]) => {
+    if (isEmpty(cookieValue)) {
+      return null;
+    }
 
-export const getCookie = (cookieName: string): Nullable<string> => getCookies()[cookieName]
+    return `${cookieName}=${cookieValue}`;
+  }).filter(isNotNil).join('; ');
+
+  document.cookie = preparedCookies;
+}
+
+export const getCookie = (cookieName: string): Nullable<string> => getCookies()[cookieName];
+
+export const removeCookie = (cookieName: string): void => {
+  document.cookie = `${cookieName}=; expires=${new Date(0).toUTCString()};`;
+}

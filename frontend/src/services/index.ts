@@ -1,10 +1,11 @@
 import { getContext } from "svelte";
-import { ApiEndpoints, ApiPrefix } from "../config";
+import { ApiEndpoints, ApiPrefix, Routes } from "../config";
 
 import { FetchFN, makeScopedFetch } from "./requests"
 
 import auth from './auth';
 import validation from './validation';
+import type { NavigateFn } from "svelte-navigator";
 
 export type SharedServicesConfig = Readonly<{
   fetch: FetchFN;
@@ -38,16 +39,23 @@ const makeServices = (
   validation: validation(sharedConfig, specificConfigs.validation),
 })
 
+type DynamicConfig = Readonly<{
+  navigate: NavigateFn;
+}>
+
 
 export const SERVICES_KEY = Symbol();
 
 export const getServices = () => getContext<Services>(SERVICES_KEY)
 
-export default makeServices({
-  fetch: makeScopedFetch(ApiPrefix),
-}, {
+export default ({
+  navigate
+}: DynamicConfig) => makeServices({ fetch: makeScopedFetch(ApiPrefix) }, {
   auth: {
     authCookieName: 'auth',
+    redirect: {
+      toLogin: () => navigate(Routes.login),
+    },
     requestEndpoints: {
       login: ApiEndpoints.login,
       register: ApiEndpoints.register,
