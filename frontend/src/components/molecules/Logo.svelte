@@ -3,6 +3,7 @@
   import Image from "../atoms/Image.svelte";
 
   export let variant: Nullable<Variant> = "small";
+  export let cls: Nullable<string> = "";
 
   const variants = {
     small: {
@@ -21,5 +22,5 @@
 <Image
   alt="Pantryy logo"
   src={variants[variant].imgSrc}
-  cls={`logo--${variants[variant].class}`}
+  cls={`logo--${variants[variant].class} ${cls}`}
 />

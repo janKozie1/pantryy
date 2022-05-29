@@ -8,16 +8,25 @@
   type ColorVariants = "primary" | "secondary" | "neutral";
   type FillVariants = "filled" | "ghost" | "borderless";
 
-  export let size: `${Sizes}${"--squared" | ""}`;
+  export let size: Sizes;
+  export let squared: boolean = false;
   export let fill: FillVariants;
   export let color: ColorVariants;
+
+  const buttonSizeToTextSize: Record<Sizes, string> = {
+    sm: "small",
+    md: "medium",
+    lg: "large",
+  };
 </script>
 
 <button
   {type}
-  class={`${cls} button button--${size} button--${fill}--${color}`}
+  class={`${cls} button button--${size}${
+    squared ? "--squared" : ""
+  } button--${fill}--${color}`}
 >
-  <span class="text__action--button--large">
+  <span class={`text__action--button--${buttonSizeToTextSize[size]}`}>
     <slot name="content" />
   </span>
   {#if $$slots.icon}
