@@ -14,7 +14,9 @@ export type ServiceCreator<ServiceShape, Config = null> = (
   sharedServicesConfig: SharedServicesConfig, serviceConfig: Config
 ) => ServiceShape;
 
-export type MakeServiceFN<Data, ReturnValue = void, ServiceConfig = null> = (config: SharedServicesConfig, serviceConfig: ServiceConfig) => (data: Data) => ReturnValue;
+export type MakeServiceFN<Data, ReturnValue = void, ServiceConfig = null> = unknown extends Data
+  ? (config: SharedServicesConfig, serviceConfig: ServiceConfig) => () => ReturnValue
+  : (config: SharedServicesConfig, serviceConfig: ServiceConfig) => (data: Data) => ReturnValue;
 
 type UninitializedServices = Readonly<{
   auth: typeof auth;
@@ -45,6 +47,7 @@ export default makeServices({
   fetch: makeScopedFetch(ApiPrefix),
 }, {
   auth: {
+    authCookieName: 'auth',
     requestEndpoints: {
       login: ApiEndpoints.login,
       register: ApiEndpoints.register,

@@ -69,6 +69,7 @@ export default {
 		!production && dev({
 			dirs: ['public'],
 			host: 'localhost',
+			spa: true,
 			port: 8080,
 			proxy: [{
 				from: '/api',

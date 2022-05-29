@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Link } from "svelte-routing";
+  import { Link } from "svelte-navigator";
 
   import Image from "../components/atoms/Image.svelte";
   import Stylesheet from "../components/atoms/Stylesheet.svelte";

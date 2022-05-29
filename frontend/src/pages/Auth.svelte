@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Link } from "svelte-routing";
+  import { Link, useNavigate } from "svelte-navigator";
 
   import Icon from "../components/atoms/Icon.svelte";
   import Image from "../components/atoms/Image.svelte";
@@ -11,17 +11,24 @@
   import { Routes } from "../config";
 
   import { getServices } from "../services";
-  import { errorMessages, withFormData } from "../utils/form";
+  import { withFormData } from "../utils/form";
   import { isNil } from "../utils/guards";
+  import type { Nullable } from "../utils/types";
 
   const services = getServices();
+  const navigate = useNavigate();
 
   const forms = {
     login: Routes.login,
     register: Routes.register,
   };
 
-  let fieldErrors = {
+  type FieldErrors = Record<
+    "email" | "password" | "repeatedPassword",
+    Nullable<string>
+  >;
+
+  let fieldErrors: FieldErrors = {
     email: null,
     password: null,
     repeatedPassword: null,
@@ -31,21 +38,39 @@
     const email = data.get("email");
     const password = data.get("password");
 
-    const validationResult = services.validation.validateLoginFields({
+    const localValidationResult = services.validation.validateLoginFields({
       email,
       password,
     });
 
-    if (!validationResult.isValid) {
+    if (!localValidationResult.isValid) {
       return (fieldErrors = {
         ...fieldErrors,
-        email: validationResult.errors.email ?? null,
-        password: validationResult.errors.password ?? null,
+        email: localValidationResult.errors.email ?? null,
+        password: localValidationResult.errors.password ?? null,
       });
+    } else {
+      fieldErrors = {
+        email: null,
+        password: null,
+        repeatedPassword: null,
+      };
     }
 
-    if (!isNil(validationResult.validFields)) {
-      services.auth.login(validationResult.validFields);
+    if (!isNil(localValidationResult.validFields)) {
+      services.auth
+        .login(localValidationResult.validFields)
+        .then((response) => {
+          if (!response.ok) {
+            fieldErrors = {
+              ...fieldErrors,
+              email: response.errors.email ?? null,
+              password: response.errors.password ?? null,
+            };
+          } else {
+            navigate(Routes.pantry);
+          }
+        });
     }
   };
 
