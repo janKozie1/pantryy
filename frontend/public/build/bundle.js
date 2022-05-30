@@ -5198,7 +5198,7 @@ var app = (function () {
     	return block;
     }
 
-    // (97:48) 
+    // (98:48) 
     function create_if_block_1(ctx) {
     	let form;
     	let div;
@@ -5224,6 +5224,7 @@ var app = (function () {
     			props: {
     				name: "password",
     				label: "Password",
+    				type: "password",
     				error: /*fieldErrors*/ ctx[0].password
     			},
     			$$inline: true
@@ -5268,9 +5269,9 @@ var app = (function () {
     			t2 = space();
     			create_component(button.$$.fragment);
     			attr_dev(div, "class", "form__inputs_container");
-    			add_location(div, file$4, 98, 8, 3601);
+    			add_location(div, file$4, 99, 8, 3629);
     			attr_dev(form, "class", "form -full-width -mt--1000");
-    			add_location(form, file$4, 97, 6, 3551);
+    			add_location(form, file$4, 98, 6, 3579);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, form, anchor);
@@ -5330,7 +5331,7 @@ var app = (function () {
     		block,
     		id: create_if_block_1.name,
     		type: "if",
-    		source: "(97:48) ",
+    		source: "(98:48) ",
     		ctx
     	});
 
@@ -5365,6 +5366,7 @@ var app = (function () {
     			props: {
     				name: "password",
     				label: "Password",
+    				type: "password",
     				error: /*fieldErrors*/ ctx[0].password
     			},
     			$$inline: true
@@ -5488,7 +5490,7 @@ var app = (function () {
     	return block;
     }
 
-    // (121:10) 
+    // (123:10) 
     function create_content_slot_1(ctx) {
     	let span;
 
@@ -5498,7 +5500,7 @@ var app = (function () {
     			span.textContent = "Sign up";
     			attr_dev(span, "slot", "content");
     			attr_dev(span, "class", "-color--inverted");
-    			add_location(span, file$4, 120, 10, 4265);
+    			add_location(span, file$4, 122, 10, 4321);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, span, anchor);
@@ -5513,14 +5515,14 @@ var app = (function () {
     		block,
     		id: create_content_slot_1.name,
     		type: "slot",
-    		source: "(121:10) ",
+    		source: "(123:10) ",
     		ctx
     	});
 
     	return block;
     }
 
-    // (122:10) 
+    // (124:10) 
     function create_icon_slot_1(ctx) {
     	let div;
     	let icon;
@@ -5540,7 +5542,7 @@ var app = (function () {
     			create_component(icon.$$.fragment);
     			attr_dev(div, "slot", "icon");
     			attr_dev(div, "class", "-inline-flex -pl--500 -mt--200");
-    			add_location(div, file$4, 121, 10, 4336);
+    			add_location(div, file$4, 123, 10, 4392);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, div, anchor);
@@ -5567,14 +5569,14 @@ var app = (function () {
     		block,
     		id: create_icon_slot_1.name,
     		type: "slot",
-    		source: "(122:10) ",
+    		source: "(124:10) ",
     		ctx
     	});
 
     	return block;
     }
 
-    // (81:8) <Link to="#" class="text__action--link--small -mt--600 -ml--auto">
+    // (82:8) <Link to="#" class="text__action--link--small -mt--600 -ml--auto">
     function create_default_slot$3(ctx) {
     	let span;
 
@@ -5583,7 +5585,7 @@ var app = (function () {
     			span = element("span");
     			span.textContent = "Forgot password?";
     			attr_dev(span, "class", "-color--action_default");
-    			add_location(span, file$4, 81, 10, 2995);
+    			add_location(span, file$4, 82, 10, 3023);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, span, anchor);
@@ -5598,14 +5600,14 @@ var app = (function () {
     		block,
     		id: create_default_slot$3.name,
     		type: "slot",
-    		source: "(81:8) <Link to=\\\"#\\\" class=\\\"text__action--link--small -mt--600 -ml--auto\\\">",
+    		source: "(82:8) <Link to=\\\"#\\\" class=\\\"text__action--link--small -mt--600 -ml--auto\\\">",
     		ctx
     	});
 
     	return block;
     }
 
-    // (91:10) 
+    // (92:10) 
     function create_content_slot$1(ctx) {
     	let span;
 
@@ -5615,7 +5617,7 @@ var app = (function () {
     			span.textContent = "Log in";
     			attr_dev(span, "slot", "content");
     			attr_dev(span, "class", "-color--inverted");
-    			add_location(span, file$4, 90, 10, 3256);
+    			add_location(span, file$4, 91, 10, 3284);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, span, anchor);
@@ -5630,14 +5632,14 @@ var app = (function () {
     		block,
     		id: create_content_slot$1.name,
     		type: "slot",
-    		source: "(91:10) ",
+    		source: "(92:10) ",
     		ctx
     	});
 
     	return block;
     }
 
-    // (92:10) 
+    // (93:10) 
     function create_icon_slot$1(ctx) {
     	let div;
     	let icon;
@@ -5657,7 +5659,7 @@ var app = (function () {
     			create_component(icon.$$.fragment);
     			attr_dev(div, "slot", "icon");
     			attr_dev(div, "class", "-inline-flex -pl--500 -mt--200");
-    			add_location(div, file$4, 91, 10, 3326);
+    			add_location(div, file$4, 92, 10, 3354);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, div, anchor);
@@ -5684,7 +5686,7 @@ var app = (function () {
     		block,
     		id: create_icon_slot$1.name,
     		type: "slot",
-    		source: "(92:10) ",
+    		source: "(93:10) ",
     		ctx
     	});
 
@@ -5810,7 +5812,7 @@ var app = (function () {
     			attr_dev(main, "class", "page");
     			add_location(main, file$4, 60, 0, 2279);
     			attr_dev(div2, "class", "bg_photos_container");
-    			add_location(div2, file$4, 129, 0, 4533);
+    			add_location(div2, file$4, 131, 0, 4589);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");

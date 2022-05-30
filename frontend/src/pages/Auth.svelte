@@ -96,6 +96,7 @@
           <TextInput
             name="password"
             label="Password"
+            type="password"
             error={fieldErrors.password}
           />
         </div>
@@ -122,6 +123,7 @@
           <TextInput
             name="password"
             label="Password"
+            type="password"
             error={fieldErrors.password}
           />
           <TextInput

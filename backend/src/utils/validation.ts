@@ -9,4 +9,6 @@ export const errorMessages = {
   VALID_EMAIL: 'Must be a valid email',
   PASSWORDS_DONT_MATCH: 'Passwords must match',
   EMAIL_TAKEN: 'Email is already taken',
+  EMAIL_NOT_USED: 'Email not used',
+  INVALID_PASSWORD: 'Invalid password',
 }

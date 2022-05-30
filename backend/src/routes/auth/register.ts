@@ -5,6 +5,7 @@ import { isEmpty, isNil, isObjectWithKeys } from "../../utils/guards";
 import { withPrefix } from "../../utils/routes";
 import { ValidationResponse } from "../../utils/types";
 import { errorMessages, isEmail } from "../../utils/validation";
+import { id } from "../../utils/fn";
 
 type RegisterPayload = Readonly<{
   email: string;
@@ -114,13 +115,11 @@ const routes: RouteInitializer = (prefix, {app, pool, services}) => {
       })
     }
 
-    const response: RegisterResponse = {
+    res.json(id<RegisterResponse>({
       ok: didAdd,
       validData: null,
       errors: {}
-    }
-
-    res.json(response);
+    }));
   })
 }
 
