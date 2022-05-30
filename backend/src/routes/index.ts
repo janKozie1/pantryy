@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { Pool } from 'pg';
 import { App } from '../app';
+import { Services } from '../services';
 import { withPrefix } from '../utils/routes';
 
 import auth from './auth';
@@ -8,6 +9,7 @@ import auth from './auth';
 type RouterInitializerConfig = Readonly<{
   app: App;
   pool: Pool;
+  services: Services;
 }>
 
 export type RouteInitializer = (prefix: string, config: RouterInitializerConfig) => void;

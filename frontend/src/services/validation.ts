@@ -1,5 +1,5 @@
 import type { MakeServiceFN, ServiceCreator } from ".";
-import { errorMessages } from "../utils/form";
+import { errorMessages } from "../utils/validation";
 import { isEmpty, isNotNil } from "../utils/guards";
 import type { Nullable } from "../utils/types";
 import { isEmail } from "../utils/validation";

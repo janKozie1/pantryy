@@ -7,4 +7,6 @@ export const isEmail = (arg: unknown) => isString(arg) && (
 export const errorMessages = {
   NOT_EMPTY: 'Must not be empty',
   VALID_EMAIL: 'Must be a valid email',
+  PASSWORDS_DONT_MATCH: 'Passwords must match',
+  EMAIL_TAKEN: 'Email is already taken',
 }

@@ -8,9 +8,3 @@ export const withFormData = (fn: OnSubmitFN) => (e: SubmitEvent) => {
     fn(new FormData(target));
   }
 }
-
-
-export const errorMessages = {
-  NOT_EMPTY: 'Must not be empty',
-  VALID_EMAIL: 'Must be a valid email',
-}
