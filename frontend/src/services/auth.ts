@@ -54,6 +54,37 @@ const makeLogin: MakeServiceFN<LoginRequest, Promise<Nullable<LoginResponse>>, A
 
     if (response.ok) {
       const body: LoginResponse = await response.json();
+      return body;
+    }
+
+    return null;
+  } catch {
+    return null;
+  }
+}
+
+type RegisterRequest = Readonly<{
+  email: string;
+  password: string;
+  repeatedPassword: string;
+}>
+
+type RegisterResponse = RequestResponse<RegisterRequest>;
+
+const makeRegister: MakeServiceFN<RegisterRequest, Promise<Nullable<RegisterResponse>>, AuthServiceConfig> = ({fetch}, {requestEndpoints }) => async(
+  data
+) => {
+  try {
+    const response = await makeSendJSON(fetch)(requestEndpoints.register, {
+      body: JSON.stringify({
+        email: data.email,
+        password: data.password,
+        repeatedPassword: data.repeatedPassword
+      })
+    });
+
+    if (response.ok) {
+      const body: RegisterResponse = await response.json();
 
       return body;
     }
@@ -71,20 +102,17 @@ const makeLogout: MakeServiceFN<unknown, void, AuthServiceConfig> = (_, {authCoo
   redirect.toLogin();
 };
 
-type SignupRequest = Readonly<{
-  email: string;
-  password: string;
-  repeatedPassword: string;
-}>
 
 export type AuthService = Readonly<{
   login: ReturnType<typeof makeLogin>;
+  register: ReturnType<typeof makeRegister>;
   isLoggedIn: ReturnType<typeof makeIsLoggedIn>;
   logout: ReturnType<typeof makeLogout>;
 }>
 
 const makeAuthService: ServiceCreator<AuthService, AuthServiceConfig> = (config, serviceConfig) => ({
   login: makeLogin(config, serviceConfig),
+  register: makeRegister(config, serviceConfig),
   isLoggedIn: makeIsLoggedIn(config, serviceConfig),
   logout: makeLogout(config, serviceConfig),
 })

@@ -34,6 +34,14 @@
     repeatedPassword: null,
   };
 
+  let updateFieldErrors = (newErrors: Nullable<Partial<FieldErrors>>) => {
+    fieldErrors = {
+      email: newErrors?.email ?? null,
+      password: newErrors?.password ?? null,
+      repeatedPassword: newErrors?.repeatedPassword ?? null,
+    };
+  };
+
   let onLoginSubmit = (data: FormData) => {
     const email = data.get("email");
     const password = data.get("password");
@@ -43,35 +51,53 @@
       password,
     });
 
-    if (!localValidationResult.isValid) {
-      return (fieldErrors = {
-        ...fieldErrors,
-        email: localValidationResult.errors.email ?? null,
-        password: localValidationResult.errors.password ?? null,
-      });
+    if (
+      !localValidationResult.isValid ||
+      isNil(localValidationResult.validFields)
+    ) {
+      return updateFieldErrors(localValidationResult.errors);
     } else {
-      fieldErrors = {
-        email: null,
-        password: null,
-        repeatedPassword: null,
-      };
+      updateFieldErrors(null);
     }
 
-    if (!isNil(localValidationResult.validFields)) {
-      services.auth
-        .login(localValidationResult.validFields)
-        .then((response) => {
-          if (!response.ok) {
-            fieldErrors = {
-              ...fieldErrors,
-              email: response.errors.email ?? null,
-              password: response.errors.password ?? null,
-            };
-          } else {
-            navigate(Routes.pantry);
-          }
-        });
+    services.auth.login(localValidationResult.validFields).then((response) => {
+      if (!response.ok) {
+        updateFieldErrors(response.errors);
+      } else {
+        navigate(Routes.pantry);
+      }
+    });
+  };
+
+  let onRegisterSubmit = (data: FormData) => {
+    const email = data.get("email");
+    const password = data.get("password");
+    const repeatedPassword = data.get("repeated_password");
+
+    const localValidationResult = services.validation.validateRegisterFields({
+      email,
+      password,
+      repeatedPassword,
+    });
+
+    if (
+      !localValidationResult.isValid ||
+      isNil(localValidationResult.validFields)
+    ) {
+      return updateFieldErrors(localValidationResult.errors);
+    } else {
+      updateFieldErrors(null);
     }
+
+    services.auth
+      .register(localValidationResult.validFields)
+      .then((response) => {
+        if (!response.ok) {
+          updateFieldErrors(response.errors);
+        } else {
+          navigate(Routes.pantry);
+        }
+      });
   };
 
   let pathname = window.location.pathname;
@@ -117,7 +143,10 @@
         </Button>
       </form>
     {:else if pathname.includes(forms.register)}
-      <form class="form -full-width -mt--1000">
+      <form
+        on:submit|preventDefault={withFormData(onRegisterSubmit)}
+        class="form -full-width -mt--1000"
+      >
         <div class="form__inputs_container">
           <TextInput name="email" label="Email" error={fieldErrors.email} />
           <TextInput
