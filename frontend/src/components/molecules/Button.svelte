@@ -26,11 +26,13 @@
     squared ? "--squared" : ""
   } button--${fill}--${color}`}
 >
-  <span class={`text__action--button--${buttonSizeToTextSize[size]}`}>
-    <slot name="content" />
-  </span>
+  {#if $$slots.content}
+    <span class={`text__action--button--${buttonSizeToTextSize[size]}`}>
+      <slot name="content" />
+    </span>
+  {/if}
   {#if $$slots.icon}
-    <div class="-inline-flex -pl--500 -mt--200">
+    <div class={`-inline-flex ${$$slots.content ? "-pl--500" : ""} -mt--200`}>
       <slot name="icon" />
     </div>
   {/if}

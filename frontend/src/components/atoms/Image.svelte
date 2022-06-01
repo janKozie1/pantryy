@@ -4,4 +4,4 @@
   export let cls: string;
 </script>
 
-<img src={`images/${src}`} {alt} class={cls} />
+<img src={`/images/${src}`} {alt} class={cls} />
