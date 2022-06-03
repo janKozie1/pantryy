@@ -95,7 +95,7 @@ $button_variants: (
   &--borderless {
     @mixin button--borderless($color, $cursor) {
       cursor: $cursor;
-      background-color: var(--color__inverted);
+      background-color: transparent;
       border-radius: var(--border__rounded_md);
       border: 1px solid $color;
     }

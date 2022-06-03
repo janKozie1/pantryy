@@ -23,4 +23,6 @@
 
   .-mx--#{$name} { margin-left: $value; margin-right: $value; }
   .-my--#{$name} { margin-top: $value; margin-bottom: $value; }
+
+  .-gap--#{$name} { gap: $value };
 }

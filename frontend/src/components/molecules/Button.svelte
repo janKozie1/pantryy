@@ -22,6 +22,7 @@
 
 <button
   {type}
+  on:click
   class={`${cls} button button--${size}${
     squared ? "--squared" : ""
   } button--${fill}--${color}`}

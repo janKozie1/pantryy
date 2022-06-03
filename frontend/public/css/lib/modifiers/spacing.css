@@ -74,6 +74,10 @@
   margin-bottom: 1px;
 }
 
+.-gap--100 {
+  gap: 1px;
+}
+
 .-p--200 {
   padding: 2px;
 }
@@ -132,6 +136,10 @@
 .-my--200 {
   margin-top: 2px;
   margin-bottom: 2px;
+}
+
+.-gap--200 {
+  gap: 2px;
 }
 
 .-p--300 {
@@ -194,6 +202,10 @@
   margin-bottom: 4px;
 }
 
+.-gap--300 {
+  gap: 4px;
+}
+
 .-p--400 {
   padding: 6px;
 }
@@ -252,6 +264,10 @@
 .-my--400 {
   margin-top: 6px;
   margin-bottom: 6px;
+}
+
+.-gap--400 {
+  gap: 6px;
 }
 
 .-p--500 {
@@ -314,6 +330,10 @@
   margin-bottom: 8px;
 }
 
+.-gap--500 {
+  gap: 8px;
+}
+
 .-p--600 {
   padding: 12px;
 }
@@ -372,6 +392,10 @@
 .-my--600 {
   margin-top: 12px;
   margin-bottom: 12px;
+}
+
+.-gap--600 {
+  gap: 12px;
 }
 
 .-p--700 {
@@ -434,6 +458,10 @@
   margin-bottom: 16px;
 }
 
+.-gap--700 {
+  gap: 16px;
+}
+
 .-p--800 {
   padding: 24px;
 }
@@ -492,6 +520,10 @@
 .-my--800 {
   margin-top: 24px;
   margin-bottom: 24px;
+}
+
+.-gap--800 {
+  gap: 24px;
 }
 
 .-p--900 {
@@ -554,6 +586,10 @@
   margin-bottom: 32px;
 }
 
+.-gap--900 {
+  gap: 32px;
+}
+
 .-p--1000 {
   padding: 40px;
 }
@@ -612,6 +648,10 @@
 .-my--1000 {
   margin-top: 40px;
   margin-bottom: 40px;
+}
+
+.-gap--1000 {
+  gap: 40px;
 }
 
 /*# sourceMappingURL=spacing.css.map */

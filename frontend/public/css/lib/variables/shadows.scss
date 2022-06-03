@@ -1,0 +1,10 @@
+$shadows: (
+  "large": '0 1px 4px 0px rgba(58,58,58,0.08), 0 6px 12px 2px rgba(9,26,17,0.12)',
+  "small": '0 0.5px 1px 0.5px rgba(9,26,17,0.12)',
+);
+
+@mixin css_shadows {
+  @each $name, $value in $shadows {
+    --shadow__#{$name}: #{$value};
+  }
+}

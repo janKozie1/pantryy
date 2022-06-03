@@ -1,0 +1,18 @@
+.drawer {
+  position: absolute;
+  right: var(--spacing__800);
+  height: calc(100vh - 2 * var(--spacing__800));
+  top: var(--spacing__800);
+  background-color: var(--color__neutral_8);
+  width: 330px;
+  border-radius: var(--border__rounded_md);
+  box-shadow: var(--shadow__large);
+  padding: var(--spacing__800);
+  transform: translateX(calc(100% + var(--spacing__800)));
+  transition: transform 0.3s;
+}
+.drawer--expanded {
+  transform: translateX(0);
+}
+
+/*# sourceMappingURL=drawer.css.map */

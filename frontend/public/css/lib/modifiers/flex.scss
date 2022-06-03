@@ -7,3 +7,13 @@
   display: flex;
   justify-content: center;
 }
+
+.-justify-space-between {
+  display: flex;
+  justify-content: space-between;
+}
+
+.-direction-column {
+  display: flex;
+  flex-direction: column;
+}

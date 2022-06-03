@@ -466,75 +466,92 @@
 }
 .button--borderless--primary {
   cursor: auto;
-  background-color: var(--color__inverted);
+  background-color: transparent;
   border-radius: var(--border__rounded_md);
   border: 1px solid var(--color__inverted);
 }
 .button--borderless--primary:hover {
   cursor: pointer;
-  background-color: var(--color__inverted);
+  background-color: transparent;
   border-radius: var(--border__rounded_md);
   border: 1px solid var(--color__action_primary--hover);
 }
 .button--borderless--primary:active {
   cursor: pointer;
-  background-color: var(--color__inverted);
+  background-color: transparent;
   border-radius: var(--border__rounded_md);
   border: 1px solid var(--color__action_primary--active);
 }
 .button--borderless--primary:disabled {
   cursor: not-allowed;
-  background-color: var(--color__inverted);
+  background-color: transparent;
   border-radius: var(--border__rounded_md);
   border: 1px solid var(--color__action_primary--disabled);
 }
 .button--borderless--secondary {
   cursor: auto;
-  background-color: var(--color__inverted);
+  background-color: transparent;
   border-radius: var(--border__rounded_md);
   border: 1px solid var(--color__inverted);
 }
 .button--borderless--secondary:hover {
   cursor: pointer;
-  background-color: var(--color__inverted);
+  background-color: transparent;
   border-radius: var(--border__rounded_md);
   border: 1px solid var(--color__action_secondary--hover);
 }
 .button--borderless--secondary:active {
   cursor: pointer;
-  background-color: var(--color__inverted);
+  background-color: transparent;
   border-radius: var(--border__rounded_md);
   border: 1px solid var(--color__action_secondary--active);
 }
 .button--borderless--secondary:disabled {
   cursor: not-allowed;
-  background-color: var(--color__inverted);
+  background-color: transparent;
   border-radius: var(--border__rounded_md);
   border: 1px solid var(--color__action_secondary--disabled);
 }
 .button--borderless--neutral {
   cursor: auto;
-  background-color: var(--color__inverted);
+  background-color: transparent;
   border-radius: var(--border__rounded_md);
   border: 1px solid var(--color__inverted);
 }
 .button--borderless--neutral:hover {
   cursor: pointer;
-  background-color: var(--color__inverted);
+  background-color: transparent;
   border-radius: var(--border__rounded_md);
   border: 1px solid var(--color__action_default--hover);
 }
 .button--borderless--neutral:active {
   cursor: pointer;
-  background-color: var(--color__inverted);
+  background-color: transparent;
   border-radius: var(--border__rounded_md);
   border: 1px solid var(--color__action_default--active);
 }
 .button--borderless--neutral:disabled {
   cursor: not-allowed;
-  background-color: var(--color__inverted);
+  background-color: transparent;
   border-radius: var(--border__rounded_md);
   border: 1px solid var(--color__action_default--disabled);
+}
+
+.drawer {
+  position: absolute;
+  right: var(--spacing__800);
+  height: calc(100vh - 2 * var(--spacing__800));
+  top: var(--spacing__800);
+  background-color: var(--color__neutral_8);
+  width: 330px;
+  border-radius: var(--border__rounded_md);
+  box-shadow: var(--shadow__large);
+  padding: var(--spacing__800);
+  transform: translateX(calc(100% + var(--spacing__800)));
+  transition: transform 0.3s;
+}
+.drawer--expanded {
+  transform: translateX(0);
 }
 
 /*# sourceMappingURL=index.css.map */
