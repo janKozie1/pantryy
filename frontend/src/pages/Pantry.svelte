@@ -3,20 +3,34 @@
 
   import Stylesheet from "../components/atoms/Stylesheet.svelte";
   import Button from "../components/molecules/Button.svelte";
+  import Loading from "../components/molecules/Loading.svelte";
   import AddPantryItemDrawer from "../components/organisms/AddPantryItemDrawer.svelte";
   import Nav from "../components/organisms/Nav.svelte";
   import PantryItem from "../components/organisms/PantryItem.svelte";
   import Toolbar from "../components/organisms/Toolbar.svelte";
+  import { getServices } from "../services";
+
+  const services = getServices();
+
+  let items = services.externalData.getPantryItems();
 
   let drawerOpen = false;
   let onAddItemButtonClick = () => (drawerOpen = true);
   let onDrawerCancel = () => (drawerOpen = false);
+  let onDrawerSuccess = () => {
+    drawerOpen = false;
+    items = services.externalData.getPantryItems();
+  };
 </script>
 
 <Stylesheet src="pages/pantry.css" />
 
 <div class="page">
-  <AddPantryItemDrawer open={drawerOpen} onCancel={onDrawerCancel} />
+  <AddPantryItemDrawer
+    open={drawerOpen}
+    onCancel={onDrawerCancel}
+    onSuccess={onDrawerSuccess}
+  />
   <Nav />
   <main class="page__main">
     <Toolbar>
@@ -33,12 +47,13 @@
       </Button>
     </Toolbar>
     <ul class="pantry_list -px--700 -py--1000">
-      <PantryItem />
-      <PantryItem />
-      <PantryItem />
-      <PantryItem />
-      <PantryItem />
-      <PantryItem />
+      {#await items}
+        <Loading />
+      {:then loadedItems}
+        {#each loadedItems as item (item.id)}
+          <PantryItem {item} />
+        {/each}
+      {/await}
     </ul>
   </main>
 </div>

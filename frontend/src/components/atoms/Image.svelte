@@ -1,7 +1,11 @@
 <script lang="ts">
+  import type { Nullable } from "../../utils/types";
+
   export let src: string;
   export let alt: string;
-  export let cls: string;
+  export let cls: Nullable<string> = null;
+
+  export let external: boolean = false;
 </script>
 
-<img src={`/images/${src}`} {alt} class={cls} />
+<img src={external ? src : `/images/${src}`} {alt} class={cls} />

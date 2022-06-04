@@ -1,24 +1,38 @@
 import pg from 'pg';
 import Multer from 'multer';
+import { fileURLToPath } from 'url'
+import { dirname, join } from 'path';
 
 import dotenv from 'dotenv';
 
 import routes from './routes/index.js';
 import App from './app.js';
 import Services from './services/index.js';
+import path from 'path';
 
 dotenv.config();
 
-type AppConfig = Readonly<{
+export type AppConfig = Readonly<{
   prefix: string;
   port: string;
+  staticContent: {
+    filePath: string;
+    endPoint: '/static',
+  };
+  uploads: {
+    folder: string;
+  }
 }>
 
 const init = (config: AppConfig) => {
   const pool = new pg.Pool();
-  const app = App();
-  const services = Services({ pool });
-  const upload = Multer({dest: 'uploads/'});
+  const app = App(config);
+  const upload = Multer({dest: path.join(config.staticContent.filePath, config.uploads.folder)});
+
+  const services = Services({
+    pool,
+    filesConfig: { staticEndpoint: config.staticContent.endPoint, uploadedImagesFolder: config.uploads.folder }
+  });
 
   routes(config.prefix, { app, pool, services, upload });
 
@@ -31,5 +45,12 @@ const init = (config: AppConfig) => {
 
 init({
   port: process.env.PORT ?? '8080',
-  prefix: '/api'
+  prefix: '/api',
+  uploads: {
+    folder: 'uploads',
+  },
+  staticContent: {
+    endPoint: '/static',
+    filePath: join(dirname(fileURLToPath(import.meta.url)), '/static')
+  },
 });

@@ -73,6 +73,7 @@ export default ({
       requestEndpoints: {
         measurmentUnits: ApiEndpoints.getMeasurmentUnits,
         pantryItem: ApiEndpoints.pantryItem,
+        pantryItems: ApiEndpoints.pantryItems
       },
     },
     validation: null,

@@ -1674,6 +1674,39 @@
   transform: translateX(0);
 }
 
+@keyframes rotation {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+.spinner {
+  border: 0rem solid var(--color__neutral_8);
+  border-top-color: var(--color__action_primary);
+  border-radius: 50%;
+  animation: rotation 0.8s ease infinite;
+}
+.spinner--dark {
+  border-top-color: rgba(var(--color__neutral_black), 0.5);
+}
+.spinner--small {
+  width: 2rem;
+  height: 2rem;
+  border-width: 0.15rem;
+}
+.spinner--regular {
+  width: 4rem;
+  height: 4rem;
+  border-width: 0.3rem;
+}
+.spinner--big {
+  width: 6rem;
+  height: 6rem;
+  border-width: 0.6rem;
+}
+
 :root {
   --color__primary: #E86C00;
   --color__secondary: #FDCC4A;

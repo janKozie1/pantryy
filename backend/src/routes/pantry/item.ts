@@ -1,4 +1,4 @@
-import { Pool, PoolClient } from "pg";
+import {  PoolClient } from "pg";
 import { Request } from 'express';
 
 import { RouteInitializer } from "../index.js";
@@ -8,7 +8,7 @@ import { Nullable, ValidationResponse } from "../../utils/types.js";
 import { id, withClient } from "../../utils/fn.js";
 import { isNil, isObjectWithKeys } from "../../utils/guards.js";
 import { errorMessages } from "../../utils/validation.js";
-import { changeExtension, getExtension, isImage, removeFile, renameFile } from '../../utils/files.js';
+import { changeExtension, getExtension, isImage, removeFile } from '../../utils/files.js';
 import { Services } from "../../services/index.js";
 
 type CreatePantryItemRequest = Readonly<{
@@ -115,11 +115,12 @@ const routes: RouteInitializer = (prefix, {app, services, upload, pool}) => {
       removeFile(file?.path);
       return res.json(parsed);
     } else {
-      const newFileName = await changeExtension(parsed.validData.image.file.path, parsed.validData.image.extension);
-      const didCreate = await withClient(createNewProduct, pool)(req, services, parsed.validData, newFileName)
+      const fileName = `${parsed.validData.image.file.filename}.${parsed.validData.image.extension}`;
+      const newFilePath = await changeExtension(parsed.validData.image.file.path, parsed.validData.image.extension);
+      const didCreate = await withClient(createNewProduct, pool)(req, services, parsed.validData, fileName)
 
       if (!didCreate) {
-        removeFile(newFileName);
+        removeFile(newFilePath);
         return res.json(id<CreatePantryItemResponse>({
           ok: false,
           validData: null,

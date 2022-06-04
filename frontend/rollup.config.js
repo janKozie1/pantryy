@@ -74,6 +74,9 @@ export default {
 			proxy: [{
 				from: '/api',
 				to: 'http://localhost:5050/api'
+			}, {
+				from: '/static',
+				to: 'http://localhost:5050/static'
 			}]
 		}),
 

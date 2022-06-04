@@ -10,11 +10,13 @@
 
   import Drawer from "../molecules/Drawer.svelte";
   import InputLabel from "../molecules/InputLabel.svelte";
+  import Loading from "../molecules/Loading.svelte";
   import RadioGroup from "../molecules/RadioGroup.svelte";
   import RadioInput from "../molecules/RadioInput.svelte";
   import TextInput from "../molecules/TextInput.svelte";
 
   export let onCancel: () => void;
+  export let onSuccess: () => void;
   export let open: boolean;
 
   type FieldErrors = Record<
@@ -67,7 +69,7 @@
         if (!response.ok) {
           updateFieldErrors(response.errors);
         } else {
-          onCancel();
+          onSuccess();
         }
       });
   };
@@ -75,7 +77,7 @@
 
 <Drawer title="Add new product" {onSubmit} {onCancel} {open}>
   {#await measurmentUnits}
-    <p>Loading.AddPantryItemForm...</p>
+    <Loading />
   {:then loadedMeasurmentUnits}
     <div class="-mt--1000 -pt--500 -direction-column -gap--800">
       <TextInput name="name" label="Name" error={fieldErrors.name} />

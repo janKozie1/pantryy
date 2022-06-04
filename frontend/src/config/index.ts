@@ -12,4 +12,5 @@ export const ApiEndpoints = {
   register: '/auth/register',
   getMeasurmentUnits: '/pantry/measurmentUnits',
   pantryItem: '/pantry/item',
+  pantryItems: '/pantry/items',
 }

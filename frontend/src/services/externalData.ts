@@ -21,6 +21,7 @@ type ExternalDataServiceConfig = Readonly<{
   requestEndpoints: Readonly<{
     measurmentUnits: string;
     pantryItem: string
+    pantryItems: string;
   }>
 }>
 
@@ -75,14 +76,40 @@ const makeCreatePantryItem: MakeServiceFN<CreatePantryItemRequest, Promise<Nulla
   }
 }
 
+export type PantryItem = Readonly<{
+  id: string;
+  name: string;
+  description: string;
+  imageURL: string;
+}>
+
+type GetPantryItemsResponse = PantryItem[];
+
+const makeGetPantryItems: MakeServiceFN<unknown, Promise<GetPantryItemsResponse>, ExternalDataServiceConfig> = ({fetch}, {requestEndpoints}) => async () => {
+  try {
+    const response = await fetch(requestEndpoints.pantryItems);
+
+
+    if (response.ok) {
+      const body: GetPantryItemsResponse = await response.json();
+      return body;
+    }
+
+  } catch {
+    return []
+  }
+}
+
 export type AuthService = Readonly<{
   getMeasurmentUnits: ReturnType<typeof makeGetMeasurmentUnits>;
-  createPantryItem: ReturnType<typeof makeCreatePantryItem>
+  createPantryItem: ReturnType<typeof makeCreatePantryItem>;
+  getPantryItems: ReturnType<typeof makeGetPantryItems>;
 }>
 
 const makeAuthService: ServiceCreator<AuthService, ExternalDataServiceConfig> = (config, serviceConfig) => ({
   getMeasurmentUnits: makeGetMeasurmentUnits(config, serviceConfig),
   createPantryItem: makeCreatePantryItem(config, serviceConfig),
+  getPantryItems: makeGetPantryItems(config, serviceConfig),
 })
 
 export default makeAuthService;

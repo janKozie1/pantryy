@@ -1,5 +1,6 @@
 import { Pool } from 'pg';
 import auth from './auth.js';
+import files from './files.js';
 
 export type SharedServicesConfig = Readonly<{
   pool: Pool;
@@ -15,6 +16,7 @@ export type MakeServiceFN<Data, ReturnValue = void, ServiceConfig = null> = unkn
 
 type UninitializedServices = Readonly<{
   auth: typeof auth;
+  files: typeof files;
 }>;
 
 type ServiceSpecificConfigs = Readonly<{
@@ -27,19 +29,19 @@ export type Services = Readonly<{
 
 const makeServices = (
   sharedConfig: SharedServicesConfig, specificConfigs: ServiceSpecificConfigs
-): Services => {
-  const authService = auth(sharedConfig, specificConfigs.auth);
-
-  return ({
-    auth: authService,
-  })
-}
+): Services => ({
+  auth: auth(sharedConfig, specificConfigs.auth),
+  files: files(sharedConfig, specificConfigs.files)
+})
 
 type DynamicConfig = Readonly<{
-  pool: Pool
+  pool: Pool;
+  filesConfig: ServiceSpecificConfigs['files']
 }>
 
-export default (dynamicConfig: DynamicConfig) => makeServices(dynamicConfig, {
+export default (dynamicConfig: DynamicConfig) => makeServices({
+  pool: dynamicConfig.pool
+}, {
   auth: {
     authCookieName: 'auth',
     jwt: {
@@ -47,4 +49,5 @@ export default (dynamicConfig: DynamicConfig) => makeServices(dynamicConfig, {
       key: ':D',
     }
   },
+  files: dynamicConfig.filesConfig
 });
