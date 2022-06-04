@@ -106,6 +106,52 @@ const createNewProduct = async (
   }
 }
 
+type UserProduct = Readonly<{
+  id: string;
+  name: string;
+  description: string;
+  imageURL: string;
+}>
+
+const getUserProduct = async (
+  client: PoolClient,
+  services: Services,
+  email: Nullable<string>,
+  productId: Nullable<string>
+): Promise<Nullable<UserProduct>> => {
+  if (isNil(productId)) {
+    return null;
+  }
+
+  const user = await client.query('SELECT user_id from users where users.user_email = $1', [email]);
+  const userId = user.rows[0].user_id;
+
+  const result = await client.query(`SELECT
+      P.product_id, PD.product_name, PD.product_description, PD.product_image_url
+    FROM
+      products_details as PD
+    INNER JOIN
+      products as P
+    ON
+      PD.product_detail_id=P.product_detail_id
+    WHERE
+      P.product_id=$1 AND P.user_id=$2
+  `, [productId, userId]);
+
+  if (result.rowCount !== 1) {
+    return null;
+  }
+
+  const product = result.rows[0];
+
+  return {
+    id: product.product_id,
+    imageURL: services.files.getImageURL(product.product_image_url),
+    name: product.product_name,
+    description: product.product_description
+  };
+}
+
 const routes: RouteInitializer = (prefix, {app, services, upload, pool}) => {
   app.post(withPrefix(prefix, ''), protectedRoute({services}), upload.single('image'), async (req, res) => {
     const file: Nullable<Express.Request['file']> = req.file;
@@ -133,6 +179,21 @@ const routes: RouteInitializer = (prefix, {app, services, upload, pool}) => {
         errors: {},
         validData: null,
       }));
+    }
+  })
+
+  app.get(withPrefix(prefix, '/:id'), protectedRoute({services}), async (req, res) => {
+    const product = await withClient(getUserProduct, pool)(
+      services,
+      services.auth.decodeToken(services.auth.getToken(req))?.email,
+      req.params.id,
+    )
+
+    if (isNil(product)) {
+      res.status(404);
+      return res.json({ok: false})
+    } else {
+      return res.json(id<UserProduct>(product));
     }
   })
 }

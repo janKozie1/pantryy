@@ -71,9 +71,10 @@ export default ({
     },
     externalData: {
       requestEndpoints: {
-        measurmentUnits: ApiEndpoints.getMeasurmentUnits,
-        pantryItem: ApiEndpoints.pantryItem,
-        pantryItems: ApiEndpoints.pantryItems
+        getMeasurmentUnits: ApiEndpoints.getMeasurmentUnits,
+        getPantryItem: ApiEndpoints.getPantryItem,
+        getPantryItems: ApiEndpoints.getPantryItems,
+        createPantryItem: ApiEndpoints.createPantryItem,
       },
     },
     validation: null,

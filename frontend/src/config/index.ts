@@ -2,15 +2,16 @@ export const Routes = {
   login: '/login',
   register: '/register',
   pantry: '/pantry',
-  product: '/product/:id',
+  product: '/pantry/:id',
   home: '/'
-}
+} as const;
 
-export const ApiPrefix = '/api';
+export const ApiPrefix = '/api' as const;
 export const ApiEndpoints = {
   login: '/auth/login',
   register: '/auth/register',
   getMeasurmentUnits: '/pantry/measurmentUnits',
-  pantryItem: '/pantry/item',
-  pantryItems: '/pantry/items',
-}
+  createPantryItem: '/pantry/item',
+  getPantryItem: '/pantry/item/:id',
+  getPantryItems: '/pantry/items',
+} as const;

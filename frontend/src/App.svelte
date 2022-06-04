@@ -29,9 +29,9 @@
 				<Pantry />
 			</AuthRoute>
 		</Route>
-		<Route path={Routes.product}>
+		<Route path={Routes.product} let:params>
 			<AuthRoute isProtected redirectTo={Routes.login}>
-				<Product />
+				<Product productId={params.id} />
 			</AuthRoute>
 		</Route>
 		<Route path={Routes.home}><Home /></Route>

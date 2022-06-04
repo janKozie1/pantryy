@@ -1,4 +1,5 @@
 import type { ServiceCreator, MakeServiceFN } from "."
+import { generatePath } from "../utils/routes";
 import type { Nullable } from "../utils/types";
 import { isFile } from "../utils/validation";
 import type { RequestResponse } from "./requests";
@@ -19,9 +20,10 @@ const getFormData = (arg: Record<string, string | Blob>): FormData => {
 
 type ExternalDataServiceConfig = Readonly<{
   requestEndpoints: Readonly<{
-    measurmentUnits: string;
-    pantryItem: string
-    pantryItems: string;
+    getMeasurmentUnits: string;
+    createPantryItem: string
+    getPantryItem: string
+    getPantryItems: string;
   }>
 }>
 
@@ -34,7 +36,7 @@ export type MeasurmentUnitsResponse = Readonly<{
 
 const makeGetMeasurmentUnits: MakeServiceFN<unknown, Promise<Nullable<MeasurmentUnitsResponse>>, ExternalDataServiceConfig> = ({fetch}, {requestEndpoints}) => async () => {
   try {
-    const response = await fetch(requestEndpoints.measurmentUnits);
+    const response = await fetch(requestEndpoints.getMeasurmentUnits);
 
     if (response.ok) {
       const body: MeasurmentUnitsResponse = await response.json();
@@ -60,7 +62,7 @@ const makeCreatePantryItem: MakeServiceFN<CreatePantryItemRequest, Promise<Nulla
   data
 ) => {
   try {
-    const response = await fetch(requestEndpoints.pantryItem, {
+    const response = await fetch(requestEndpoints.createPantryItem, {
       method: 'POST',
       body: getFormData(data),
     });
@@ -87,8 +89,7 @@ type GetPantryItemsResponse = PantryItem[];
 
 const makeGetPantryItems: MakeServiceFN<unknown, Promise<GetPantryItemsResponse>, ExternalDataServiceConfig> = ({fetch}, {requestEndpoints}) => async () => {
   try {
-    const response = await fetch(requestEndpoints.pantryItems);
-
+    const response = await fetch(requestEndpoints.getPantryItems);
 
     if (response.ok) {
       const body: GetPantryItemsResponse = await response.json();
@@ -100,16 +101,34 @@ const makeGetPantryItems: MakeServiceFN<unknown, Promise<GetPantryItemsResponse>
   }
 }
 
+const makeGetPantryItem: MakeServiceFN<string, Promise<Nullable<PantryItem>>, ExternalDataServiceConfig> = ({fetch}, {requestEndpoints}) => async (
+  id
+) => {
+  try {
+    const response = await fetch(generatePath(requestEndpoints.getPantryItem, { id }));
+
+    if (response.ok) {
+      const body: PantryItem = await response.json();
+      return body;
+    }
+
+  } catch {
+    return null
+  }
+}
+
 export type AuthService = Readonly<{
   getMeasurmentUnits: ReturnType<typeof makeGetMeasurmentUnits>;
   createPantryItem: ReturnType<typeof makeCreatePantryItem>;
   getPantryItems: ReturnType<typeof makeGetPantryItems>;
+  getPantryItem: ReturnType<typeof makeGetPantryItem>;
 }>
 
 const makeAuthService: ServiceCreator<AuthService, ExternalDataServiceConfig> = (config, serviceConfig) => ({
   getMeasurmentUnits: makeGetMeasurmentUnits(config, serviceConfig),
   createPantryItem: makeCreatePantryItem(config, serviceConfig),
   getPantryItems: makeGetPantryItems(config, serviceConfig),
+  getPantryItem: makeGetPantryItem(config, serviceConfig),
 })
 
 export default makeAuthService;

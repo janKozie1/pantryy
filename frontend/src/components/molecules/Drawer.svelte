@@ -10,44 +10,64 @@
 
   export let onSubmit: OnSubmitFN;
   export let onCancel: () => void;
+
+  let shouldRender = false;
+  let shouldAnimate = false;
+
+  $: if (open) {
+    setTimeout(() => (shouldRender = true));
+  }
+
+  $: if (shouldRender) {
+    setTimeout(() => (shouldAnimate = true), 10);
+  }
+
+  let wrappedOnCancel = () => {
+    setTimeout(() => (shouldRender = false), 150);
+    shouldAnimate = false;
+
+    onCancel();
+  };
 </script>
 
-<aside class={`drawer ${open ? "drawer--expanded" : ""}`}>
-  <div class="-align-center -justify-space-between">
-    <h2 class="text__heading--6--heavy">
-      {title}
-    </h2>
-    <button
-      class="button button--sm--squared button--borderless--neutral"
-      on:click={onCancel}
-    >
-      <Icon icon="clear" />
-      <div class="-inline-flex -fill--neutral_3" />
-    </button>
-  </div>
-  <form on:submit|preventDefault={withFormData(onSubmit)}>
-    <slot />
-    <div class="-mt--1000 -pt--500">
-      <Button
-        type="submit"
-        size="sm"
-        color="primary"
-        fill="filled"
-        cls="-full-width -justify-center"
+{#if shouldRender}
+  <aside class={`drawer ${shouldAnimate ? "drawer--expanded" : ""}`}>
+    <div class="-align-center -justify-space-between">
+      <h2 class="text__heading--6--heavy">
+        {title}
+      </h2>
+      <button
+        class="button button--sm--squared button--borderless--neutral"
+        on:click={wrappedOnCancel}
       >
-        <span slot="content" class="-color--inverted"> Submit </span>
-      </Button>
+        <Icon icon="clear" />
+        <div class="-inline-flex -fill--neutral_3" />
+      </button>
     </div>
-    <div class="-mt--600">
-      <Button
-        size="sm"
-        color="neutral"
-        fill="borderless"
-        cls="-full-width -justify-center"
-        on:click={onCancel}
-      >
-        <span slot="content" class="-color--neutral_5"> Cancel </span>
-      </Button>
-    </div>
-  </form>
-</aside>
+    <form on:submit|preventDefault={withFormData(onSubmit)}>
+      <slot />
+      <div class="-mt--1000 -pt--500">
+        <Button
+          type="submit"
+          size="sm"
+          color="primary"
+          fill="filled"
+          cls="-full-width -justify-center"
+        >
+          <span slot="content" class="-color--inverted"> Submit </span>
+        </Button>
+      </div>
+      <div class="-mt--600">
+        <Button
+          size="sm"
+          color="neutral"
+          fill="borderless"
+          cls="-full-width -justify-center"
+          on:click={wrappedOnCancel}
+        >
+          <span slot="content" class="-color--neutral_5"> Cancel </span>
+        </Button>
+      </div>
+    </form>
+  </aside>
+{/if}

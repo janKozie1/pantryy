@@ -1,5 +1,6 @@
 .drawer {
   position: absolute;
+  z-index: 2;
   right: var(--spacing__800);
   height: calc(100vh - 2 * var(--spacing__800));
   top: var(--spacing__800);
