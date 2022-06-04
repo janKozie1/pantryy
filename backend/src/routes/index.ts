@@ -1,11 +1,12 @@
 import { Pool } from 'pg';
-import { App } from '../app';
-import { Services } from '../services';
-import { withPrefix } from '../utils/routes';
 import { Multer } from 'multer'
 
-import auth from './auth';
-import pantry from './pantry';
+import { App } from '../app.js';
+import { Services } from '../services/index.js';
+import { withPrefix } from '../utils/routes.js';
+
+import auth from './auth/index.js';
+import pantry from './pantry/index.js';
 
 type RouterInitializerConfig = Readonly<{
   app: App;

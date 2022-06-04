@@ -1,10 +1,8 @@
-
-
-
-
-import auth from './auth';
+import { Pool } from 'pg';
+import auth from './auth.js';
 
 export type SharedServicesConfig = Readonly<{
+  pool: Pool;
 }>
 
 export type ServiceCreator<ServiceShape, Config = null> = (
@@ -20,7 +18,7 @@ type UninitializedServices = Readonly<{
 }>;
 
 type ServiceSpecificConfigs = Readonly<{
-  [service in keyof UninitializedServices]: UninitializedServices[service] extends ServiceCreator<infer T, infer Config> ? Config: never;
+  [service in keyof Omit<UninitializedServices, 'operations'>]:  UninitializedServices[service] extends ServiceCreator<infer T, infer Config> ? Config: never;
 }>
 
 export type Services = Readonly<{
@@ -29,11 +27,19 @@ export type Services = Readonly<{
 
 const makeServices = (
   sharedConfig: SharedServicesConfig, specificConfigs: ServiceSpecificConfigs
-): Services => ({
-  auth: auth(sharedConfig, specificConfigs.auth),
-})
+): Services => {
+  const authService = auth(sharedConfig, specificConfigs.auth);
 
-export default () => makeServices({}, {
+  return ({
+    auth: authService,
+  })
+}
+
+type DynamicConfig = Readonly<{
+  pool: Pool
+}>
+
+export default (dynamicConfig: DynamicConfig) => makeServices(dynamicConfig, {
   auth: {
     authCookieName: 'auth',
     jwt: {

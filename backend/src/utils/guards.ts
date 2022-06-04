@@ -1,4 +1,4 @@
-import { Literal } from "./types";
+import { Literal } from "./types.js";
 
 export const isString = (arg: unknown): arg is string => typeof arg === 'string';
 
@@ -7,9 +7,13 @@ export const isNotNil = <T>(arg: T | null | undefined): arg is T => !isNil(arg);
 
 export const isLiteral = <T>(
   arg: unknown,
-): arg is (T extends Literal ? T : Literal) => typeof arg === 'object' && (
-  Object.getPrototypeOf(Object.getPrototypeOf(arg))
-) === null;
+): arg is (T extends Literal ? T : Literal) => {
+  return typeof arg === 'object' && !isNil(arg) && ((
+    Object.getPrototypeOf(arg)
+  ) === null || (
+    Object.getPrototypeOf(Object.getPrototypeOf(arg))
+  ) === null)
+};
 
 export const isObjectWithKeys = <T>(
   arg: unknown,

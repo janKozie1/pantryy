@@ -2,10 +2,12 @@
   "name": "pantryy_backend",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "exports": "./index.js",
+  "type": "module",
   "scripts": {
     "build": "npx tsc",
     "start": "node dist/index.js",
+    "typecheck": "tsc --noEmit",
     "dev": "concurrently \"npx tsc --watch\" \"nodemon -q dist/index.js\""
   },
   "keywords": [],

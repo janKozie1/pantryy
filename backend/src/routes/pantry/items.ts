@@ -1,6 +1,6 @@
-import { RouteInitializer } from "..";
-import { withPrefix } from "../../utils/routes";
-import protectedRoute from "../../middleware/protectedRoute";
+import { RouteInitializer } from "../index.js";
+import { withPrefix } from "../../utils/routes.js";
+import protectedRoute from "../../middleware/protectedRoute.js";
 
 const routes: RouteInitializer = (prefix, {app, services},) => {
   app.get(withPrefix(prefix, ''), protectedRoute({services}), async (req, res) => {

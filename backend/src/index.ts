@@ -1,11 +1,11 @@
-import { Pool  } from 'pg';
+import pg from 'pg';
 import Multer from 'multer';
 
 import dotenv from 'dotenv';
 
-import routes from './routes';
-import App from './app';
-import Services from './services';
+import routes from './routes/index.js';
+import App from './app.js';
+import Services from './services/index.js';
 
 dotenv.config();
 
@@ -15,9 +15,9 @@ type AppConfig = Readonly<{
 }>
 
 const init = (config: AppConfig) => {
-  const pool = new Pool();
+  const pool = new pg.Pool();
   const app = App();
-  const services = Services();
+  const services = Services({ pool });
   const upload = Multer({dest: 'uploads/'});
 
   routes(config.prefix, { app, pool, services, upload });

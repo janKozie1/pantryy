@@ -1,5 +1,5 @@
 import { RequestHandler } from "express";
-import { Services } from "../services";
+import { Services } from "../services/index.js";
 
 type Config = Readonly<{
   services: Services;

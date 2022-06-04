@@ -1,11 +1,12 @@
-import { PoolClient } from "pg";
+import { Pool, PoolClient } from "pg";
 import bcrypt from 'bcrypt';
-import { RouteInitializer } from "..";
-import { isEmpty, isNil, isObjectWithKeys } from "../../utils/guards";
-import { withPrefix } from "../../utils/routes";
-import { ValidationResponse } from "../../utils/types";
-import { errorMessages, isEmail } from "../../utils/validation";
-import { id } from "../../utils/fn";
+
+import { RouteInitializer } from "../index.js";
+import { isEmpty, isNil, isObjectWithKeys } from "../../utils/guards.js";
+import { withPrefix } from "../../utils/routes.js";
+import { ValidationResponse } from "../../utils/types.js";
+import { errorMessages, isEmail } from "../../utils/validation.js";
+import { id, withClient } from "../../utils/fn.js";
 
 type RegisterPayload = Readonly<{
   email: string;
@@ -99,14 +100,13 @@ const createUser = async (client: PoolClient, payload: RegisterPayload): Promise
 
 const routes: RouteInitializer = (prefix, {app, pool, services}) => {
   app.post(withPrefix(prefix, ''), async (req, res) => {
-    const client = await pool.connect();
-    const parsed = await validateBody(client, req.body);
+    const parsed = await withClient(validateBody, pool)(req.body);
 
     if (!parsed.ok || isNil(parsed.validData)) {
       return res.json(parsed)
     }
 
-    const didAdd = await createUser(client, parsed.validData);
+    const didAdd = await withClient(createUser, pool)(parsed.validData);
 
     if (didAdd) {
       services.auth.login({

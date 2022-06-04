@@ -1,10 +1,7 @@
-import { Middleware } from ".";
-import { isNil } from "../utils/guards";
+import { Middleware } from "./index.js";
 
 const protectedRoute: Middleware = ({services}) => (req, res, next) => {
-  const authToken = req.cookies.auth;
-
-  if (!isNil(authToken) && services.auth.isLoggedIn(authToken)) {
+  if (services.auth.isLoggedIn(services.auth.getToken(req))) {
     return next()
   } else {
     res.statusCode = 401;
