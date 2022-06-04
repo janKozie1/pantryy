@@ -1,4 +1,3 @@
-
 import { RouteInitializer } from "..";
 import { withPrefix } from "../../utils/routes";
 import protectedRoute from "../../middleware/protectedRoute";

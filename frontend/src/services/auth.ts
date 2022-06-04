@@ -2,6 +2,7 @@ import type { ServiceCreator, MakeServiceFN, SharedServicesConfig } from "."
 import { getCookie, removeCookie } from "../utils/cookies";
 import { isEmpty } from "../utils/guards";
 import type { Nullable } from "../utils/types";
+import type { RequestResponse } from "./requests";
 
 type AuthServiceConfig = Readonly<{
   authCookieName: string;
@@ -14,26 +15,6 @@ type AuthServiceConfig = Readonly<{
   }>
 }>
 
-type RequestResponse<T> = Readonly<{
-  ok: boolean;
-  errors: Partial<{
-    [key in keyof T]: string
-  }>
-}>
-
-const makeSendJSON = (scopedFetch: SharedServicesConfig['fetch']):  SharedServicesConfig['fetch'] => (...args) => {
-  const [url, params] = args;
-
-  return scopedFetch(url, {
-    ...params,
-    method: "POST",
-    headers: {
-      "Content-type": "application/json"
-    },
-    body: params.body,
-  })
-}
-
 type LoginRequest = Readonly<{
   email: string;
   password: string;
@@ -41,11 +22,11 @@ type LoginRequest = Readonly<{
 
 type LoginResponse = RequestResponse<LoginRequest>;
 
-const makeLogin: MakeServiceFN<LoginRequest, Promise<Nullable<LoginResponse>>, AuthServiceConfig> = ({fetch}, {requestEndpoints}) => async (
+const makeLogin: MakeServiceFN<LoginRequest, Promise<Nullable<LoginResponse>>, AuthServiceConfig> = ({sendJSON}, {requestEndpoints}) => async (
   data
 ) => {
   try {
-    const response = await makeSendJSON(fetch)(requestEndpoints.login, {
+    const response = await sendJSON(requestEndpoints.login, {
       body: JSON.stringify({
         email: data.email,
         password: data.password,
@@ -71,11 +52,11 @@ type RegisterRequest = Readonly<{
 
 type RegisterResponse = RequestResponse<RegisterRequest>;
 
-const makeRegister: MakeServiceFN<RegisterRequest, Promise<Nullable<RegisterResponse>>, AuthServiceConfig> = ({fetch}, {requestEndpoints }) => async(
+const makeRegister: MakeServiceFN<RegisterRequest, Promise<Nullable<RegisterResponse>>, AuthServiceConfig> = ({sendJSON}, {requestEndpoints }) => async(
   data
 ) => {
   try {
-    const response = await makeSendJSON(fetch)(requestEndpoints.register, {
+    const response = await sendJSON(requestEndpoints.register, {
       body: JSON.stringify({
         email: data.email,
         password: data.password,

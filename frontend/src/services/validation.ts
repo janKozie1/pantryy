@@ -1,6 +1,6 @@
 import type { MakeServiceFN, ServiceCreator } from ".";
-import { errorMessages } from "../utils/validation";
-import { isEmpty, isNotNil } from "../utils/guards";
+import { errorMessages, isFile } from "../utils/validation";
+import { isEmpty, isNil, isNotNil } from "../utils/guards";
 import type { Nullable } from "../utils/types";
 import { isEmail } from "../utils/validation";
 
@@ -94,14 +94,65 @@ const makeValidateRegisterFields: MakeServiceFN<RegisterFormData, ValidationResu
   }
 }
 
+type AddPantryItemFormData = Readonly<{
+  name: unknown;
+  image: unknown;
+  description: unknown;
+  unit: unknown;
+}>
+
+type AddPantryItemValidData = Readonly<{
+  [key in keyof Omit<AddPantryItemFormData, 'image'>]: string;
+}> & Readonly<{
+  image: File;
+}>
+
+
+const makeValidateAddPantryItemFields: MakeServiceFN<AddPantryItemFormData, ValidationResult<AddPantryItemFormData, AddPantryItemValidData>> = () => ({
+  name,
+  image,
+  description,
+  unit
+}) => {
+  const errors: ValidationResult<AddPantryItemFormData, AddPantryItemValidData>['errors'] = {
+    name: isEmpty(name)
+      ? errorMessages.NOT_EMPTY
+      : null,
+    image: !isFile(image)
+      ? errorMessages.VALID_FILE
+      : null,
+    description: isEmpty(description)
+      ? errorMessages.NOT_EMPTY
+      : null,
+    unit: isEmpty(unit)
+      ? errorMessages.NOT_SELECTED
+      : null
+  }
+
+  const isValid = !hasErrors(errors);
+
+  return {
+    isValid,
+    errors,
+    validFields: isValid ? ({
+      name,
+      image,
+      description,
+      unit
+    } as AddPantryItemValidData) : null,
+  }
+}
+
 type ValidationService = Readonly<{
   validateLoginFields: ReturnType<typeof makeValidateLoginFields>;
   validateRegisterFields: ReturnType<typeof makeValidateRegisterFields>
+  validateAddPantryItemFields: ReturnType<typeof makeValidateAddPantryItemFields>
 }>
 
 const makeValidationService: ServiceCreator<ValidationService> = (config, serviceConfig) => ({
   validateLoginFields: makeValidateLoginFields(config, serviceConfig),
   validateRegisterFields: makeValidateRegisterFields(config, serviceConfig),
+  validateAddPantryItemFields: makeValidateAddPantryItemFields(config, serviceConfig)
 })
 
 export default makeValidationService;

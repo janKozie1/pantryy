@@ -1,8 +1,10 @@
 <script lang="ts">
   import { isNil } from "../../utils/guards";
   import type { Nullable } from "../../utils/types";
+  import ErrorMessage from "./ErrorMessage.svelte";
 
   export let label: Nullable<string> = null;
+  export let error: Nullable<string> = null;
 </script>
 
 <div class="input -full-width">
@@ -13,7 +15,7 @@
         <span class="text__paragraph--base--heavy">{label}</span>
       </div>
     {/if}
-
     <slot />
+    <ErrorMessage {error} />
   </label>
 </div>

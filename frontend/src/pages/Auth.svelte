@@ -11,7 +11,7 @@
   import { Routes } from "../config";
 
   import { getServices } from "../services";
-  import { withFormData } from "../utils/form";
+  import { mergeFieldErrors, OnSubmitFN, withFormData } from "../utils/form";
   import { isNil } from "../utils/guards";
   import type { Nullable } from "../utils/types";
 
@@ -35,14 +35,10 @@
   };
 
   let updateFieldErrors = (newErrors: Nullable<Partial<FieldErrors>>) => {
-    fieldErrors = {
-      email: newErrors?.email ?? null,
-      password: newErrors?.password ?? null,
-      repeatedPassword: newErrors?.repeatedPassword ?? null,
-    };
+    fieldErrors = mergeFieldErrors(fieldErrors, newErrors);
   };
 
-  let onLoginSubmit = (data: FormData) => {
+  let onLoginSubmit: OnSubmitFN = (data) => {
     const email = data.get("email");
     const password = data.get("password");
 
@@ -69,7 +65,7 @@
     });
   };
 
-  let onRegisterSubmit = (data: FormData) => {
+  let onRegisterSubmit: OnSubmitFN = (data) => {
     const email = data.get("email");
     const password = data.get("password");
     const repeatedPassword = data.get("repeated_password");

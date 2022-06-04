@@ -11,18 +11,12 @@
   let drawerOpen = false;
   let onAddItemButtonClick = () => (drawerOpen = true);
   let onDrawerCancel = () => (drawerOpen = false);
-
-  let onAddItemDrawerSubmit = () => {};
 </script>
 
 <Stylesheet src="pages/pantry.css" />
 
 <div class="page">
-  <AddPantryItemDrawer
-    open={drawerOpen}
-    onCancel={onDrawerCancel}
-    onSubmit={onAddItemDrawerSubmit}
-  />
+  <AddPantryItemDrawer open={drawerOpen} onCancel={onDrawerCancel} />
   <Nav />
   <main class="page__main">
     <Toolbar>

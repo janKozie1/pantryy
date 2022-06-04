@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { isNil, isString } from "../../utils/guards";
   import type { Nullable } from "../../utils/types";
   import InputLabel from "./InputLabel.svelte";
 
@@ -13,7 +12,7 @@
   export let ghost: boolean = false;
 </script>
 
-<InputLabel {label}>
+<InputLabel {label} {error}>
   <input
     {name}
     {type}
@@ -22,13 +21,4 @@
     } ${cls}`}
     placeholder={`${placeholder ?? label ?? name}...`}
   />
-  {#if isString(error)}
-    <div class="-pl--700 -mt--400 ">
-      <span class="text__paragraph--small--regular">
-        <span class="-color--state_error">
-          {error}
-        </span>
-      </span>
-    </div>
-  {/if}
 </InputLabel>

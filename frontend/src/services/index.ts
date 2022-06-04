@@ -1,14 +1,16 @@
 import { getContext } from "svelte";
 import { ApiEndpoints, ApiPrefix, Routes } from "../config";
 
-import { FetchFN, makeScopedFetch } from "./requests"
+import { FetchFN, makeScopedFetch, makeSendJSON } from "./requests"
 
 import auth from './auth';
 import validation from './validation';
+import externalData from './externalData';
 import type { NavigateFn } from "svelte-navigator";
 
 export type SharedServicesConfig = Readonly<{
   fetch: FetchFN;
+  sendJSON: FetchFN;
 }>
 
 export type ServiceCreator<ServiceShape, Config = null> = (
@@ -22,6 +24,7 @@ export type MakeServiceFN<Data, ReturnValue = void, ServiceConfig = null> = unkn
 type UninitializedServices = Readonly<{
   auth: typeof auth;
   validation: typeof validation;
+  externalData: typeof externalData;
 }>;
 
 type ServiceSpecificConfigs = Readonly<{
@@ -37,6 +40,7 @@ const makeServices = (
 ): Services => ({
   auth: auth(sharedConfig, specificConfigs.auth),
   validation: validation(sharedConfig, specificConfigs.validation),
+  externalData: externalData(sharedConfig, specificConfigs.externalData),
 })
 
 type DynamicConfig = Readonly<{
@@ -50,16 +54,27 @@ export const getServices = () => getContext<Services>(SERVICES_KEY)
 
 export default ({
   navigate
-}: DynamicConfig) => makeServices({ fetch: makeScopedFetch(ApiPrefix) }, {
-  auth: {
-    authCookieName: 'auth',
-    redirect: {
-      toLogin: () => navigate(Routes.login),
+}: DynamicConfig) => {
+  const fetch = makeScopedFetch(ApiPrefix);
+  const sendJSON = makeSendJSON(fetch);
+
+  return makeServices({ fetch, sendJSON }, {
+    auth: {
+      authCookieName: 'auth',
+      redirect: {
+        toLogin: () => navigate(Routes.login),
+      },
+      requestEndpoints: {
+        login: ApiEndpoints.login,
+        register: ApiEndpoints.register,
+      }
     },
-    requestEndpoints: {
-      login: ApiEndpoints.login,
-      register: ApiEndpoints.register,
-    }
-  },
-  validation: null,
-});
+    externalData: {
+      requestEndpoints: {
+        measurmentUnits: ApiEndpoints.getMeasurmentUnits,
+        pantryItem: ApiEndpoints.pantryItem,
+      },
+    },
+    validation: null,
+  })
+};

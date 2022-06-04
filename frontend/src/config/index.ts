@@ -6,9 +6,10 @@ export const Routes = {
   home: '/'
 }
 
-
 export const ApiPrefix = '/api';
 export const ApiEndpoints = {
   login: '/auth/login',
   register: '/auth/register',
+  getMeasurmentUnits: '/pantry/measurmentUnits',
+  pantryItem: '/pantry/item',
 }
