@@ -14,5 +14,6 @@ export const ApiEndpoints = {
   createPantryItem: '/pantry/item',
   getPantryItem: '/pantry/item/:id',
   updatePantryItem: '/pantry/item/:id',
+  deletePantryItem: '/pantry/item/:id',
   getPantryItems: '/pantry/items',
 } as const;

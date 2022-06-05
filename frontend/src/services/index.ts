@@ -75,6 +75,7 @@ export default ({
         getPantryItem: ApiEndpoints.getPantryItem,
         getPantryItems: ApiEndpoints.getPantryItems,
         updatePantryItem: ApiEndpoints.updatePantryItem,
+        deletePantryItem: ApiEndpoints.deletePantryItem,
         createPantryItem: ApiEndpoints.createPantryItem,
       },
     },

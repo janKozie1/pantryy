@@ -255,6 +255,41 @@ const updateUserProduct = async (
   }
 }
 
+const deleteUserProduct = async (
+  client: PoolClient,
+  req: Request,
+  services: Services,
+  productId: Nullable<string>,
+): Promise<boolean> => {
+  const email = services.auth.decodeToken(services.auth.getToken(req))?.email;
+
+  try {
+    const user = await client.query('SELECT user_id from users where users.user_email = $1', [email]);
+    const userId = user.rows[0].user_id;
+
+    const productDetails = await client.query(`SELECT
+        PD.product_detail_id
+      FROM
+        products_details as PD
+      JOIN
+        products as P
+      ON
+        P.product_detail_id = PD.product_detail_id
+      WHERE
+        P.product_id=$1
+      AND
+        P.user_id=$2;
+    `, [productId, userId]);
+
+    const productDetailsId = productDetails.rows?.[0]?.product_detail_id;
+    const response = await client.query(`DELETE from products_details where product_detail_id=$1`, [productDetailsId]);
+
+    return response.rowCount === 1;
+  } catch(err) {
+    return false;
+  }
+}
+
 const routes: RouteInitializer = (prefix, {app, services, upload, pool}) => {
   app.post(withPrefix(prefix, ''), protectedRoute({services}), upload.single('image'), async (req, res) => {
     const file: Nullable<Express.Request['file']> = req.file;
@@ -314,12 +349,22 @@ const routes: RouteInitializer = (prefix, {app, services, upload, pool}) => {
     }
   })
 
+  app.delete(withPrefix(prefix, '/:id'), protectedRoute({services}), async (req, res) => {
+    const didDelete = await withClient(deleteUserProduct, pool)(req, services, req.params.id);
+
+    if (!didDelete) {
+      return res.json({ok: false})
+    }
+
+    return res.json({ok: true})
+  })
+
   app.get(withPrefix(prefix, '/:id'), protectedRoute({services}), async (req, res) => {
     const product = await withClient(getUserProduct, pool)(req, services, req.params.id)
 
     if (isNil(product)) {
       res.status(404);
-      return res.json({ok: false})
+      return res.json(null)
     } else {
       return res.json(id<UserProduct>(product));
     }

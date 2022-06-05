@@ -24,6 +24,7 @@ type ExternalDataServiceConfig = Readonly<{
     createPantryItem: string;
     updatePantryItem: string;
     getPantryItem: string;
+    deletePantryItem: string;
     getPantryItems: string;
   }>
 }>
@@ -147,12 +148,32 @@ const makeGetPantryItem: MakeServiceFN<string, Promise<Nullable<PantryItem>>, Ex
   }
 }
 
+type DeletePantryItemResponse = RequestResponse<{}>;
+
+const makeDeletePantryItem: MakeServiceFN<string, Promise<Nullable<DeletePantryItemResponse>>, ExternalDataServiceConfig> = ({fetch}, {requestEndpoints}) => async (
+  id
+) => {
+  try {
+    const response = await fetch(generatePath(requestEndpoints.deletePantryItem, { id }), {
+      method: "DELETE"
+    });
+
+    if (response.ok) {
+      const body: DeletePantryItemResponse = await response.json();
+      return body;
+    }
+  } catch {
+    return null;
+  }
+}
+
 export type AuthService = Readonly<{
   getMeasurmentUnits: ReturnType<typeof makeGetMeasurmentUnits>;
   getPantryItems: ReturnType<typeof makeGetPantryItems>;
   createPantryItem: ReturnType<typeof makeCreatePantryItem>;
   getPantryItem: ReturnType<typeof makeGetPantryItem>;
-  updatePantryItem: ReturnType<typeof makeUpdatePantryItem>
+  deletePantryItem: ReturnType<typeof makeDeletePantryItem>;
+  updatePantryItem: ReturnType<typeof makeUpdatePantryItem>;
 }>
 
 const makeAuthService: ServiceCreator<AuthService, ExternalDataServiceConfig> = (config, serviceConfig) => ({
@@ -160,7 +181,8 @@ const makeAuthService: ServiceCreator<AuthService, ExternalDataServiceConfig> = 
   getPantryItems: makeGetPantryItems(config, serviceConfig),
   createPantryItem: makeCreatePantryItem(config, serviceConfig),
   getPantryItem: makeGetPantryItem(config, serviceConfig),
-  updatePantryItem: makeUpdatePantryItem(config, serviceConfig)
+  deletePantryItem: makeDeletePantryItem(config, serviceConfig),
+  updatePantryItem: makeUpdatePantryItem(config, serviceConfig),
 })
 
 export default makeAuthService;
