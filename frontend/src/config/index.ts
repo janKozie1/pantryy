@@ -13,5 +13,6 @@ export const ApiEndpoints = {
   getMeasurmentUnits: '/pantry/measurmentUnits',
   createPantryItem: '/pantry/item',
   getPantryItem: '/pantry/item/:id',
+  updatePantryItem: '/pantry/item/:id',
   getPantryItems: '/pantry/items',
 } as const;

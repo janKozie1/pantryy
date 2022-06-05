@@ -1,8 +1,11 @@
 <script lang="ts">
   import { getServices } from "../../services";
-  import type { MeasurmentUnitsResponse } from "../../services/externalData";
 
-  import { mergeFieldErrors, OnSubmitFN } from "../../utils/form";
+  import {
+    mergeFieldErrors,
+    OnSubmitFN,
+    setInitialValues,
+  } from "../../utils/form";
   import { isNil } from "../../utils/guards";
   import { capitalize } from "../../utils/string";
 
@@ -15,17 +18,18 @@
   import RadioInput from "../molecules/RadioInput.svelte";
   import TextInput from "../molecules/TextInput.svelte";
 
+  type Fields = "name" | "image" | "description" | "unit";
+
   export let onCancel: () => void;
   export let onSuccess: () => void;
   export let open: boolean;
+  export let initialValues: Partial<Record<Fields | "id", string>> = {};
 
-  type FieldErrors = Record<
-    "name" | "image" | "description" | "unit",
-    Nullable<string>
-  >;
+  type FieldErrors = Record<Fields, Nullable<string>>;
 
   const services = getServices();
 
+  let formContainerRef: Nullable<HTMLElement> = null;
   let fieldErrors: FieldErrors = {
     name: null,
     image: null,
@@ -33,14 +37,13 @@
     unit: null,
   };
 
-  let measurmentUnits: Promise<MeasurmentUnitsResponse> =
-    services.externalData.getMeasurmentUnits();
+  let measurmentUnits = services.externalData.getMeasurmentUnits();
 
   let updateFieldErrors = (newErrors: Nullable<Partial<FieldErrors>>) => {
     fieldErrors = mergeFieldErrors(fieldErrors, newErrors);
   };
 
-  let onSubmit: OnSubmitFN = (data) => {
+  let onCreateSubmit: OnSubmitFN = (data) => {
     const name = data.get("name");
     const image = data.get("image");
     const description = data.get("description");
@@ -73,13 +76,57 @@
         }
       });
   };
+
+  let onEditSubmit: OnSubmitFN = (data) => {
+    const name = data.get("name");
+    const image = data.get("image");
+    const description = data.get("description");
+    const unit = data.get("unit");
+
+    const localValidationResult =
+      services.validation.validateEditPantryItemFields({
+        name,
+        image,
+        description,
+        unit,
+        id: initialValues.id,
+      });
+
+    if (
+      !localValidationResult.isValid ||
+      isNil(localValidationResult.validFields)
+    ) {
+      return updateFieldErrors(localValidationResult.errors);
+    } else {
+      updateFieldErrors(null);
+    }
+
+    services.externalData
+      .updatePantryItem(localValidationResult.validFields)
+      .then((response) => {
+        if (!response.ok) {
+          updateFieldErrors(response.errors);
+        } else {
+          onSuccess();
+        }
+      });
+  };
+
+  let onSubmit = !isNil(initialValues.id) ? onEditSubmit : onCreateSubmit;
+
+  $: if (!isNil(formContainerRef)) {
+    setInitialValues(formContainerRef, initialValues);
+  }
 </script>
 
 <Drawer title="Add new product" {onSubmit} {onCancel} {open}>
   {#await measurmentUnits}
     <Loading />
   {:then loadedMeasurmentUnits}
-    <div class="-mt--1000 -pt--500 -direction-column -gap--800">
+    <div
+      class="-mt--1000 -pt--500 -direction-column -gap--800"
+      bind:this={formContainerRef}
+    >
       <TextInput name="name" label="Name" error={fieldErrors.name} />
       <TextInput
         name="image"

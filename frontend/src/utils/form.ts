@@ -24,3 +24,35 @@ export const mergeFieldErrors = <Errors extends FieldErrors>(current: Errors, ne
     ...newErrors,
   }
 }
+
+
+export const setInitialValues = (ref: HTMLElement, initialValues: Partial<Record<string, string>>) => {
+  const inputValues = Object.entries(initialValues);
+
+  inputValues.forEach(([inputName, value]) => {
+    const selector = `[name="${inputName}"]`;
+    const input = ref.querySelector(selector);
+
+    if (isNil(input)) {
+      return;
+    }
+
+    if (input instanceof HTMLInputElement) {
+      if (input.type === 'radio') {
+        ([...ref.querySelectorAll(selector)] as HTMLInputElement[]).forEach((radio) => {
+          if (radio.value === value) {
+            radio.checked = true;
+          } else {
+            radio.checked = false;
+          }
+        });
+      } else {
+        input.value = value;
+      }
+    }
+
+    if (input instanceof HTMLTextAreaElement) {
+      input.value = value;
+    }
+  })
+}

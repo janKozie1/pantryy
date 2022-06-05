@@ -21,8 +21,9 @@ const getFormData = (arg: Record<string, string | Blob>): FormData => {
 type ExternalDataServiceConfig = Readonly<{
   requestEndpoints: Readonly<{
     getMeasurmentUnits: string;
-    createPantryItem: string
-    getPantryItem: string
+    createPantryItem: string;
+    updatePantryItem: string;
+    getPantryItem: string;
     getPantryItems: string;
   }>
 }>
@@ -78,11 +79,40 @@ const makeCreatePantryItem: MakeServiceFN<CreatePantryItemRequest, Promise<Nulla
   }
 }
 
+type UpdatePantryItemRequest = CreatePantryItemRequest & Readonly<{
+  id: string;
+}>;
+
+type UpdatePantryItemResponse = RequestResponse<UpdatePantryItemRequest>
+
+const makeUpdatePantryItem: MakeServiceFN<UpdatePantryItemRequest, Promise<Nullable<UpdatePantryItemResponse>>, ExternalDataServiceConfig> = ({fetch}, {requestEndpoints}) => async (
+  data
+) => {
+  const { id } = data;
+
+  try {
+    const response = await fetch(generatePath(requestEndpoints.updatePantryItem, { id }), {
+      method: 'PATCH',
+      body: getFormData(data),
+    });
+
+    if (response.ok) {
+      const body: UpdatePantryItemResponse = await response.json();
+      return body;
+    }
+
+    return null;
+  } catch {
+    return null;
+  }
+}
+
 export type PantryItem = Readonly<{
   id: string;
   name: string;
   description: string;
   imageURL: string;
+  unitId: string;
 }>
 
 type GetPantryItemsResponse = PantryItem[];
@@ -119,16 +149,18 @@ const makeGetPantryItem: MakeServiceFN<string, Promise<Nullable<PantryItem>>, Ex
 
 export type AuthService = Readonly<{
   getMeasurmentUnits: ReturnType<typeof makeGetMeasurmentUnits>;
-  createPantryItem: ReturnType<typeof makeCreatePantryItem>;
   getPantryItems: ReturnType<typeof makeGetPantryItems>;
+  createPantryItem: ReturnType<typeof makeCreatePantryItem>;
   getPantryItem: ReturnType<typeof makeGetPantryItem>;
+  updatePantryItem: ReturnType<typeof makeUpdatePantryItem>
 }>
 
 const makeAuthService: ServiceCreator<AuthService, ExternalDataServiceConfig> = (config, serviceConfig) => ({
   getMeasurmentUnits: makeGetMeasurmentUnits(config, serviceConfig),
-  createPantryItem: makeCreatePantryItem(config, serviceConfig),
   getPantryItems: makeGetPantryItems(config, serviceConfig),
+  createPantryItem: makeCreatePantryItem(config, serviceConfig),
   getPantryItem: makeGetPantryItem(config, serviceConfig),
+  updatePantryItem: makeUpdatePantryItem(config, serviceConfig)
 })
 
 export default makeAuthService;

@@ -15,6 +15,11 @@ export const isLiteral = <T>(
   ) === null)
 };
 
+export const isObjectWithPartialKeys = <T>(
+  arg: unknown,
+  requiredKeys: (keyof T)[],
+): arg is Partial<T> => isLiteral(arg) && requiredKeys.some((key) => key in arg);
+
 export const isObjectWithKeys = <T>(
   arg: unknown,
   requiredKeys: (keyof T)[],

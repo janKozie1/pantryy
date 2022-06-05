@@ -1,12 +1,17 @@
 <script lang="ts">
   import type { OnSubmitFN } from "../../utils/form";
   import { withFormData } from "../../utils/form";
+  import { isNil } from "../../utils/guards";
+  import type { Nullable } from "../../utils/types";
 
   import Icon from "../atoms/Icon.svelte";
   import Button from "./Button.svelte";
 
   export let title: string;
   export let open: boolean;
+  export let formRef: Nullable<HTMLFormElement> = null;
+
+  let a: Nullable<HTMLFormElement>;
 
   export let onSubmit: OnSubmitFN;
   export let onCancel: () => void;
@@ -44,7 +49,7 @@
         <div class="-inline-flex -fill--neutral_3" />
       </button>
     </div>
-    <form on:submit|preventDefault={withFormData(onSubmit)}>
+    <form on:submit|preventDefault={withFormData(onSubmit)} bind:this={formRef}>
       <slot />
       <div class="-mt--1000 -pt--500">
         <Button

@@ -9,3 +9,7 @@ export type ValidationResponse<T> = Readonly<{
   }>,
   validData: Nullable<T>;
 }>
+
+export type PartialWithNulls<T> = Readonly<{
+  [key in keyof T]?: Nullable<T[key]>
+}>

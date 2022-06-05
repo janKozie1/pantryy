@@ -1,5 +1,5 @@
 import type { MakeServiceFN, ServiceCreator } from ".";
-import { errorMessages, isFile } from "../utils/validation";
+import { errorMessages, isEmptyFile, isFile } from "../utils/validation";
 import { isEmpty, isNil, isNotNil } from "../utils/guards";
 import type { Nullable } from "../utils/types";
 import { isEmail } from "../utils/validation";
@@ -107,7 +107,6 @@ type AddPantryItemValidData = Readonly<{
   image: File;
 }>
 
-
 const makeValidateAddPantryItemFields: MakeServiceFN<AddPantryItemFormData, ValidationResult<AddPantryItemFormData, AddPantryItemValidData>> = () => ({
   name,
   image,
@@ -143,16 +142,74 @@ const makeValidateAddPantryItemFields: MakeServiceFN<AddPantryItemFormData, Vali
   }
 }
 
+type EditPantryItemFormData = Readonly<{
+  name: unknown;
+  image: unknown;
+  description: unknown;
+  unit: unknown;
+  id: unknown;
+}>
+
+type EditPantryItemValidData = Readonly<{
+  [key in keyof Omit<EditPantryItemFormData, 'image'>]: string;
+}> & Readonly<{
+  image: File;
+}>
+
+const makeValidateEditPantryItemFields: MakeServiceFN<EditPantryItemFormData, ValidationResult<EditPantryItemFormData, EditPantryItemValidData>> = () => ({
+  name,
+  image,
+  description,
+  unit,
+  id,
+}) => {
+  const errors: ValidationResult<EditPantryItemFormData, EditPantryItemValidData>['errors'] = {
+    name: isEmpty(name)
+      ? errorMessages.NOT_EMPTY
+      : null,
+    image: isEmptyFile(image)
+      ? null
+      : !isFile(image)
+        ? errorMessages.VALID_FILE
+        : null,
+    description: isEmpty(description)
+      ? errorMessages.NOT_EMPTY
+      : null,
+    unit: isEmpty(unit)
+      ? errorMessages.NOT_SELECTED
+      : null,
+    id: isEmpty(id)
+      ? errorMessages.NOT_EMPTY
+      : null,
+  }
+
+  const isValid = !hasErrors(errors);
+
+  return {
+    isValid,
+    errors,
+    validFields: isValid ? ({
+      name,
+      image,
+      description,
+      unit,
+      id,
+    } as EditPantryItemValidData) : null,
+  }
+}
+
 type ValidationService = Readonly<{
   validateLoginFields: ReturnType<typeof makeValidateLoginFields>;
   validateRegisterFields: ReturnType<typeof makeValidateRegisterFields>
-  validateAddPantryItemFields: ReturnType<typeof makeValidateAddPantryItemFields>
+  validateAddPantryItemFields: ReturnType<typeof makeValidateAddPantryItemFields>,
+  validateEditPantryItemFields: ReturnType<typeof makeValidateEditPantryItemFields>;
 }>
 
 const makeValidationService: ServiceCreator<ValidationService> = (config, serviceConfig) => ({
   validateLoginFields: makeValidateLoginFields(config, serviceConfig),
   validateRegisterFields: makeValidateRegisterFields(config, serviceConfig),
-  validateAddPantryItemFields: makeValidateAddPantryItemFields(config, serviceConfig)
+  validateAddPantryItemFields: makeValidateAddPantryItemFields(config, serviceConfig),
+  validateEditPantryItemFields: makeValidateEditPantryItemFields(config, serviceConfig),
 })
 
 export default makeValidationService;

@@ -4,42 +4,34 @@
   import Stylesheet from "../components/atoms/Stylesheet.svelte";
   import Button from "../components/molecules/Button.svelte";
   import Loading from "../components/molecules/Loading.svelte";
-  import AddPantryItemDrawer from "../components/organisms/AddPantryItemDrawer.svelte";
+  import PantryItemDrawer from "../components/organisms/PantryItemDrawer.svelte";
   import Nav from "../components/organisms/Nav.svelte";
   import PantryItem from "../components/organisms/PantryItem.svelte";
   import Toolbar from "../components/organisms/Toolbar.svelte";
   import { getServices } from "../services";
+  import { useDrawer } from "../hooks/useDrawer";
 
   const services = getServices();
 
   let items = services.externalData.getPantryItems();
 
-  let drawerOpen = false;
-  let onAddItemButtonClick = () => (drawerOpen = true);
-  let onDrawerCancel = () => (drawerOpen = false);
-  let onDrawerSuccess = () => {
-    drawerOpen = false;
-    items = services.externalData.getPantryItems();
-  };
+  const { isOpen, ...methods } = useDrawer({
+    onSuccess: () => (items = services.externalData.getPantryItems()),
+  });
 </script>
 
 <Stylesheet src="pages/pantry.css" />
 
 <div class="page">
-  <AddPantryItemDrawer
-    open={drawerOpen}
-    onCancel={onDrawerCancel}
-    onSuccess={onDrawerSuccess}
+  <PantryItemDrawer
+    open={$isOpen}
+    onCancel={methods.onCancel}
+    onSuccess={methods.onSuccess}
   />
   <Nav />
   <main class="page__main">
     <Toolbar>
-      <Button
-        size="sm"
-        color="primary"
-        fill="filled"
-        on:click={onAddItemButtonClick}
-      >
+      <Button size="sm" color="primary" fill="filled" on:click={methods.onOpen}>
         <span slot="content" class="-color--inverted"> Add new </span>
         <div slot="icon" class="-inline-flex">
           <Icon cls="-fill--inverted" icon="add" />

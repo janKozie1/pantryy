@@ -74,6 +74,7 @@ export default ({
         getMeasurmentUnits: ApiEndpoints.getMeasurmentUnits,
         getPantryItem: ApiEndpoints.getPantryItem,
         getPantryItems: ApiEndpoints.getPantryItems,
+        updatePantryItem: ApiEndpoints.updatePantryItem,
         createPantryItem: ApiEndpoints.createPantryItem,
       },
     },

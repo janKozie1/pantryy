@@ -5,8 +5,10 @@
   import Button from "../components/molecules/Button.svelte";
   import Loading from "../components/molecules/Loading.svelte";
   import Nav from "../components/organisms/Nav.svelte";
+  import PantryItemDrawer from "../components/organisms/PantryItemDrawer.svelte";
   import Table from "../components/organisms/Table.svelte";
   import Toolbar from "../components/organisms/Toolbar.svelte";
+  import { useDrawer } from "../hooks/useDrawer";
   import { getServices } from "../services";
 
   export let productId: string;
@@ -14,15 +16,38 @@
   const services = getServices();
 
   let product = services.externalData.getPantryItem(productId);
+
+  const { isOpen, ...methods } = useDrawer({
+    onSuccess: () => (product = services.externalData.getPantryItem(productId)),
+  });
 </script>
 
 <Stylesheet src="pages/product.css" />
 
 <div class="page">
+  {#await product then loadedProduct}
+    <PantryItemDrawer
+      open={$isOpen}
+      onCancel={methods.onCancel}
+      onSuccess={methods.onSuccess}
+      initialValues={{
+        name: loadedProduct.name,
+        description: loadedProduct.description,
+        unit: loadedProduct.unitId,
+        id: loadedProduct.id,
+      }}
+    />
+  {/await}
   <Nav />
   <main class="page__main">
     <Toolbar>
-      <Button size="sm" squared color="neutral" fill="borderless">
+      <Button
+        size="sm"
+        squared
+        color="neutral"
+        fill="borderless"
+        on:click={methods.onOpen}
+      >
         <div slot="icon" class="-inline-flex">
           <Icon cls="-fill--neutral_3" icon="settings" />
         </div>
