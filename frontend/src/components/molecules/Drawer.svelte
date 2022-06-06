@@ -11,8 +11,6 @@
   export let open: boolean;
   export let formRef: Nullable<HTMLFormElement> = null;
 
-  let a: Nullable<HTMLFormElement>;
-
   export let onSubmit: OnSubmitFN;
   export let onCancel: () => void;
 
