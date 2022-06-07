@@ -16,24 +16,18 @@ jobs:
         uses: ./.github/actions/cache
         with:
           package: ${{ matrix.package }}
-  # lint:
-  #   name: Lint
-  #   runs-on: ubuntu-latest
-  #   needs: [setup-deps]
-  #   steps:
-  #     - uses: actions/checkout@v2
-  #     - name: re-use cache
-  #       uses: ./.github/actions/cache
-  #     - run: yarn lint
-  # tsc:
-  #   name: Type-check
-  #   runs-on: ubuntu-latest
-  #   needs: [setup-deps]
-  #   steps:
-  #     - uses: actions/checkout@v2
-  #     - name: re-use cache
-  #       uses: ./.github/actions/cache
-  #     - run: yarn tsc
+  typecheck:
+    name: Type-check
+    runs-on: ubuntu-latest
+    needs: [setup-deps]
+    strategy:
+      matrix:
+        package: [backend, frontend]
+    steps:
+      - uses: actions/checkout@v2
+      - name: re-use cache
+        uses: ./.github/actions/cache
+      - run: yarn --cwd "${{ matrix.package }}" typecheck
   # test_affected:
   #   name: Run tests for affected files
   #   runs-on: ubuntu-latest
