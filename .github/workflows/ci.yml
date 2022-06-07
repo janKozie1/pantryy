@@ -10,7 +10,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: setup cache
-        uses: ./.github/actions/cache
+        uses: ./.github/action.yml
   # lint:
   #   name: Lint
   #   runs-on: ubuntu-latest
