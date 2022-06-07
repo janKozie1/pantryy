@@ -1,10 +1,10 @@
-name: backend CI
+name: Backend
 
 on:
   push:
 
 jobs:
-  ci:
+  CI:
     uses: ./.github/workflows/ci.yml
     with:
       package: backend
