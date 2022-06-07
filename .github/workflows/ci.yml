@@ -13,7 +13,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: setup cache
-      - uses: ./.github/actions/cache
+        uses: ./.github/actions/cache
         with:
           package: ${{ matrix.package }}
   # lint:
