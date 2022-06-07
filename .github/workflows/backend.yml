@@ -1,0 +1,10 @@
+name: Backend
+
+on:
+  push:
+
+jobs:
+  CI:
+    uses: ./.github/workflows/ci.yml
+    with:
+      package: pantryy_backend

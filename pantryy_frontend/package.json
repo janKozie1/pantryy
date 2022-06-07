@@ -6,7 +6,8 @@
     "build": "rollup -c",
     "dev": "rollup -c -w",
     "start": "sirv public --no-clear --single --ignores '/api'",
-    "check": "svelte-check --tsconfig ./tsconfig.json",
+    "typecheck": "svelte-check --fail-on-warnings --fail-on-hints --tsconfig ./tsconfig.json",
+    "test:ci": "CI=true jest src",
     "test": "jest src",
     "test:watch": "npm run test -- --watch"
   },
