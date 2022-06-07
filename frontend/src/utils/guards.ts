@@ -7,9 +7,21 @@ export const isNotNil = <T>(arg: T | null | undefined): arg is T => !isNil(arg);
 
 export const isLiteral = <T>(
   arg: unknown,
-): arg is (T extends Literal ? T : Literal) => typeof arg === 'object' && (
-  Object.getPrototypeOf(Object.getPrototypeOf(arg))
-) === null;
+): arg is (T extends Literal ? T : Literal) => {
+  if (typeof arg !== 'object') {
+    return false;
+  }
+
+  if (isNil(arg)) {
+    return false;
+  }
+
+  if (Object.getPrototypeOf(arg) === null) {
+    return true;
+  }
+
+  return Object.getPrototypeOf(Object.getPrototypeOf(arg)) === null;
+};
 
 export function isEmpty(arg: string | null | undefined): arg is '' | null | undefined;
 export function isEmpty<T>(arg: T | null | undefined): arg is null | undefined;

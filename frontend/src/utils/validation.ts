@@ -12,7 +12,9 @@ export const errorMessages = {
   NOT_SELECTED: 'One of the options must be selected',
 }
 
-export const isEmptyFile = (arg: unknown): arg is File => !isNil(arg) && arg instanceof File
+const isFile = (arg: unknown): arg is File => !isNil(arg) && arg instanceof File;
 
-export const isFile = (arg: unknown): arg is File => !isNil(arg) && arg instanceof File
-  && !isEmpty(arg.name) && arg.size !== 0;
+
+export const isNotEmptyFile = (arg: unknown): arg is File =>  isFile(arg) && !isEmpty(arg.name) && arg.size !== 0;
+
+export const isEmptyFile = (arg: unknown): arg is File => isFile(arg) && !isNotEmptyFile(arg);

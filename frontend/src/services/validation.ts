@@ -1,5 +1,5 @@
 import type { MakeServiceFN, ServiceCreator } from ".";
-import { errorMessages, isEmptyFile, isFile } from "../utils/validation";
+import { errorMessages, isEmptyFile, isNotEmptyFile } from "../utils/validation";
 import { isEmpty, isNil, isNotNil } from "../utils/guards";
 import type { Nullable } from "../utils/types";
 import { isEmail } from "../utils/validation";
@@ -117,7 +117,7 @@ const makeValidateAddPantryItemFields: MakeServiceFN<AddPantryItemFormData, Vali
     name: isEmpty(name)
       ? errorMessages.NOT_EMPTY
       : null,
-    image: !isFile(image)
+    image: !isNotEmptyFile(image)
       ? errorMessages.VALID_FILE
       : null,
     description: isEmpty(description)
@@ -169,7 +169,7 @@ const makeValidateEditPantryItemFields: MakeServiceFN<EditPantryItemFormData, Va
       : null,
     image: isEmptyFile(image)
       ? null
-      : !isFile(image)
+      : !isNotEmptyFile(image)
         ? errorMessages.VALID_FILE
         : null,
     description: isEmpty(description)

@@ -5,7 +5,6 @@ import {render} from '@testing-library/svelte'
 import Button from './Button.svelte'
 
 test('shows proper heading when rendered', () => {
-  const {getByText} = render(Button, {name: 'World'})
-
-  expect(getByText('Hello World!')).toBeInTheDocument()
+  const { getByRole } = render(Button, { type: 'submit', color: 'primary', fill: 'filled', size: 'lg' })
+  expect(getByRole('button')).toBeInTheDocument()
 })
