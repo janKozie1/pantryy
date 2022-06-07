@@ -27,7 +27,8 @@ jobs:
       - uses: actions/checkout@v2
       - name: re-use cache
         uses: ./.github/actions/cache
-      - run: yarn --cwd "${{ matrix.package }}" typecheck
+      - run: cd ${{ matrix.package }}
+      - run: yarn typecheck
   # test_affected:
   #   name: Run tests for affected files
   #   runs-on: ubuntu-latest
