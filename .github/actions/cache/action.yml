@@ -1,5 +1,9 @@
 name: 'cache'
 description: 'create and restore cache'
+inputs:
+  package:
+    description: 'Package to run the command in'
+    required: true
 runs:
   using: "composite"
   steps:
@@ -17,6 +21,6 @@ runs:
         key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
         restore-keys: |
           ${{ runner.os }}-yarn-
-    - run: yarn --cwd "./frontend" install
+    - run: yarn --cwd "${{ inputs.package }}" install
       shell: bash
       if: steps.yarn-cache.outputs.cache-hit != 'true'

@@ -7,10 +7,15 @@ jobs:
   setup-deps:
     name: Setup project dependencies
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        package: [backend, frontend]
     steps:
       - uses: actions/checkout@v2
       - name: setup cache
-        uses: ./.github/actions/cache
+      - uses: ./.github/actions/cache
+        with:
+          package: ${{ matrix.package }}
   # lint:
   #   name: Lint
   #   runs-on: ubuntu-latest
