@@ -55,15 +55,15 @@ describe('auth', () => {
     })
 
     it('gets email out of the token', () => {
-      expect(service.decodeToken(jwt.sign({email: 'test@gmail.com'}, jwtKey))).toBe("test@gmail.com")
+      expect(service.decodeToken(jwt.sign({email: 'test@gmail.com'}, jwtKey))).toEqual({email: "test@gmail.com"})
     })
   })
 
   describe('isLoggedIn', () => {
     it('determines if token is valid correctly', () => {
       expect(service.isLoggedIn(jwt.sign({email: 'asdf'}, jwtKey))).toBe(false)
-      expect(service.decodeToken(jwt.sign({email: 'test@gmail.com'}, jwtKey))).toBe(true)
-      expect(service.decodeToken(jwt.sign({email: 'test@gmail.com'}, "different key"))).toBe(false)
+      expect(service.isLoggedIn(jwt.sign({email: 'test@gmail.com'}, jwtKey))).toBe(true)
+      expect(service.isLoggedIn(jwt.sign({email: 'test@gmail.com'}, "different key"))).toBe(false)
     })
   })
 
