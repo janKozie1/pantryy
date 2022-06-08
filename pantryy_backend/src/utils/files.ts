@@ -5,28 +5,28 @@ import { Nullable } from './types.js';
 
 export const renameFile = async (fromPath: string, toPath: string) => {
   try {
-    await fs.rename(fromPath, toPath)
+    await fs.rename(fromPath, toPath);
   } catch {
-    return;
+    return null;
   }
-}
+};
 
 export const changeExtension = async (file: string, ext: string): Promise<string> => {
-  const newName = `${file.replace(/\..*/,'')}.${ext}`;
+  const newName = `${file.replace(/\..*/, '')}.${ext}`;
   await renameFile(file, newName);
 
   return newName;
-}
+};
 
 export const removeFile = async (path: Nullable<string>) => {
   try {
     if (isNil(path)) {
-      return;
+      return null;
     }
 
     fs.unlink(path);
   } catch {
-    return;
+    return null;
   }
 };
 
@@ -42,7 +42,7 @@ export const isImage = async (filePath: string): Promise<boolean> => {
   } catch {
     return false;
   }
-}
+};
 
 export const getExtension = async (filePath: string): Promise<Nullable<string>> => {
   try {
@@ -56,4 +56,4 @@ export const getExtension = async (filePath: string): Promise<Nullable<string>> 
   } catch {
     return null;
   }
-}
+};

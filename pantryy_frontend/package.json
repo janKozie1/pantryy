@@ -8,7 +8,8 @@
     "start": "sirv public --no-clear --single --ignores '/api'",
     "typecheck": "svelte-check --fail-on-warnings --fail-on-hints --tsconfig ./tsconfig.json",
     "test:ci": "CI=true jest src",
-    "test:watch": "jest src --watch"
+    "test:watch": "jest src --watch",
+    "lint": "echo ok"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^17.0.0",

@@ -9,11 +9,11 @@ const getApp = (config: AppConfig): App => {
   const app = express();
 
   app.use(config.staticContent.endPoint, express.static(config.staticContent.filePath));
-  app.use(bodyParser.urlencoded({extended: false}));
+  app.use(bodyParser.urlencoded({ extended: false }));
   app.use(bodyParser.json());
-  app.use(cookieParser())
+  app.use(cookieParser());
 
   return app;
-}
+};
 
 export default getApp;

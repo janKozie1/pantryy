@@ -1,12 +1,12 @@
-import { PoolClient } from "pg";
+import { PoolClient } from 'pg';
 import bcrypt from 'bcrypt';
 
-import { RouteInitializer } from "../index.js";
-import { isEmpty, isNil, isObjectWithKeys } from "../../utils/guards.js";
-import { withPrefix } from "../../utils/routes.js";
-import { ValidationResponse } from "../../utils/types.js";
-import { errorMessages, isEmail } from "../../utils/validation.js";
-import { id, withClient } from "../../utils/fn.js";
+import { RouteInitializer } from '../index.js';
+import { isEmpty, isNil, isObjectWithKeys } from '../../utils/guards.js';
+import { withPrefix } from '../../utils/routes.js';
+import { ValidationResponse } from '../../utils/types.js';
+import { errorMessages, isEmail } from '../../utils/validation.js';
+import { id, withClient } from '../../utils/fn.js';
 
 type LoginPayload = Readonly<{
   email: string;
@@ -23,8 +23,8 @@ const validateBody = async (client: PoolClient, body: unknown): Promise<LoginRes
       errors: {
         email: errorMessages.NOT_EMPTY,
         password: errorMessages.NOT_EMPTY,
-      }
-    }
+      },
+    };
   }
 
   const { email, password } = body;
@@ -36,8 +36,8 @@ const validateBody = async (client: PoolClient, body: unknown): Promise<LoginRes
       errors: {
         email: isEmpty(email) ? errorMessages.NOT_EMPTY : null,
         password: isEmpty(password) ? errorMessages.NOT_EMPTY : null,
-      }
-    }
+      },
+    };
   }
 
   if (!isEmail(email)) {
@@ -47,11 +47,11 @@ const validateBody = async (client: PoolClient, body: unknown): Promise<LoginRes
       errors: {
         email: errorMessages.VALID_EMAIL,
         password: null,
-      }
-    }
+      },
+    };
   }
 
-  const userResponse = (await client.query('SELECT user_id, user_password FROM users where user_email = $1', [email]))
+  const userResponse = (await client.query('SELECT user_id, user_password FROM users where user_email = $1', [email]));
 
   if (isEmpty(userResponse.rows) || userResponse.rowCount !== 1) {
     return {
@@ -60,8 +60,8 @@ const validateBody = async (client: PoolClient, body: unknown): Promise<LoginRes
       errors: {
         email: errorMessages.EMAIL_NOT_USED,
         password: null,
-      }
-    }
+      },
+    };
   }
 
   const [user] = userResponse.rows;
@@ -73,36 +73,36 @@ const validateBody = async (client: PoolClient, body: unknown): Promise<LoginRes
       errors: {
         email: null,
         password: errorMessages.INVALID_PASSWORD,
-      }
-    }
+      },
+    };
   }
 
   return {
     ok: true,
-    validData: { email, password  },
-    errors: {}
-  }
-}
+    validData: { email, password },
+    errors: {},
+  };
+};
 
-const routes: RouteInitializer = (prefix, {app, pool, services}) => {
+const routes: RouteInitializer = (prefix, { app, pool, services }) => {
   app.post(withPrefix(prefix, ''), async (req, res) => {
     const parsed = await withClient(validateBody, pool)(req.body);
 
     if (!parsed.ok || isNil(parsed.validData)) {
-      return res.json(parsed)
+      return res.json(parsed);
     }
 
     services.auth.login({
       email: parsed.validData.email,
       response: res,
-    })
+    });
 
     res.json(id<LoginResponse>({
       ok: true,
       validData: null,
-      errors: {}
+      errors: {},
     }));
-  })
-}
+  });
+};
 
 export default routes;

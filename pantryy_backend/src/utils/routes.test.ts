@@ -1,4 +1,4 @@
-import { withPrefix } from './routes.js'
+import { withPrefix } from './routes.js';
 
 describe('routes', () => {
   describe('withPrefix', () => {
@@ -6,6 +6,6 @@ describe('routes', () => {
       expect(withPrefix('/root', '/:id')).toBe('/root/:id');
       expect(withPrefix('/root/', '/:id')).toBe('/root/:id');
       expect(withPrefix('/root/sub_root', '/:id')).toBe('/root/sub_root/:id');
-    })
-  })
-})
+    });
+  });
+});

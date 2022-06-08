@@ -20,19 +20,17 @@ type UninitializedServices = Readonly<{
 }>;
 
 type ServiceSpecificConfigs = Readonly<{
-  [service in keyof Omit<UninitializedServices, 'operations'>]:  UninitializedServices[service] extends ServiceCreator<infer T, infer Config> ? Config: never;
+  [service in keyof Omit<UninitializedServices, 'operations'>]: UninitializedServices[service] extends ServiceCreator<unknown, infer Config> ? Config: never;
 }>
 
 export type Services = Readonly<{
   [service in keyof UninitializedServices]: ReturnType<UninitializedServices[service]>
 }>
 
-const makeServices = (
-  sharedConfig: SharedServicesConfig, specificConfigs: ServiceSpecificConfigs
-): Services => ({
+const makeServices = (sharedConfig: SharedServicesConfig, specificConfigs: ServiceSpecificConfigs): Services => ({
   auth: auth(sharedConfig, specificConfigs.auth),
-  files: files(sharedConfig, specificConfigs.files)
-})
+  files: files(sharedConfig, specificConfigs.files),
+});
 
 type DynamicConfig = Readonly<{
   pool: Pool;
@@ -40,14 +38,14 @@ type DynamicConfig = Readonly<{
 }>
 
 export default (dynamicConfig: DynamicConfig) => makeServices({
-  pool: dynamicConfig.pool
+  pool: dynamicConfig.pool,
 }, {
   auth: {
     authCookieName: 'auth',
     jwt: {
       expiresInSeconds: 60 * 60 * 24,
       key: ':D',
-    }
+    },
   },
-  files: dynamicConfig.filesConfig
+  files: dynamicConfig.filesConfig,
 });
