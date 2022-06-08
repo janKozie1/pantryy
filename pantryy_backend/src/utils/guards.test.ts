@@ -5,7 +5,7 @@ import {
   isString,
   isObjectWithKeys,
   isObjectWithPartialKeys,
-} from './guards';
+} from './guards.js';
 import { Literal } from './types.js';
 
 describe('guards', () => {
