@@ -1,5 +1,5 @@
 import { Pool } from 'pg';
-import { Multer } from 'multer'
+import { Multer } from 'multer';
 
 import { App } from '../app.js';
 import { Services } from '../services/index.js';
@@ -20,6 +20,6 @@ export type RouteInitializer = (prefix: string, config: RouterInitializerConfig)
 const routes: RouteInitializer = (prefix, config) => {
   auth(withPrefix(prefix, '/auth'), config);
   pantry(withPrefix(prefix, '/pantry'), config);
-}
+};
 
 export default routes;
