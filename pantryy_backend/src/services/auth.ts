@@ -4,6 +4,7 @@ import jwt from 'jsonwebtoken';
 import type { ServiceCreator, MakeServiceFN } from "./index.js"
 import { isEmpty, isNil, isObjectWithKeys } from "../utils/guards.js";
 import { Nullable } from "../utils/types.js";
+import { isEmail } from "../utils/validation.js";
 
 type AuthServiceConfig = Readonly<{
   authCookieName: string;
@@ -18,7 +19,7 @@ type LoginRequest = Readonly<{
   response: Response;
 }>
 
-const makeLogin: MakeServiceFN<LoginRequest, void, AuthServiceConfig> = (_, config) => async (
+const makeLogin: MakeServiceFN<LoginRequest, void, AuthServiceConfig> = (_, config) => (
   data
 ) => {
   const token = jwt.sign({ email: data.email, iat: config.jwt.expiresInSeconds }, config.jwt.key);
@@ -39,7 +40,7 @@ const makeDecodeToken: MakeServiceFN<Nullable<string>, DecodeTokenReturnValue, A
   try {
     const verified = jwt.verify(token, config.jwt.key);
 
-    if (isObjectWithKeys(verified, ['email'])) {
+    if (isObjectWithKeys(verified, ['email']) && isEmail(verified.email)) {
       return { email: verified.email };
     }
 
@@ -52,16 +53,10 @@ const makeDecodeToken: MakeServiceFN<Nullable<string>, DecodeTokenReturnValue, A
 const makeIsLoggedIn: MakeServiceFN<Nullable<string>, boolean, AuthServiceConfig> = (_, config) => (
   token
 ) => {
-  if (isNil(token)) {
-    return false;
-  }
+  const decodeToken = makeDecodeToken(_, config);
+  const result = decodeToken(token);
 
-  try {
-    const verified = jwt.verify(token, config.jwt.key);
-    return !isEmpty(verified) && isObjectWithKeys(verified, ['email']);
-  } catch {
-    return false;
-  }
+  return !isNil(result);
 }
 
 const makeGetToken: MakeServiceFN<Request, Nullable<string>, AuthServiceConfig> = (_, config) => (
