@@ -25,6 +25,8 @@ jobs:
         uses: ./.github/actions/cache
       - run: ls -l
         shell: bash
+      - run: ls -l ${{ inputs.package }}
+        shell: bash
   # test_affected:
   #   name: Run tests for affected files
   #   runs-on: ubuntu-latest
