@@ -1,9 +1,5 @@
 name: 'cache'
 description: 'create and restore cache'
-inputs:
-  package:
-    description: 'Package to run the command in'
-    required: true
 runs:
   using: "composite"
   steps:
