@@ -7,4 +7,4 @@ jobs:
   CI:
     uses: ./.github/workflows/ci.yml
     with:
-      package: frontend
+      package: pantryy_frontend
