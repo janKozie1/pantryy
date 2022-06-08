@@ -11,9 +11,6 @@ jobs:
   setup-deps:
     name: Setup project dependencies
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./${{ inputs.package }}
     steps:
       - uses: actions/checkout@v2
       - name: setup cache

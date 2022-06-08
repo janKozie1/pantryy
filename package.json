@@ -1,0 +1,4 @@
+{
+  "private": true,
+  "workspaces": ["pantryy_frontend", "pantryy_backend"]
+}
