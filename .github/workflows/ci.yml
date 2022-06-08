@@ -23,15 +23,12 @@ jobs:
         shell: bash
       - run: yarn workspace ${{ inputs.package }} typecheck
   test:
-    name: Run all tests
+    name: Run tests
     runs-on: ubuntu-latest
     needs: [setup-deps]
-    strategy:
-      matrix:
-        package: [admin, shared, user]
     steps:
       - uses: actions/checkout@v2
       - run: yarn install
         shell: bash
       - name: Run tests
-        run: yarn workspace ${{ inputs.package }} typecheck test:ci
+        run: yarn workspace ${{ inputs.package }} test:ci
