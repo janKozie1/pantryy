@@ -28,7 +28,7 @@ type UninitializedServices = Readonly<{
 }>;
 
 type ServiceSpecificConfigs = Readonly<{
-  [service in keyof UninitializedServices]: UninitializedServices[service] extends ServiceCreator<infer T, infer Config> ? Config: never;
+  [service in keyof UninitializedServices]: UninitializedServices[service] extends ServiceCreator<unknown, infer Config> ? Config: never;
 }>
 
 export type Services = Readonly<{

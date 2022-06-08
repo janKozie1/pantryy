@@ -1,4 +1,4 @@
-import { isEmpty, isNil, isNotNil } from "./guards";
+import { isEmpty, isNotNil } from "./guards";
 import type { Nullable } from "./types";
 
 const getUnparsedCookies = (): string[] => document.cookie.split(';');

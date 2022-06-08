@@ -1,7 +1,6 @@
 <script lang="ts">
   import type { OnSubmitFN } from "../../utils/form";
   import { withFormData } from "../../utils/form";
-  import { isNil } from "../../utils/guards";
   import type { Nullable } from "../../utils/types";
 
   import Icon from "../atoms/Icon.svelte";

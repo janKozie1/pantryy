@@ -1,4 +1,4 @@
-import type { ServiceCreator, MakeServiceFN, SharedServicesConfig } from "."
+import type { ServiceCreator, MakeServiceFN } from "."
 import { getCookie, removeCookie } from "../utils/cookies";
 import { isEmpty } from "../utils/guards";
 import type { Nullable } from "../utils/types";
