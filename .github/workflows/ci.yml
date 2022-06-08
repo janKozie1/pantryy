@@ -19,8 +19,6 @@ jobs:
     needs: [setup-deps]
     steps:
       - uses: actions/checkout@v2
-      - name: re-use cache
-        uses: ./.github/actions/cache
       - run: yarn install
         shell: bash
       - run: ls -l
