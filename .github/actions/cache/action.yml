@@ -19,10 +19,3 @@ runs:
           ${{ runner.os }}-yarn-
     - run: yarn install
       shell: bash
-      if: steps.yarn-cache.outputs.cache-hit != 'true'
-    - run: ls -l
-      shell: bash
-    - run: ls -l ./pantryy_backend
-      shell: bash
-    - run: ls -l ./pantryy_frontend
-      shell: bash
