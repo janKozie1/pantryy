@@ -72,7 +72,7 @@ const validateBody = async (client: PoolClient, body: unknown): Promise<Register
 
   if (emailInUse) {
     return {
-      ok: true,
+      ok: false,
       validData: null,
       errors: {
         email: errorMessages.EMAIL_TAKEN,

@@ -13,6 +13,8 @@
   export let fill: FillVariants;
   export let color: ColorVariants;
 
+  export let testId: Nullable<string> = null;
+
   const buttonSizeToTextSize: Record<Sizes, string> = {
     sm: "small",
     md: "medium",
@@ -22,6 +24,7 @@
 
 <button
   {type}
+  data-test-id={testId}
   on:click
   class={`${cls} button button--${size}${
     squared ? "--squared" : ""

@@ -4892,20 +4892,20 @@ var app = (function () {
     const get_content_slot_changes = dirty => ({});
     const get_content_slot_context = ctx => ({});
 
-    // (21:2) {#if $$slots.content}
+    // (23:2) {#if $$slots.content}
     function create_if_block_1$1(ctx) {
     	let span;
     	let span_class_value;
     	let current;
-    	const content_slot_template = /*#slots*/ ctx[9].content;
-    	const content_slot = create_slot(content_slot_template, ctx, /*$$scope*/ ctx[8], get_content_slot_context);
+    	const content_slot_template = /*#slots*/ ctx[10].content;
+    	const content_slot = create_slot(content_slot_template, ctx, /*$$scope*/ ctx[9], get_content_slot_context);
 
     	const block = {
     		c: function create() {
     			span = element("span");
     			if (content_slot) content_slot.c();
-    			attr_dev(span, "class", span_class_value = `text__action--button--${/*buttonSizeToTextSize*/ ctx[6][/*size*/ ctx[2]]}`);
-    			add_location(span, file$j, 21, 4, 428);
+    			attr_dev(span, "class", span_class_value = `text__action--button--${/*buttonSizeToTextSize*/ ctx[7][/*size*/ ctx[2]]}`);
+    			add_location(span, file$j, 23, 4, 480);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, span, anchor);
@@ -4918,21 +4918,21 @@ var app = (function () {
     		},
     		p: function update(ctx, dirty) {
     			if (content_slot) {
-    				if (content_slot.p && (!current || dirty & /*$$scope*/ 256)) {
+    				if (content_slot.p && (!current || dirty & /*$$scope*/ 512)) {
     					update_slot_base(
     						content_slot,
     						content_slot_template,
     						ctx,
-    						/*$$scope*/ ctx[8],
+    						/*$$scope*/ ctx[9],
     						!current
-    						? get_all_dirty_from_scope(/*$$scope*/ ctx[8])
-    						: get_slot_changes(content_slot_template, /*$$scope*/ ctx[8], dirty, get_content_slot_changes),
+    						? get_all_dirty_from_scope(/*$$scope*/ ctx[9])
+    						: get_slot_changes(content_slot_template, /*$$scope*/ ctx[9], dirty, get_content_slot_changes),
     						get_content_slot_context
     					);
     				}
     			}
 
-    			if (!current || dirty & /*size*/ 4 && span_class_value !== (span_class_value = `text__action--button--${/*buttonSizeToTextSize*/ ctx[6][/*size*/ ctx[2]]}`)) {
+    			if (!current || dirty & /*size*/ 4 && span_class_value !== (span_class_value = `text__action--button--${/*buttonSizeToTextSize*/ ctx[7][/*size*/ ctx[2]]}`)) {
     				attr_dev(span, "class", span_class_value);
     			}
     		},
@@ -4955,27 +4955,27 @@ var app = (function () {
     		block,
     		id: create_if_block_1$1.name,
     		type: "if",
-    		source: "(21:2) {#if $$slots.content}",
+    		source: "(23:2) {#if $$slots.content}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (26:2) {#if $$slots.icon}
+    // (28:2) {#if $$slots.icon}
     function create_if_block$5(ctx) {
     	let div;
     	let div_class_value;
     	let current;
-    	const icon_slot_template = /*#slots*/ ctx[9].icon;
-    	const icon_slot = create_slot(icon_slot_template, ctx, /*$$scope*/ ctx[8], get_icon_slot_context);
+    	const icon_slot_template = /*#slots*/ ctx[10].icon;
+    	const icon_slot = create_slot(icon_slot_template, ctx, /*$$scope*/ ctx[9], get_icon_slot_context);
 
     	const block = {
     		c: function create() {
     			div = element("div");
     			if (icon_slot) icon_slot.c();
-    			attr_dev(div, "class", div_class_value = `-inline-flex ${/*$$slots*/ ctx[7].content ? "-pl--500" : ""} -mt--200`);
-    			add_location(div, file$j, 26, 4, 577);
+    			attr_dev(div, "class", div_class_value = `-inline-flex ${/*$$slots*/ ctx[8].content ? "-pl--500" : ""} -mt--200`);
+    			add_location(div, file$j, 28, 4, 629);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, div, anchor);
@@ -4988,21 +4988,21 @@ var app = (function () {
     		},
     		p: function update(ctx, dirty) {
     			if (icon_slot) {
-    				if (icon_slot.p && (!current || dirty & /*$$scope*/ 256)) {
+    				if (icon_slot.p && (!current || dirty & /*$$scope*/ 512)) {
     					update_slot_base(
     						icon_slot,
     						icon_slot_template,
     						ctx,
-    						/*$$scope*/ ctx[8],
+    						/*$$scope*/ ctx[9],
     						!current
-    						? get_all_dirty_from_scope(/*$$scope*/ ctx[8])
-    						: get_slot_changes(icon_slot_template, /*$$scope*/ ctx[8], dirty, get_icon_slot_changes),
+    						? get_all_dirty_from_scope(/*$$scope*/ ctx[9])
+    						: get_slot_changes(icon_slot_template, /*$$scope*/ ctx[9], dirty, get_icon_slot_changes),
     						get_icon_slot_context
     					);
     				}
     			}
 
-    			if (!current || dirty & /*$$slots*/ 128 && div_class_value !== (div_class_value = `-inline-flex ${/*$$slots*/ ctx[7].content ? "-pl--500" : ""} -mt--200`)) {
+    			if (!current || dirty & /*$$slots*/ 256 && div_class_value !== (div_class_value = `-inline-flex ${/*$$slots*/ ctx[8].content ? "-pl--500" : ""} -mt--200`)) {
     				attr_dev(div, "class", div_class_value);
     			}
     		},
@@ -5025,7 +5025,7 @@ var app = (function () {
     		block,
     		id: create_if_block$5.name,
     		type: "if",
-    		source: "(26:2) {#if $$slots.icon}",
+    		source: "(28:2) {#if $$slots.icon}",
     		ctx
     	});
 
@@ -5039,8 +5039,8 @@ var app = (function () {
     	let current;
     	let mounted;
     	let dispose;
-    	let if_block0 = /*$$slots*/ ctx[7].content && create_if_block_1$1(ctx);
-    	let if_block1 = /*$$slots*/ ctx[7].icon && create_if_block$5(ctx);
+    	let if_block0 = /*$$slots*/ ctx[8].content && create_if_block_1$1(ctx);
+    	let if_block1 = /*$$slots*/ ctx[8].icon && create_if_block$5(ctx);
 
     	const block = {
     		c: function create() {
@@ -5049,8 +5049,9 @@ var app = (function () {
     			t = space();
     			if (if_block1) if_block1.c();
     			attr_dev(button, "type", /*type*/ ctx[0]);
+    			attr_dev(button, "data-test-id", /*testId*/ ctx[6]);
     			attr_dev(button, "class", button_class_value = `${/*cls*/ ctx[1]} button button--${/*size*/ ctx[2]}${/*squared*/ ctx[3] ? "--squared" : ""} button--${/*fill*/ ctx[4]}--${/*color*/ ctx[5]}`);
-    			add_location(button, file$j, 13, 0, 257);
+    			add_location(button, file$j, 14, 0, 284);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -5063,16 +5064,16 @@ var app = (function () {
     			current = true;
 
     			if (!mounted) {
-    				dispose = listen_dev(button, "click", /*click_handler*/ ctx[10], false, false, false);
+    				dispose = listen_dev(button, "click", /*click_handler*/ ctx[11], false, false, false);
     				mounted = true;
     			}
     		},
     		p: function update(ctx, [dirty]) {
-    			if (/*$$slots*/ ctx[7].content) {
+    			if (/*$$slots*/ ctx[8].content) {
     				if (if_block0) {
     					if_block0.p(ctx, dirty);
 
-    					if (dirty & /*$$slots*/ 128) {
+    					if (dirty & /*$$slots*/ 256) {
     						transition_in(if_block0, 1);
     					}
     				} else {
@@ -5091,11 +5092,11 @@ var app = (function () {
     				check_outros();
     			}
 
-    			if (/*$$slots*/ ctx[7].icon) {
+    			if (/*$$slots*/ ctx[8].icon) {
     				if (if_block1) {
     					if_block1.p(ctx, dirty);
 
-    					if (dirty & /*$$slots*/ 128) {
+    					if (dirty & /*$$slots*/ 256) {
     						transition_in(if_block1, 1);
     					}
     				} else {
@@ -5116,6 +5117,10 @@ var app = (function () {
 
     			if (!current || dirty & /*type*/ 1) {
     				attr_dev(button, "type", /*type*/ ctx[0]);
+    			}
+
+    			if (!current || dirty & /*testId*/ 64) {
+    				attr_dev(button, "data-test-id", /*testId*/ ctx[6]);
     			}
 
     			if (!current || dirty & /*cls, size, squared, fill, color*/ 62 && button_class_value !== (button_class_value = `${/*cls*/ ctx[1]} button button--${/*size*/ ctx[2]}${/*squared*/ ctx[3] ? "--squared" : ""} button--${/*fill*/ ctx[4]}--${/*color*/ ctx[5]}`)) {
@@ -5163,8 +5168,9 @@ var app = (function () {
     	let { squared = false } = $$props;
     	let { fill } = $$props;
     	let { color } = $$props;
+    	let { testId = null } = $$props;
     	const buttonSizeToTextSize = { sm: "small", md: "medium", lg: "large" };
-    	const writable_props = ['type', 'cls', 'size', 'squared', 'fill', 'color'];
+    	const writable_props = ['type', 'cls', 'size', 'squared', 'fill', 'color', 'testId'];
 
     	Object.keys($$props).forEach(key => {
     		if (!~writable_props.indexOf(key) && key.slice(0, 2) !== '$$' && key !== 'slot') console.warn(`<Button> was created with unknown prop '${key}'`);
@@ -5181,7 +5187,8 @@ var app = (function () {
     		if ('squared' in $$props) $$invalidate(3, squared = $$props.squared);
     		if ('fill' in $$props) $$invalidate(4, fill = $$props.fill);
     		if ('color' in $$props) $$invalidate(5, color = $$props.color);
-    		if ('$$scope' in $$props) $$invalidate(8, $$scope = $$props.$$scope);
+    		if ('testId' in $$props) $$invalidate(6, testId = $$props.testId);
+    		if ('$$scope' in $$props) $$invalidate(9, $$scope = $$props.$$scope);
     	};
 
     	$$self.$capture_state = () => ({
@@ -5191,6 +5198,7 @@ var app = (function () {
     		squared,
     		fill,
     		color,
+    		testId,
     		buttonSizeToTextSize
     	});
 
@@ -5201,6 +5209,7 @@ var app = (function () {
     		if ('squared' in $$props) $$invalidate(3, squared = $$props.squared);
     		if ('fill' in $$props) $$invalidate(4, fill = $$props.fill);
     		if ('color' in $$props) $$invalidate(5, color = $$props.color);
+    		if ('testId' in $$props) $$invalidate(6, testId = $$props.testId);
     	};
 
     	if ($$props && "$$inject" in $$props) {
@@ -5214,6 +5223,7 @@ var app = (function () {
     		squared,
     		fill,
     		color,
+    		testId,
     		buttonSizeToTextSize,
     		$$slots,
     		$$scope,
@@ -5232,7 +5242,8 @@ var app = (function () {
     			size: 2,
     			squared: 3,
     			fill: 4,
-    			color: 5
+    			color: 5,
+    			testId: 6
     		});
 
     		dispatch_dev("SvelteRegisterComponent", {
@@ -5303,6 +5314,14 @@ var app = (function () {
     	}
 
     	set color(value) {
+    		throw new Error("<Button>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
+    	}
+
+    	get testId() {
+    		throw new Error("<Button>: Props cannot be read directly from the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
+    	}
+
+    	set testId(value) {
     		throw new Error("<Button>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
     	}
     }
@@ -6132,9 +6151,11 @@ var app = (function () {
     };
 
     /* src\pages\Auth.svelte generated by Svelte v3.48.0 */
+
+    const { console: console_1 } = globals;
     const file$e = "src\\pages\\Auth.svelte";
 
-    // (86:6) <Tab to="/login">
+    // (87:6) <Tab to="/login">
     function create_default_slot_2$3(ctx) {
     	let t;
 
@@ -6154,14 +6175,14 @@ var app = (function () {
     		block,
     		id: create_default_slot_2$3.name,
     		type: "slot",
-    		source: "(86:6) <Tab to=\\\"/login\\\">",
+    		source: "(87:6) <Tab to=\\\"/login\\\">",
     		ctx
     	});
 
     	return block;
     }
 
-    // (87:6) <Tab to="/register">
+    // (88:6) <Tab to="/register">
     function create_default_slot_1$4(ctx) {
     	let t;
 
@@ -6181,14 +6202,14 @@ var app = (function () {
     		block,
     		id: create_default_slot_1$4.name,
     		type: "slot",
-    		source: "(87:6) <Tab to=\\\"/register\\\">",
+    		source: "(88:6) <Tab to=\\\"/register\\\">",
     		ctx
     	});
 
     	return block;
     }
 
-    // (119:48) 
+    // (120:48) 
     function create_if_block_1(ctx) {
     	let form;
     	let div;
@@ -6261,9 +6282,9 @@ var app = (function () {
     			t2 = space();
     			create_component(button.$$.fragment);
     			attr_dev(div, "class", "form__inputs_container");
-    			add_location(div, file$e, 123, 8, 4113);
+    			add_location(div, file$e, 124, 8, 4145);
     			attr_dev(form, "class", "form -full-width -mt--1000");
-    			add_location(form, file$e, 119, 6, 3978);
+    			add_location(form, file$e, 120, 6, 4010);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, form, anchor);
@@ -6330,14 +6351,14 @@ var app = (function () {
     		block,
     		id: create_if_block_1.name,
     		type: "if",
-    		source: "(119:48) ",
+    		source: "(120:48) ",
     		ctx
     	});
 
     	return block;
     }
 
-    // (89:4) {#if pathname.includes(forms.login)}
+    // (90:4) {#if pathname.includes(forms.login)}
     function create_if_block$2(ctx) {
     	let form;
     	let div;
@@ -6409,9 +6430,9 @@ var app = (function () {
     			t2 = space();
     			create_component(button.$$.fragment);
     			attr_dev(div, "class", "form__inputs_container");
-    			add_location(div, file$e, 93, 8, 3022);
+    			add_location(div, file$e, 94, 8, 3054);
     			attr_dev(form, "class", "form -full-width -mt--1000");
-    			add_location(form, file$e, 89, 6, 2890);
+    			add_location(form, file$e, 90, 6, 2922);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, form, anchor);
@@ -6482,14 +6503,14 @@ var app = (function () {
     		block,
     		id: create_if_block$2.name,
     		type: "if",
-    		source: "(89:4) {#if pathname.includes(forms.login)}",
+    		source: "(90:4) {#if pathname.includes(forms.login)}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (147:10) 
+    // (148:10) 
     function create_content_slot_1$2(ctx) {
     	let span;
 
@@ -6499,7 +6520,7 @@ var app = (function () {
     			span.textContent = "Sign up";
     			attr_dev(span, "slot", "content");
     			attr_dev(span, "class", "-color--inverted");
-    			add_location(span, file$e, 146, 10, 4828);
+    			add_location(span, file$e, 147, 10, 4860);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, span, anchor);
@@ -6514,14 +6535,14 @@ var app = (function () {
     		block,
     		id: create_content_slot_1$2.name,
     		type: "slot",
-    		source: "(147:10) ",
+    		source: "(148:10) ",
     		ctx
     	});
 
     	return block;
     }
 
-    // (148:10) 
+    // (149:10) 
     function create_icon_slot_1$1(ctx) {
     	let div;
     	let icon;
@@ -6541,7 +6562,7 @@ var app = (function () {
     			create_component(icon.$$.fragment);
     			attr_dev(div, "slot", "icon");
     			attr_dev(div, "class", "-inline-flex -pl--500 -mt--200");
-    			add_location(div, file$e, 147, 10, 4900);
+    			add_location(div, file$e, 148, 10, 4932);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, div, anchor);
@@ -6568,14 +6589,14 @@ var app = (function () {
     		block,
     		id: create_icon_slot_1$1.name,
     		type: "slot",
-    		source: "(148:10) ",
+    		source: "(149:10) ",
     		ctx
     	});
 
     	return block;
     }
 
-    // (103:8) <Link to="#" class="text__action--link--small -mt--600 -ml--auto">
+    // (104:8) <Link to="#" class="text__action--link--small -mt--600 -ml--auto">
     function create_default_slot$7(ctx) {
     	let span;
 
@@ -6584,7 +6605,7 @@ var app = (function () {
     			span = element("span");
     			span.textContent = "Forgot password?";
     			attr_dev(span, "class", "-color--action_default");
-    			add_location(span, file$e, 103, 10, 3406);
+    			add_location(span, file$e, 104, 10, 3438);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, span, anchor);
@@ -6599,14 +6620,14 @@ var app = (function () {
     		block,
     		id: create_default_slot$7.name,
     		type: "slot",
-    		source: "(103:8) <Link to=\\\"#\\\" class=\\\"text__action--link--small -mt--600 -ml--auto\\\">",
+    		source: "(104:8) <Link to=\\\"#\\\" class=\\\"text__action--link--small -mt--600 -ml--auto\\\">",
     		ctx
     	});
 
     	return block;
     }
 
-    // (113:10) 
+    // (114:10) 
     function create_content_slot$3(ctx) {
     	let span;
 
@@ -6616,7 +6637,7 @@ var app = (function () {
     			span.textContent = "Log in";
     			attr_dev(span, "slot", "content");
     			attr_dev(span, "class", "-color--inverted");
-    			add_location(span, file$e, 112, 10, 3676);
+    			add_location(span, file$e, 113, 10, 3708);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, span, anchor);
@@ -6631,14 +6652,14 @@ var app = (function () {
     		block,
     		id: create_content_slot$3.name,
     		type: "slot",
-    		source: "(113:10) ",
+    		source: "(114:10) ",
     		ctx
     	});
 
     	return block;
     }
 
-    // (114:10) 
+    // (115:10) 
     function create_icon_slot$2(ctx) {
     	let div;
     	let icon;
@@ -6658,7 +6679,7 @@ var app = (function () {
     			create_component(icon.$$.fragment);
     			attr_dev(div, "slot", "icon");
     			attr_dev(div, "class", "-inline-flex -pl--500 -mt--200");
-    			add_location(div, file$e, 113, 10, 3747);
+    			add_location(div, file$e, 114, 10, 3779);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, div, anchor);
@@ -6685,7 +6706,7 @@ var app = (function () {
     		block,
     		id: create_icon_slot$2.name,
     		type: "slot",
-    		source: "(114:10) ",
+    		source: "(115:10) ",
     		ctx
     	});
 
@@ -6805,13 +6826,13 @@ var app = (function () {
     			t6 = space();
     			create_component(image2.$$.fragment);
     			attr_dev(div0, "class", "tabs_container");
-    			add_location(div0, file$e, 84, 4, 2721);
+    			add_location(div0, file$e, 85, 4, 2753);
     			attr_dev(div1, "class", "page_content");
-    			add_location(div1, file$e, 83, 2, 2689);
+    			add_location(div1, file$e, 84, 2, 2721);
     			attr_dev(main, "class", "page");
-    			add_location(main, file$e, 81, 0, 2640);
+    			add_location(main, file$e, 82, 0, 2672);
     			attr_dev(div2, "class", "bg_photos_container");
-    			add_location(div2, file$e, 155, 0, 5105);
+    			add_location(div2, file$e, 156, 0, 5137);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -6967,6 +6988,8 @@ var app = (function () {
     		}
 
     		services.auth.register(localValidationResult.validFields).then(response => {
+    			console.log(response);
+
     			if (!response.ok) {
     				updateFieldErrors(response.errors);
     			} else {
@@ -6979,7 +7002,7 @@ var app = (function () {
     	const writable_props = [];
 
     	Object.keys($$props).forEach(key => {
-    		if (!~writable_props.indexOf(key) && key.slice(0, 2) !== '$$' && key !== 'slot') console.warn(`<Auth> was created with unknown prop '${key}'`);
+    		if (!~writable_props.indexOf(key) && key.slice(0, 2) !== '$$' && key !== 'slot') console_1.warn(`<Auth> was created with unknown prop '${key}'`);
     	});
 
     	$$self.$capture_state = () => ({
@@ -10287,7 +10310,7 @@ var app = (function () {
     	return block;
     }
 
-    // (69:10) 
+    // (70:10) 
     function create_icon_slot_4(ctx) {
     	let div;
     	let icon;
@@ -10307,7 +10330,7 @@ var app = (function () {
     			create_component(icon.$$.fragment);
     			attr_dev(div, "slot", "icon");
     			attr_dev(div, "class", "-inline-flex");
-    			add_location(div, file$2, 68, 10, 2527);
+    			add_location(div, file$2, 69, 10, 2562);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, div, anchor);
@@ -10334,14 +10357,14 @@ var app = (function () {
     		block,
     		id: create_icon_slot_4.name,
     		type: "slot",
-    		source: "(69:10) ",
+    		source: "(70:10) ",
     		ctx
     	});
 
     	return block;
     }
 
-    // (80:10) 
+    // (82:10) 
     function create_icon_slot_3(ctx) {
     	let div;
     	let icon;
@@ -10361,7 +10384,7 @@ var app = (function () {
     			create_component(icon.$$.fragment);
     			attr_dev(div, "slot", "icon");
     			attr_dev(div, "class", "-inline-flex");
-    			add_location(div, file$2, 79, 10, 2837);
+    			add_location(div, file$2, 81, 10, 2905);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, div, anchor);
@@ -10388,7 +10411,7 @@ var app = (function () {
     		block,
     		id: create_icon_slot_3.name,
     		type: "slot",
-    		source: "(80:10) ",
+    		source: "(82:10) ",
     		ctx
     	});
 
@@ -10409,6 +10432,7 @@ var app = (function () {
     				squared: true,
     				color: "neutral",
     				fill: "borderless",
+    				testId: "delete-product",
     				$$slots: { icon: [create_icon_slot_4] },
     				$$scope: { ctx }
     			},
@@ -10423,6 +10447,7 @@ var app = (function () {
     				squared: true,
     				color: "neutral",
     				fill: "borderless",
+    				testId: "edit-product",
     				$$slots: { icon: [create_icon_slot_3] },
     				$$scope: { ctx }
     			},
@@ -10514,7 +10539,7 @@ var app = (function () {
     	return block;
     }
 
-    // (89:4) {:then loadedProduct}
+    // (91:4) {:then loadedProduct}
     function create_then_block$1(ctx) {
     	let notfound;
     	let current;
@@ -10564,14 +10589,14 @@ var app = (function () {
     		block,
     		id: create_then_block$1.name,
     		type: "then",
-    		source: "(89:4) {:then loadedProduct}",
+    		source: "(91:4) {:then loadedProduct}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (100:14) 
+    // (102:14) 
     function create_content_slot_1(ctx) {
     	let span;
 
@@ -10581,7 +10606,7 @@ var app = (function () {
     			span.textContent = "Add to a shopping list";
     			attr_dev(span, "slot", "content");
     			attr_dev(span, "class", "-color--neutral_3");
-    			add_location(span, file$2, 99, 14, 3523);
+    			add_location(span, file$2, 101, 14, 3591);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, span, anchor);
@@ -10596,14 +10621,14 @@ var app = (function () {
     		block,
     		id: create_content_slot_1.name,
     		type: "slot",
-    		source: "(100:14) ",
+    		source: "(102:14) ",
     		ctx
     	});
 
     	return block;
     }
 
-    // (103:14) 
+    // (105:14) 
     function create_icon_slot_2(ctx) {
     	let div;
     	let icon;
@@ -10620,7 +10645,7 @@ var app = (function () {
     			create_component(icon.$$.fragment);
     			attr_dev(div, "slot", "icon");
     			attr_dev(div, "class", "-inline-flex");
-    			add_location(div, file$2, 102, 14, 3649);
+    			add_location(div, file$2, 104, 14, 3717);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, div, anchor);
@@ -10647,14 +10672,14 @@ var app = (function () {
     		block,
     		id: create_icon_slot_2.name,
     		type: "slot",
-    		source: "(103:14) ",
+    		source: "(105:14) ",
     		ctx
     	});
 
     	return block;
     }
 
-    // (122:16) 
+    // (124:16) 
     function create_content_slot$1(ctx) {
     	let span;
 
@@ -10664,7 +10689,7 @@ var app = (function () {
     			span.textContent = "See recipes";
     			attr_dev(span, "slot", "content");
     			attr_dev(span, "class", "-color--action_primary");
-    			add_location(span, file$2, 121, 16, 4453);
+    			add_location(span, file$2, 123, 16, 4521);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, span, anchor);
@@ -10679,14 +10704,14 @@ var app = (function () {
     		block,
     		id: create_content_slot$1.name,
     		type: "slot",
-    		source: "(122:16) ",
+    		source: "(124:16) ",
     		ctx
     	});
 
     	return block;
     }
 
-    // (125:16) 
+    // (127:16) 
     function create_icon_slot_1(ctx) {
     	let div;
     	let icon;
@@ -10706,7 +10731,7 @@ var app = (function () {
     			create_component(icon.$$.fragment);
     			attr_dev(div, "slot", "icon");
     			attr_dev(div, "class", "-inline-flex");
-    			add_location(div, file$2, 124, 16, 4579);
+    			add_location(div, file$2, 126, 16, 4647);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, div, anchor);
@@ -10733,14 +10758,14 @@ var app = (function () {
     		block,
     		id: create_icon_slot_1.name,
     		type: "slot",
-    		source: "(125:16) ",
+    		source: "(127:16) ",
     		ctx
     	});
 
     	return block;
     }
 
-    // (139:18) 
+    // (141:18) 
     function create_icon_slot$1(ctx) {
     	let div;
     	let icon;
@@ -10757,7 +10782,7 @@ var app = (function () {
     			create_component(icon.$$.fragment);
     			attr_dev(div, "slot", "icon");
     			attr_dev(div, "class", "-inline-flex");
-    			add_location(div, file$2, 138, 18, 5209);
+    			add_location(div, file$2, 140, 18, 5277);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, div, anchor);
@@ -10784,14 +10809,14 @@ var app = (function () {
     		block,
     		id: create_icon_slot$1.name,
     		type: "slot",
-    		source: "(139:18) ",
+    		source: "(141:18) ",
     		ctx
     	});
 
     	return block;
     }
 
-    // (90:6) <NotFound data={loadedProduct}>
+    // (92:6) <NotFound data={loadedProduct}>
     function create_default_slot$3(ctx) {
     	let div8;
     	let div0;
@@ -10924,32 +10949,32 @@ var app = (function () {
     			t13 = space();
     			create_component(table.$$.fragment);
     			attr_dev(div0, "class", "-full-width product__left_column");
-    			add_location(div0, file$2, 91, 10, 3225);
+    			add_location(div0, file$2, 93, 10, 3293);
     			attr_dev(h1, "class", "text__heading--2--regular");
-    			add_location(h1, file$2, 110, 16, 3961);
+    			add_location(h1, file$2, 112, 16, 4029);
     			attr_dev(p0, "class", "text__paragraph--small--light");
-    			add_location(p0, file$2, 112, 18, 4084);
+    			add_location(p0, file$2, 114, 18, 4152);
     			attr_dev(p1, "class", "text__paragraph--base--regular item_description__amount");
-    			add_location(p1, file$2, 113, 18, 4159);
+    			add_location(p1, file$2, 115, 18, 4227);
     			attr_dev(div1, "class", "-mt--700");
-    			add_location(div1, file$2, 111, 16, 4042);
-    			add_location(div2, file$2, 109, 14, 3938);
+    			add_location(div1, file$2, 113, 16, 4110);
+    			add_location(div2, file$2, 111, 14, 4006);
     			attr_dev(div3, "class", "-full-width product__info");
-    			add_location(div3, file$2, 108, 12, 3883);
+    			add_location(div3, file$2, 110, 12, 3951);
     			attr_dev(span, "class", "text__paragraph--base--light");
-    			add_location(span, file$2, 130, 14, 4815);
+    			add_location(span, file$2, 132, 14, 4883);
     			attr_dev(div4, "class", "-mt--900");
-    			add_location(div4, file$2, 129, 12, 4777);
+    			add_location(div4, file$2, 131, 12, 4845);
     			attr_dev(h2, "class", "text__heading--4--regular");
-    			add_location(h2, file$2, 136, 16, 5052);
+    			add_location(h2, file$2, 138, 16, 5120);
     			attr_dev(div5, "class", "-align-center");
-    			add_location(div5, file$2, 135, 14, 5007);
+    			add_location(div5, file$2, 137, 14, 5075);
     			attr_dev(div6, "class", "-mt--900 -pt--900");
-    			add_location(div6, file$2, 134, 12, 4960);
+    			add_location(div6, file$2, 136, 12, 5028);
     			attr_dev(div7, "class", "-full-width product__right_column");
-    			add_location(div7, file$2, 107, 10, 3822);
+    			add_location(div7, file$2, 109, 10, 3890);
     			attr_dev(div8, "class", "-pt--900 -px--1000 product");
-    			add_location(div8, file$2, 90, 8, 3173);
+    			add_location(div8, file$2, 92, 8, 3241);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, div8, anchor);
@@ -11043,14 +11068,14 @@ var app = (function () {
     		block,
     		id: create_default_slot$3.name,
     		type: "slot",
-    		source: "(90:6) <NotFound data={loadedProduct}>",
+    		source: "(92:6) <NotFound data={loadedProduct}>",
     		ctx
     	});
 
     	return block;
     }
 
-    // (87:20)         <Loading />      {:then loadedProduct}
+    // (89:20)         <Loading />      {:then loadedProduct}
     function create_pending_block$1(ctx) {
     	let loading;
     	let current;
@@ -11083,7 +11108,7 @@ var app = (function () {
     		block,
     		id: create_pending_block$1.name,
     		type: "pending",
-    		source: "(87:20)         <Loading />      {:then loadedProduct}",
+    		source: "(89:20)         <Loading />      {:then loadedProduct}",
     		ctx
     	});
 
@@ -11164,7 +11189,7 @@ var app = (function () {
     			t4 = space();
     			info_1.block.c();
     			attr_dev(div0, "class", "divider--horizontal -full-width");
-    			add_location(div0, file$2, 85, 4, 3009);
+    			add_location(div0, file$2, 87, 4, 3077);
     			attr_dev(main, "class", "page__main");
     			add_location(main, file$2, 58, 2, 2275);
     			attr_dev(div1, "class", "page");
