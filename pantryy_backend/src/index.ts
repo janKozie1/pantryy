@@ -37,6 +37,10 @@ const init = (config: AppConfig) => {
     app, pool, services, upload,
   });
 
+  app.get('*', (_, res) => {
+    res.sendFile(path.resolve(config.staticContent.filePath, 'index.html'))
+  })
+
   app.listen(config.port, () => {
     console.log('⚡️[server]: Server is running');
   });
