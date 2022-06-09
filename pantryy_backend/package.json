@@ -5,7 +5,7 @@
   "exports": "./index.js",
   "type": "module",
   "scripts": {
-    "build": "npx tsc",
+    "build": "tsc",
     "typecheck": "tsc --noEmit",
     "test:ci": "CI=true jest src",
     "test:watch": "jest src --watch",

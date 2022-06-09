@@ -21,5 +21,10 @@ jobs:
       - uses: actions/checkout@v2
       - name: re-use cache
         uses: ./.github/actions/cache
-      - run: ls -l ./pantryy_backend
-      - run: ls -l ./pantryy_frontend
+      - name: build apps
+        run: yarn workspace foreach run build
+      - name: move frontend to static backend files
+        run: |
+          mkdir ./pantryy_backend/dist/static &&
+          cp ./pantryy_frontend/public/index.html ./pantryy_backend/dist/static/index.html
+          cp -r ./pantryy_frontend/public/static/. ./pantryy_backend/dist/static/

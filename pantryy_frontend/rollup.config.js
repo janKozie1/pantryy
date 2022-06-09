@@ -74,10 +74,12 @@ export default {
 			proxy: [{
 				from: '/api',
 				to: 'http://localhost:5050/api'
-			}, {
-				from: '/static',
-				to: 'http://localhost:5050/static'
-			}]
+			},
+			{
+				from: '/static/uploads',
+				to: 'http://localhost:5050/static/uploads'
+			}
+		]
 		}),
 
 		// In dev mode, call `npm run start` once
