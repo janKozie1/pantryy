@@ -8,4 +8,4 @@
   export let external: boolean = false;
 </script>
 
-<img src={external ? src : `/images/${src}`} {alt} class={cls} />
+<img src={external ? src : `/static/images/${src}`} {alt} class={cls} />

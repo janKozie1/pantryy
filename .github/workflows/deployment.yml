@@ -1,0 +1,17 @@
+name: Deployment
+
+on:
+  push:
+    branches:
+      - deploy
+
+jobs:
+  setup-deps:
+    name: Setup project dependencies
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - run: yarn install
+        shell: bash
+      - run: ls -l ./pantryy_backend
+      - run: ls -l ./pantryy_frontend
