@@ -11,13 +11,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - run: yarn install
-        shell: bash
+      - name: setup cache
+        uses: ./.github/actions/cache
   configure:
     name: Configure things
     runs-on: ubuntu-latest
     needs: [setup-deps]
     steps:
       - uses: actions/checkout@v2
+      - name: re-use cache
+        uses: ./.github/actions/cache
       - run: ls -l ./pantryy_backend
       - run: ls -l ./pantryy_frontend
