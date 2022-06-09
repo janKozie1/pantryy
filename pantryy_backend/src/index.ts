@@ -38,8 +38,8 @@ const init = (config: AppConfig) => {
   });
 
   app.get('*', (_, res) => {
-    res.sendFile(path.resolve(config.staticContent.filePath, 'index.html'))
-  })
+    res.sendFile(path.resolve(config.staticContent.filePath, 'index.html'));
+  });
 
   app.listen(config.port, () => {
     console.log('⚡️[server]: Server is running');
