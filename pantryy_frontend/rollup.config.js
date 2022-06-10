@@ -37,7 +37,7 @@ export default {
 		sourcemap: true,
 		format: 'iife',
 		name: 'app',
-		file: 'public/build/bundle.js'
+		file: 'public/static/build/bundle.js'
 	},
 	plugins: [
 		svelte({
@@ -74,10 +74,12 @@ export default {
 			proxy: [{
 				from: '/api',
 				to: 'http://localhost:5050/api'
-			}, {
-				from: '/static',
-				to: 'http://localhost:5050/static'
-			}]
+			},
+			{
+				from: '/static/uploads',
+				to: 'http://localhost:5050/static/uploads'
+			}
+		]
 		}),
 
 		// In dev mode, call `npm run start` once

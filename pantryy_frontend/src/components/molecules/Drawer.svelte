@@ -17,11 +17,13 @@
   let shouldAnimate = false;
 
   $: if (open) {
-    setTimeout(() => (shouldRender = true));
+    const value = open;
+    setTimeout(() => (shouldRender = value));
   }
 
   $: if (shouldRender) {
-    setTimeout(() => (shouldAnimate = true), 10);
+    const value = open;
+    setTimeout(() => (shouldAnimate = value), 10);
   }
 
   let wrappedOnCancel = () => {

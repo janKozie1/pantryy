@@ -119,7 +119,12 @@
   }
 </script>
 
-<Drawer title="Add new product" {onSubmit} {onCancel} {open}>
+<Drawer
+  title={!isNil(initialValues.id) ? "Edit product" : "Add new product"}
+  {onSubmit}
+  {onCancel}
+  {open}
+>
   {#await measurmentUnits}
     <Loading />
   {:then loadedMeasurmentUnits}

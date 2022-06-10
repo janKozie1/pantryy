@@ -45,6 +45,7 @@ const makeServices = (
 
 type DynamicConfig = Readonly<{
   navigate: NavigateFn;
+  fetchInstance: FetchFN,
 }>
 
 
@@ -53,9 +54,10 @@ export const SERVICES_KEY = Symbol();
 export const getServices = () => getContext<Services>(SERVICES_KEY)
 
 export default ({
-  navigate
+  navigate,
+  fetchInstance,
 }: DynamicConfig) => {
-  const fetch = makeScopedFetch(ApiPrefix);
+  const fetch = makeScopedFetch(fetchInstance, ApiPrefix);
   const sendJSON = makeSendJSON(fetch);
 
   return makeServices({ fetch, sendJSON }, {

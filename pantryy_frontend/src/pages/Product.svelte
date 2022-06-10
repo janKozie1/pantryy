@@ -59,6 +59,7 @@
           squared
           color="neutral"
           fill="borderless"
+          testId="delete-product"
           on:click={onDelete}
         >
           <div slot="icon" class="-inline-flex">
@@ -70,6 +71,7 @@
           squared
           color="neutral"
           fill="borderless"
+          testId="edit-product"
           on:click={methods.onOpen}
         >
           <div slot="icon" class="-inline-flex">

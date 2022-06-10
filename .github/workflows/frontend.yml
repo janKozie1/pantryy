@@ -2,6 +2,8 @@ name: Frontend
 
 on:
   push:
+    branches-ignore:
+      - deploy
 
 jobs:
   CI:

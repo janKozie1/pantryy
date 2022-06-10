@@ -3,5 +3,5 @@
 </script>
 
 <svelte:head>
-  <link rel="stylesheet" href={`/css/${src}`} />
+  <link rel="stylesheet" href={`/static/css/${src}`} />
 </svelte:head>

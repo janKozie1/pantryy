@@ -2,6 +2,8 @@ name: Backend
 
 on:
   push:
+    branches-ignore:
+      - deploy
 
 jobs:
   CI:
