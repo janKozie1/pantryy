@@ -7,10 +7,10 @@ export type RequestResponse<T> = Readonly<{
 
 export type FetchFN = typeof fetch;
 
-export const makeScopedFetch = (apiPrefix: string): FetchFN => (...args) => {
+export const makeScopedFetch = (fetchInstance: FetchFN, apiPrefix: string): FetchFN => (...args) => {
   const [requestURI, ...other] = args;
 
-  return fetch(`${apiPrefix}${requestURI}`, ...other);
+  return fetchInstance(`${apiPrefix}${requestURI}`, ...other);
 }
 
 export const makeSendJSON = (scopedFetch: FetchFN):  FetchFN => (...args) => {

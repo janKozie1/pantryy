@@ -5,7 +5,13 @@
 
   const navigate = useNavigate();
 
-  setContext(SERVICES_KEY, services({ navigate, fetchInstance: fetch }));
+  setContext(
+    SERVICES_KEY,
+    services({
+      navigate,
+      fetchInstance: () => Promise.resolve(null),
+    })
+  );
 </script>
 
 <slot />
