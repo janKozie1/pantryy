@@ -21,8 +21,10 @@ jobs:
       - uses: actions/checkout@v2
       - name: re-use cache
         uses: ./.github/actions/cache
-      - name: build apps
-        run: yarn workspaces foreach build
+      - name: build frontend
+        run: yarn workspace pantryy_frontend build
+      - name: build backend
+        run: yarn workspace pantryy_backend build
       - name: move frontend to static backend files
         run: |
           mkdir ./pantryy_backend/dist/static &&
