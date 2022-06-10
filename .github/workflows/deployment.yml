@@ -22,7 +22,7 @@ jobs:
       - name: re-use cache
         uses: ./.github/actions/cache
       - name: build apps
-        run: yarn workspaces foreach run build
+        run: yarn workspaces foreach build
       - name: move frontend to static backend files
         run: |
           mkdir ./pantryy_backend/dist/static &&
