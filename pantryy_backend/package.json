@@ -8,7 +8,7 @@
     "build": "tsc",
     "typecheck": "tsc --noEmit",
     "test:ci": "CI=true jest src",
-    "test:watch": "jest src --watch",
+    "test:watch": "jest ./src --watch",
     "start:dev": "concurrently \"npx tsc --watch\" \"nodemon -q dist/index.js\"",
     "start": "nodemon -q dist/index.js",
     "lint": "eslint --max-warnings 0 --ext ts --ext js .",

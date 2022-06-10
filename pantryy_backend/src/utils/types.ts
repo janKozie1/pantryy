@@ -13,3 +13,7 @@ export type ValidationResponse<T> = Readonly<{
 export type PartialWithNulls<T> = Readonly<{
   [key in keyof T]?: Nullable<T[key]>
 }>
+
+export type PartialDeepObject<Obj> = Obj extends Literal | Nullable<Literal> ? {
+  [key in keyof Obj]?: PartialDeepObject<Obj[key]>
+} : Obj;

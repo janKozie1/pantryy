@@ -88,7 +88,6 @@
     services.auth
       .register(localValidationResult.validFields)
       .then((response) => {
-        console.log(response);
         if (!response.ok) {
           updateFieldErrors(response.errors);
         } else {

@@ -3,27 +3,17 @@ import { Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
 import auth from './auth.js';
 import { Nullable } from '../utils/types.js';
+import makeMockPool from '../mocks/pool.js';
+import makeMockRequest from '../mocks/request.js';
 
 describe('auth', () => {
-  const mockClient: PoolClient = {
-    query: async (): Promise<QueryArrayResult> => ({
-      rowCount: 0,
-      rows: [],
-      oid: 1,
-      command: '',
-      fields: [],
-    }),
-  } as unknown as PoolClient;
-
-  const mockPool: Pool = {
-    connect: async () => mockClient,
-  } as unknown as Pool;
+  const pool = makeMockPool([]);
 
   const authCookieName = 'auth';
   const jwtKey = 'jwt_key';
 
   const service = auth({
-    pool: mockPool,
+    pool,
   }, {
     authCookieName,
     jwt: {
@@ -34,15 +24,13 @@ describe('auth', () => {
 
   describe('getToken', () => {
     it('gets a token from request', () => {
-      expect(service.getToken({
+      expect(service.getToken(makeMockRequest({
         cookies: {
           [authCookieName]: 'token',
-        },
-      } as unknown as Request)).toBe('token');
+        }
+      }))).toBe('token');
 
-      expect(service.getToken({
-        cookies: {},
-      } as unknown as Request)).toBe(undefined);
+      expect(service.getToken(makeMockRequest({}))).toBe(undefined);
     });
   });
 
