@@ -1,5 +1,4 @@
-import { Pool, PoolClient, QueryArrayResult } from 'pg';
-import { Request, Response } from 'express';
+import { Response } from 'express';
 import jwt from 'jsonwebtoken';
 import auth from './auth.js';
 import { Nullable } from '../utils/types.js';

@@ -1,5 +1,5 @@
-import { Services } from "../services/index.js";
-import { PartialDeepObject } from "../utils/types.js"
+import { Services } from '../services/index.js';
+import { PartialDeepObject } from '../utils/types.js';
 
 type CustomMocks = PartialDeepObject<Services>;
 
@@ -15,6 +15,6 @@ const makeMockServices = (customMocks: CustomMocks): Services => ({
     getImageURL: () => '',
     ...customMocks.files,
   }
-})
+});
 
-export default makeMockServices
+export default makeMockServices;

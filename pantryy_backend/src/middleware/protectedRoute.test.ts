@@ -1,6 +1,5 @@
-import { Services } from '../services/index.js'
-import { Request, Response, NextFunction } from 'express';
-import protectedRoute from './protectedRoute.js'
+import { NextFunction } from 'express';
+import protectedRoute from './protectedRoute.js';
 import makeMockRequest from '../mocks/request.js';
 import makeMockServices from '../mocks/services.js';
 import makeMockResponse from '../mocks/response.js';
@@ -18,6 +17,6 @@ describe('protectedRoute', () => {
     })(request, response, next);
 
     expect(response.statusCode).toBe(401);
-    expect(response.json).toHaveBeenCalledWith(expect.objectContaining({ok: false}))
-  })
-})
+    expect(response.json).toHaveBeenCalledWith(expect.objectContaining({ok: false}));
+  });
+});

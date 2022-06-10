@@ -1,4 +1,4 @@
-import makeMockApp from '../../mocks/app.js'
+import makeMockApp from '../../mocks/app.js';
 import makeMockPool from '../../mocks/pool.js';
 import makeMockRequest from '../../mocks/request.js';
 import makeMockResponse from '../../mocks/response.js';
@@ -6,7 +6,7 @@ import makeMockServices from '../../mocks/services.js';
 import makeMockUpload from '../../mocks/upload.js';
 import { errorMessages } from '../../utils/validation.js';
 
-import register from './register.js'
+import register from './register.js';
 
 describe('/register', () => {
   describe('POST', () => {
@@ -15,15 +15,15 @@ describe('/register', () => {
       const pool = makeMockPool([
         [],
         [{userId: 'ok'}],
-      ])
+      ]);
       const upload = makeMockUpload();
       const services = makeMockServices({});
 
       const request = makeMockRequest({
         body: {
-          email: "test@gmail.com",
-          password: "123",
-          repeatedPassword: "123",
+          email: 'test@gmail.com',
+          password: '123',
+          repeatedPassword: '123',
         }
       });
       const response = makeMockResponse();
@@ -42,22 +42,22 @@ describe('/register', () => {
         errors: { },
         ok: true,
         validData: null,
-      })
-    })
+      });
+    });
 
     it('blocks creating new users with the same email', async () => {
       const [routes, app] = makeMockApp();
       const pool = makeMockPool([
         [{ user_id: 'id' }],
-      ])
+      ]);
       const upload = makeMockUpload();
       const services = makeMockServices({});
 
       const request = makeMockRequest({
         body: {
-          email: "test@gmail.com",
-          password: "123",
-          repeatedPassword: "123",
+          email: 'test@gmail.com',
+          password: '123',
+          repeatedPassword: '123',
         }
       });
       const response = makeMockResponse();
@@ -80,7 +80,7 @@ describe('/register', () => {
         },
         ok: false,
         validData: null,
-      })
-    })
-  })
-})
+      });
+    });
+  });
+});

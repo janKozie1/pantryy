@@ -7,6 +7,6 @@ const makeMockResponse = (): Response => {
     code: null,
     json: jsonFN
   } as unknown as  Response;
-}
+};
 
 export default makeMockResponse;

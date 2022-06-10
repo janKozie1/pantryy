@@ -1,6 +1,6 @@
-import { Pool, PoolClient, QueryArrayResult } from "pg";
+import { Pool, PoolClient, QueryArrayResult } from 'pg';
 
-type MockData = any[][]
+type MockData = unknown[][]
 
 const makeMockPool = (data: MockData): Pool => {
   let index = 0;
@@ -19,7 +19,7 @@ const makeMockPool = (data: MockData): Pool => {
 
       index += 1;
 
-      return result;
+      return result as QueryArrayResult;
     },
     release: async () => null,
   } as unknown as PoolClient;
@@ -28,7 +28,7 @@ const makeMockPool = (data: MockData): Pool => {
     connect: async () => mockClient,
   } as unknown as Pool;
 
-  return mockPool
-}
+  return mockPool;
+};
 
 export default makeMockPool;
