@@ -2,7 +2,7 @@
   "private": true,
   "workspaces": ["pantryy_frontend", "pantryy_backend"],
   "scripts": {
-    "build": "yarn workspace pantryy_backend build && yarn workspace pantryy_frontend build && ./postBuild.sh",
+    "build": "yarn workspace pantryy_backend build && yarn workspace pantryy_frontend build && bash ./postBuild.sh",
     "start": "yarn workspace pantryy_backend start"
   }
 }

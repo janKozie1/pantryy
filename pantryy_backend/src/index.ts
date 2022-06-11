@@ -24,7 +24,13 @@ export type AppConfig = Readonly<{
 }>
 
 const init = (config: AppConfig) => {
-  const pool = new pg.Pool();
+  const pool = new pg.Pool({
+    connectionString: process.env.DATABASE_URL,
+    ssl: {
+      rejectUnauthorized: false,
+    }
+  });
+
   const app = App(config);
   const upload = Multer({ dest: path.join(config.staticContent.filePath, config.uploads.folder) });
 
