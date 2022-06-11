@@ -1,4 +1,7 @@
 {
   "private": true,
-  "workspaces": ["pantryy_frontend", "pantryy_backend"]
+  "workspaces": ["pantryy_frontend", "pantryy_backend"],
+  "scripts": {
+    "start": "yarn workspace pantryy_backend start"
+  }
 }
