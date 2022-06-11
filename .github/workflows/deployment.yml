@@ -11,5 +11,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: deploy to heroku
-        run: git push heroku deploy:master
+      - uses: akhileshns/heroku-deploy@v3.12.12
+        with:
+          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
+          heroku_app_name: "pantryy-svelte" #Must be unique in Heroku
+          heroku_email: "jankkoziel@gmail.com"
