@@ -11,22 +11,5 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: setup cache
-        uses: ./.github/actions/cache
-  configure:
-    name: Configure things
-    runs-on: ubuntu-latest
-    needs: [setup-deps]
-    steps:
-      - uses: actions/checkout@v2
-      - name: re-use cache
-        uses: ./.github/actions/cache
-      - name: build frontend
-        run: yarn workspace pantryy_frontend build
-      - name: build backend
-        run: yarn workspace pantryy_backend build
-      - name: move frontend to static backend files
-        run: |
-          mkdir ./pantryy_backend/dist/static &&
-          cp ./pantryy_frontend/public/index.html ./pantryy_backend/dist/static/index.html
-          cp -r ./pantryy_frontend/public/static/. ./pantryy_backend/dist/static/
+      - name: deploy to heroku
+        run: git push heroku deploy:master
